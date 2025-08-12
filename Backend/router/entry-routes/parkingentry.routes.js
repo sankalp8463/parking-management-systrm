@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { createParkingEntry, getAllParkingEntries, getParkingEntryById, updateParkingEntry, deleteParkingEntry, getActiveEntries } = require('../../controllers/parkingentry.controller');
+const { parkVehicle, exitVehicle, getAllParkingEntries, getParkingEntryById, getActiveEntries, deleteParkingEntry } = require('../../controllers/parkingentry.controller');
 
-router.post('/', createParkingEntry);
+router.post('/park', parkVehicle);
+router.put('/exit/:id', exitVehicle);
 router.get('/', getAllParkingEntries);
 router.get('/:id', getParkingEntryById);
-router.put('/:id', updateParkingEntry);
-router.delete('/:id', deleteParkingEntry);
 router.get('/status/active', getActiveEntries);
+router.delete('/:id', deleteParkingEntry);
 
 module.exports = router;

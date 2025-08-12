@@ -2,8 +2,8 @@ const ParkingSlot = require('../models/parkingslot.model');
 
 const createParkingSlot = async (req, res) => {
     try {
-        const { slotNumber, status, vehicleType, hourlyRate } = req.body;
-        const slotData = { slotNumber, status, vehicleType, hourlyRate };
+        const { slotNumber, vehicleType, hourlyRate } = req.body;
+        const slotData = { slotNumber, vehicleType, hourlyRate };
         const slot = new ParkingSlot(slotData);
         await slot.save();
         res.status(201).json(slot);
