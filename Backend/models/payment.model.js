@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const paymentSchema = new mongoose.Schema({
     entryId: { type: mongoose.Schema.Types.ObjectId, ref: 'ParkingEntry', required: true },
-    paymentMethod: { type: String, enum: ['razorpay', 'cash'], required: true },
+    paymentMethod: { type: String, enum: ['online', 'cash'], required: true },
     transactionId: { type: String }, // Razorpay ID or null for cash
     amountPaid: { type: Number, required: true },
     paymentStatus: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
