@@ -2,11 +2,17 @@ const Payment = require('../models/payment.model');
 
 const createPayment = async (req, res) => {
     try {
-        const { entryId, paymentMethod, transactionId, amountPaid, paymentStatus, paymentDate } = req.body;
-        const paymentData = { entryId, paymentMethod, transactionId, amountPaid, paymentStatus, paymentDate };
+        const { vehicleNumber, paymentMethod, transactionId, amountPaid } = req.body;
+        const paymentData = { 
+            vehicleNumber, 
+            paymentMethod, 
+            transactionId, 
+            amountPaid, 
+            paymentStatus: 'completed',
+            paymentDate: new Date()
+        };
         const payment = new Payment(paymentData);
         await payment.save();
-        await payment.populate('entryId');
         res.status(201).json(payment);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -15,7 +21,7 @@ const createPayment = async (req, res) => {
 
 const getAllPayments = async (req, res) => {
     try {
-        const payments = await Payment.find().populate('entryId');
+        const payments = await Payment.find().sort({ paymentDate: -1 });
         res.json(payments);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -24,7 +30,7 @@ const getAllPayments = async (req, res) => {
 
 const getPaymentById = async (req, res) => {
     try {
-        const payment = await Payment.findById(req.params.id).populate('entryId');
+        const payment = await Payment.findById(req.params.id);
         if (!payment) return res.status(404).json({ error: 'Payment not found' });
         res.json(payment);
     } catch (error) {

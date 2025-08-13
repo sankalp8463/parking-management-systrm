@@ -1,0 +1,84 @@
+<div class="app-layout">
+  <!-- Top Header -->
+  <header class="top-header" *ngIf="isLoggedIn">
+    <div class="header-left">
+      <button class="sidebar-toggle" (click)="toggleSidebar()">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+      <div class="header-brand">
+        <h2>🅿️ ParkEase</h2>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="logout-btn" (click)="logout()">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+        </svg>
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <!-- Guest Navbar -->
+  <nav class="navbar" *ngIf="!isLoggedIn">
+    <div class="nav-brand">
+      <h2>🅿️ ParkEase</h2>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/">Home</a>
+      <a routerLink="/login" class="login-btn">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+        </svg>
+        Login
+      </a>
+      <a routerLink="/register">Register</a>
+    </div>
+  </nav>
+
+  <div class="main-layout" [class.with-sidebar]="isLoggedIn">
+    <!-- Left Sidebar -->
+    <aside class="sidebar" *ngIf="isLoggedIn" [class.collapsed]="sidebarCollapsed">
+      <nav class="sidebar-nav">
+        <a routerLink="/dashboard" routerLinkActive="active" class="sidebar-item">
+          <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a routerLink="/parking" routerLinkActive="active" class="sidebar-item">
+          <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          <span>Parking</span>
+        </a>
+        <a routerLink="/slots" routerLinkActive="active" class="sidebar-item">
+          <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+          <span>Slots</span>
+        </a>
+        <a routerLink="/payments" routerLinkActive="active" class="sidebar-item">
+          <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+          </svg>
+          <span>Payments</span>
+        </a>
+        <a routerLink="/history" routerLinkActive="active" class="sidebar-item">
+          <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          <span>History</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+<app-toast></app-toast>

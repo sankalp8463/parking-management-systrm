@@ -1,0 +1,51 @@
+<div class="modal-overlay" (click)="closeModal()">
+  <div class="payment-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Payment Required</h3>
+      <button class="close-btn" (click)="closeModal()">×</button>
+    </div>
+    
+    <div class="payment-details">
+      <div class="vehicle-info">
+        <h4>Vehicle: {{paymentData.vehicleNumber}}</h4>
+        <p>Duration: {{paymentData.totalHours}} hours</p>
+        <p class="amount">Amount: ₹{{paymentData.totalAmount}}</p>
+      </div>
+    </div>
+
+    <div class="payment-methods">
+      <h4>Select Payment Method</h4>
+      <div class="method-buttons">
+        <button 
+          class="method-btn" 
+          [class.active]="selectedMethod === 'cash'"
+          (click)="selectMethod('cash')">
+          💵 Cash
+        </button>
+        <button 
+          class="method-btn" 
+          [class.active]="selectedMethod === 'online'"
+          (click)="selectMethod('online')">
+          💳 Online
+        </button>
+      </div>
+    </div>
+
+    <div class="transaction-id" *ngIf="selectedMethod === 'online'">
+      <div class="form-group">
+        <label>Transaction ID</label>
+        <input type="text" [(ngModel)]="transactionId" placeholder="Enter transaction ID">
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeModal()">Cancel</button>
+      <button 
+        class="btn-pay" 
+        (click)="processPayment()"
+        [disabled]="!selectedMethod || (selectedMethod === 'online' && !transactionId)">
+        Complete Payment
+      </button>
+    </div>
+  </div>
+</div>

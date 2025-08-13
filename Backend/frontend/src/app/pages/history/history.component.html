@@ -1,0 +1,52 @@
+<div class="history-page">
+  <div class="container">
+    <h1>Parking History</h1>
+    
+    <div class="history-stats">
+      <div class="stat-card">
+        <h3>Total Sessions</h3>
+        <p class="stat-number">{{historyStats.total}}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Total Revenue</h3>
+        <p class="stat-number">₹{{historyStats.revenue}}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Average Duration</h3>
+        <p class="stat-number">{{historyStats.avgHours}}h</p>
+      </div>
+    </div>
+
+    <div class="history-table">
+      <h2>Completed Parking Sessions</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle</th>
+              <th>Type</th>
+              <th>Slot</th>
+              <th>Entry Time</th>
+              <th>Exit Time</th>
+              <th>Duration</th>
+              <th>Amount</th>
+              <th>User</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of historyRecords">
+              <td>{{record.vehicleInfo.vehicleNumber}}</td>
+              <td>{{record.vehicleInfo.vehicleType}}</td>
+              <td>{{record.entryInfo.slotNumber}}</td>
+              <td>{{record.entryInfo.entryTime | date:'short'}}</td>
+              <td>{{record.entryInfo.exitTime | date:'short'}}</td>
+              <td>{{record.entryInfo.totalHours}}h</td>
+              <td>₹{{record.entryInfo.totalAmount}}</td>
+              <td>{{record.vehicleInfo.userId?.name || 'N/A'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

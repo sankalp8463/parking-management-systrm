@@ -1,0 +1,79 @@
+.history-page {
+  padding: 2rem;
+  background: #f8f9fa;
+  min-height: 80vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.history-page h1 {
+  color: #2c3e50;
+  margin-bottom: 2rem;
+}
+
+.history-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.stat-card h3 {
+  color: #7f8c8d;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #3498db;
+  margin: 0;
+}
+
+.history-table {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.history-table h2 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background: #f8f9fa;
+  color: #2c3e50;
+}
+
+tr:hover {
+  background: #f8f9fa;
+}

@@ -1,14 +1,20 @@
 const ParkingEntry = require('../models/parkingentry.model');
 const ParkingSlot = require('../models/parkingslot.model');
 const Vehicle = require('../models/vehicle.nodel');
+const ParkingHistory = require('../models/parkinghistory.model');
 
 const parkVehicle = async (req, res) => {
     try {
-        const { vehicleNumber, vehicleType } = req.body;
+        const { vehicleNumber, vehicleType, userId } = req.body;
         
         let vehicle = await Vehicle.findOne({ vehicleNumber });
         if (!vehicle) {
-            return res.status(404).json({ error: 'Vehicle not found' });
+            vehicle = new Vehicle({
+                userId,
+                vehicleNumber,
+                vehicleType
+            });
+            await vehicle.save();
         }
         
         const availableSlot = await ParkingSlot.findOne({ 
@@ -42,7 +48,7 @@ const exitVehicle = async (req, res) => {
     try {
         const { id } = req.params;
         
-        const entry = await ParkingEntry.findById(id).populate('slotId');
+        const entry = await ParkingEntry.findById(id).populate(['vehicleId', 'slotId']);
         if (!entry) {
             return res.status(404).json({ error: 'Parking entry not found' });
         }
@@ -55,17 +61,43 @@ const exitVehicle = async (req, res) => {
         const totalHours = Math.ceil((exitTime - entry.entryTime) / (1000 * 60 * 60));
         const totalAmount = totalHours * entry.slotId.hourlyRate;
         
-        entry.exitTime = exitTime;
-        entry.totalHours = totalHours;
-        entry.totalAmount = totalAmount;
-        entry.status = 'completed';
+        // Create backup record in parking history
+        const historyRecord = new ParkingHistory({
+            vehicleInfo: {
+                vehicleNumber: entry.vehicleId.vehicleNumber,
+                vehicleType: entry.vehicleId.vehicleType,
+                userId: entry.vehicleId.userId
+            },
+            entryInfo: {
+                slotNumber: entry.slotId.slotNumber,
+                slotType: entry.slotId.vehicleType,
+                hourlyRate: entry.slotId.hourlyRate,
+                entryTime: entry.entryTime,
+                exitTime: exitTime,
+                totalHours: totalHours,
+                totalAmount: totalAmount
+            }
+        });
         
+        // Free the slot
         entry.slotId.status = 'available';
         
-        await Promise.all([entry.save(), entry.slotId.save()]);
-        await entry.populate(['vehicleId', 'slotId']);
+        // Save history and update slot, then delete entry
+        await Promise.all([
+            historyRecord.save(),
+            entry.slotId.save()
+        ]);
         
-        res.json(entry);
+        // Delete the parking entry after backing up
+        await ParkingEntry.findByIdAndDelete(id);
+        
+        res.json({
+            message: 'Vehicle exited successfully',
+            totalAmount: totalAmount,
+            totalHours: totalHours,
+            historyId: historyRecord._id,
+            requiresPayment: true
+        });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -99,6 +131,71 @@ const getActiveEntries = async (req, res) => {
     }
 };
 
+const exitVehicleByNumber = async (req, res) => {
+    try {
+        const { vehicleNumber } = req.body;
+        
+        const vehicle = await Vehicle.findOne({ vehicleNumber });
+        if (!vehicle) {
+            return res.status(404).json({ error: 'Vehicle not found' });
+        }
+        
+        const entry = await ParkingEntry.findOne({ 
+            vehicleId: vehicle._id, 
+            status: 'active' 
+        }).populate(['vehicleId', 'slotId']);
+        
+        if (!entry) {
+            return res.status(404).json({ error: 'No active parking entry found for this vehicle' });
+        }
+        
+        const exitTime = new Date();
+        const totalHours = Math.ceil((exitTime - entry.entryTime) / (1000 * 60 * 60));
+        const totalAmount = totalHours * entry.slotId.hourlyRate;
+        
+        // Create backup record in parking history
+        const historyRecord = new ParkingHistory({
+            vehicleInfo: {
+                vehicleNumber: entry.vehicleId.vehicleNumber,
+                vehicleType: entry.vehicleId.vehicleType,
+                userId: entry.vehicleId.userId
+            },
+            entryInfo: {
+                slotNumber: entry.slotId.slotNumber,
+                slotType: entry.slotId.vehicleType,
+                hourlyRate: entry.slotId.hourlyRate,
+                entryTime: entry.entryTime,
+                exitTime: exitTime,
+                totalHours: totalHours,
+                totalAmount: totalAmount
+            }
+        });
+        
+        // Free the slot
+        entry.slotId.status = 'available';
+        
+        // Save history and update slot, then delete entry
+        await Promise.all([
+            historyRecord.save(),
+            entry.slotId.save()
+        ]);
+        
+        // Delete the parking entry after backing up
+        await ParkingEntry.findByIdAndDelete(entry._id);
+        
+        res.json({
+            message: 'Vehicle exited successfully',
+            vehicleNumber: vehicleNumber,
+            totalAmount: totalAmount,
+            totalHours: totalHours,
+            historyId: historyRecord._id,
+            requiresPayment: true
+        });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 const deleteParkingEntry = async (req, res) => {
     try {
         const entry = await ParkingEntry.findByIdAndDelete(req.params.id);
@@ -112,6 +209,7 @@ const deleteParkingEntry = async (req, res) => {
 module.exports = {
     parkVehicle,
     exitVehicle,
+    exitVehicleByNumber,
     getAllParkingEntries,
     getParkingEntryById,
     getActiveEntries,

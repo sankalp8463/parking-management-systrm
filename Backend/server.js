@@ -11,6 +11,8 @@ const parkingSlotRoutes = require('./router/entry-routes/parkingslot.routes');
 const parkingEntryRoutes = require('./router/entry-routes/parkingentry.routes');
 const paymentRoutes = require('./router/entry-routes/payment.routes');
 const billRoutes = require('./router/entry-routes/bill.routes');
+const parkingHistoryRoutes = require('./router/entry-routes/parkinghistory.routes');
+const receiptRoutes = require('./router/entry-routes/receipt.routes');
 
 const app = express();
 
@@ -28,6 +30,8 @@ app.use('/api/parking-slots', parkingSlotRoutes);
 app.use('/api/parking-entries', parkingEntryRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/bills', billRoutes);
+app.use('/api/parking-history', parkingHistoryRoutes);
+app.use('/api/receipts', receiptRoutes);
 
 // Database connection
 

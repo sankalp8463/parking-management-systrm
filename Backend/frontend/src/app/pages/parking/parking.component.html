@@ -1,0 +1,87 @@
+<div class="parking-page">
+  <div class="container">
+    <h1>Parking Management</h1>
+    
+    <div class="parking-actions">
+      <div class="action-card">
+        <h3>Park Vehicle</h3>
+        <p class="info-text">Vehicle will be automatically registered if not exists</p>
+        <form (ngSubmit)="parkVehicle()" #parkForm="ngForm">
+          <div class="form-group">
+            <label>Vehicle Number</label>
+            <input type="text" [(ngModel)]="parkData.vehicleNumber" name="vehicleNumber" required placeholder="e.g. ABC123">
+          </div>
+          <div class="form-group">
+            <label>Vehicle Type</label>
+            <select [(ngModel)]="parkData.vehicleType" name="vehicleType" required>
+              <option value="car">Car</option>
+              <option value="bike">Bike</option>
+              <option value="truck">Truck</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary" [disabled]="!parkForm.valid">Park Vehicle</button>
+        </form>
+      </div>
+
+      <div class="action-card">
+        <h3>Exit Vehicle</h3>
+        <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitVehicleForm="ngForm">
+          <div class="form-group">
+            <label>Vehicle Number</label>
+            <input type="text" [(ngModel)]="exitData.vehicleNumber" name="vehicleNumber" required placeholder="e.g. ABC123">
+          </div>
+          <button type="submit" class="btn-secondary" [disabled]="!exitVehicleForm.valid">Exit Vehicle</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="parking-slots">
+      <h2>Parking Slots Status</h2>
+      <div class="slots-grid">
+        <div class="slot" 
+             *ngFor="let slot of parkingSlots" 
+             [class.occupied]="slot.status === 'occupied'"
+             [class.available]="slot.status === 'available'">
+          <span class="slot-number">{{slot.slotNumber}}</span>
+          <span class="slot-type">{{slot.vehicleType}}</span>
+          <span class="slot-status">{{slot.status}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="active-entries">
+      <h2>Active Parking Entries</h2>
+      <div class="entries-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle</th>
+              <th>Slot</th>
+              <th>Entry Time</th>
+              <th>Duration</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of activeEntries">
+              <td>{{entry.vehicleNumber}}</td>
+              <td>{{entry.slotNumber}}</td>
+              <td>{{entry.entryTime | date:'short'}}</td>
+              <td>{{entry.duration}}</td>
+              <td>
+                <button class="btn-exit" (click)="exitVehicleByNumber(entry.vehicleNumber)">Exit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-payment-modal 
+  *ngIf="showPaymentModal"
+  [paymentData]="paymentData"
+  (paymentComplete)="onPaymentComplete()"
+  (modalClose)="onModalClose()">
+</app-payment-modal>
