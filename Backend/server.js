@@ -37,7 +37,7 @@ app.use('/api/receipts', receiptRoutes);
 
 // Start server
 const startServer = () => {
-  app.listen(PORT, () => {
+  app.listen(PORT, '10.219.251.204', () => {
     console.log(`Server running on port ${PORT}`);
   });
 };

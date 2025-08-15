@@ -18,7 +18,7 @@ export class RegisterComponent {
     phoneNumber: '',
     email: '',
     password: '',
-    role: 'customer'
+    
   };
 
   constructor(private router: Router, private apiService: ApiService) {}

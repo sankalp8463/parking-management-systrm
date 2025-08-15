@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
     totalVehicles: 0,
     activeEntries: 0,
     availableSlots: 0,
-    totalRevenue: 0
+    dailyRevenue: 0
   };
 
   isLoading = true;
@@ -56,12 +56,22 @@ export class DashboardComponent implements OnInit {
       payments: this.apiService.getPayments()
     }).subscribe({
       next: (data) => {
+        // Calculate daily revenue (today only)
+        const today = new Date();
+        const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+        const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+        
         const newStats = {
           totalVehicles: data.vehicles.length,
           activeEntries: data.activeEntries.length,
           availableSlots: data.availableSlots.length,
-          totalRevenue: data.payments
-            .filter((p: any) => p.paymentStatus === 'completed')
+          dailyRevenue: data.payments
+            .filter((p: any) => {
+              const paymentDate = new Date(p.paymentDate);
+              return p.paymentStatus === 'completed' && 
+                     paymentDate >= startOfDay && 
+                     paymentDate <= endOfDay;
+            })
             .reduce((sum: number, p: any) => sum + p.amountPaid, 0)
         };
         
@@ -80,7 +90,7 @@ export class DashboardComponent implements OnInit {
           totalVehicles: 25,
           activeEntries: 8,
           availableSlots: 12,
-          totalRevenue: 1250
+          dailyRevenue: 450
         };
         this.isLoading = false;
       }

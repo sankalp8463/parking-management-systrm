@@ -1,51 +1,122 @@
 <div class="history-page">
   <div class="container">
-    <h1>Parking History</h1>
+    <!-- Header Section -->
+    <div class="page-header">
+      <h1>📊 Parking History</h1>
+      <p>Track and export your parking records</p>
+    </div>
     
-    <div class="history-stats">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
       <div class="stat-card">
-        <h3>Total Sessions</h3>
-        <p class="stat-number">{{historyStats.total}}</p>
+        <div class="stat-icon">🚗</div>
+        <div class="stat-content">
+          <h3>{{historyStats.total}}</h3>
+          <p>Daily Sessions</p>
+        </div>
       </div>
       <div class="stat-card">
-        <h3>Total Revenue</h3>
-        <p class="stat-number">₹{{historyStats.revenue}}</p>
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <h3>₹{{historyStats.revenue}}</h3>
+          <p>Daily Revenue</p>
+        </div>
       </div>
       <div class="stat-card">
-        <h3>Average Duration</h3>
-        <p class="stat-number">{{historyStats.avgHours}}h</p>
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-content">
+          <h3>{{historyStats.avgHours}}h</h3>
+          <p>Avg Duration</p>
+        </div>
       </div>
     </div>
 
-    <div class="history-table">
-      <h2>Completed Parking Sessions</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Vehicle</th>
-              <th>Type</th>
-              <th>Slot</th>
-              <th>Entry Time</th>
-              <th>Exit Time</th>
-              <th>Duration</th>
-              <th>Amount</th>
-              <th>User</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let record of historyRecords">
-              <td>{{record.vehicleInfo.vehicleNumber}}</td>
-              <td>{{record.vehicleInfo.vehicleType}}</td>
-              <td>{{record.entryInfo.slotNumber}}</td>
-              <td>{{record.entryInfo.entryTime | date:'short'}}</td>
-              <td>{{record.entryInfo.exitTime | date:'short'}}</td>
-              <td>{{record.entryInfo.totalHours}}h</td>
-              <td>₹{{record.entryInfo.totalAmount}}</td>
-              <td>{{record.vehicleInfo.userId?.name || 'N/A'}}</td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Search & Filter Controls -->
+    <div class="controls-card">
+      <div class="controls-header">
+        <h3>🔍 Search & Filter</h3>
+      </div>
+      <div class="controls-grid">
+        <div class="search-section">
+          <label>Search by Vehicle Number</label>
+          <input type="text" [(ngModel)]="searchVehicle" placeholder="Enter vehicle number" class="search-input" (input)="searchByVehicle()">
+        </div>
+        <div class="date-filters">
+          <div class="date-group">
+            <label>Select Date</label>
+            <input type="date" [(ngModel)]="selectedDate" class="date-input" (change)="filterByDate()">
+          </div>
+          <button class="btn-today" (click)="showToday()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            Today
+          </button>
+        </div>
+        <div class="export-section">
+          <button class="btn-export" (click)="exportToExcel()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            Export Excel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Records Grid -->
+    <div class="records-section">
+      <h3>🚙 Parking Records</h3>
+      <div class="records-grid" *ngIf="filteredRecords.length > 0">
+        <div class="record-card" *ngFor="let record of filteredRecords">
+          <div class="record-header">
+            <div class="vehicle-info">
+              <h4>{{record.vehicleInfo.vehicleNumber}}</h4>
+              <span class="vehicle-type">{{record.vehicleInfo.vehicleType}}</span>
+            </div>
+            <div class="amount">₹{{record.entryInfo.totalAmount}}</div>
+          </div>
+          
+          <div class="record-details">
+            <div class="detail-row">
+              <span class="label">🅿️ Slot:</span>
+              <span class="value">{{record.entryInfo.slotNumber}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">📅 Entry:</span>
+              <span class="value">{{record.entryInfo.entryTime | date:'MMM d, y h:mm a'}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">🚪 Exit:</span>
+              <span class="value">{{record.entryInfo.exitTime | date:'MMM d, y h:mm a'}}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">⏰ Duration:</span>
+              <span class="value">{{record.entryInfo.totalHours}}h</span>
+            </div>
+          </div>
+
+          <div class="record-footer">
+            <div class="payment-info">
+              <span class="payment-method">
+                {{record.paymentInfo?.paymentMethod || 'N/A'}}
+              </span>
+              <span class="status-badge" [class]="'status-' + (record.paymentInfo?.paymentStatus || 'unknown')">
+                {{record.paymentInfo?.paymentStatus || 'N/A'}}
+              </span>
+            </div>
+            <div class="user-info">
+              👤 {{record.vehicleInfo.userId?.name || 'Guest'}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="filteredRecords.length === 0">
+        <div class="empty-icon">📋</div>
+        <h3>No Records Found</h3>
+        <p>Try adjusting your date filter or check back later.</p>
       </div>
     </div>
   </div>

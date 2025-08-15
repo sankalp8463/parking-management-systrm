@@ -45,11 +45,21 @@ export class PaymentsComponent implements OnInit {
   }
 
   calculateStats() {
-    this.paymentStats.total = this.payments.length;
-    this.paymentStats.revenue = this.payments
+    // Calculate daily stats
+    const today = new Date();
+    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
+    const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
+    
+    const todayPayments = this.payments.filter(p => {
+      const paymentDate = new Date(p.paymentDate);
+      return paymentDate >= startOfDay && paymentDate <= endOfDay;
+    });
+    
+    this.paymentStats.total = todayPayments.length;
+    this.paymentStats.revenue = todayPayments
       .filter(p => p.paymentStatus === 'completed')
       .reduce((sum, p) => sum + p.amountPaid, 0);
-    this.paymentStats.pending = this.payments
+    this.paymentStats.pending = todayPayments
       .filter(p => p.paymentStatus === 'pending').length;
   }
 
