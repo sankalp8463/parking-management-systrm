@@ -1,10 +1,10 @@
 <div class="parking-page">
   <div class="container">
-    <h1>Parking Management</h1>
+    <h1>Vehicle Management</h1>
     
     <div class="parking-actions">
       <div class="action-card">
-        <h3>Park Vehicle</h3>
+        <h3>Park</h3>
         <p class="info-text">Vehicle will be automatically registered if not exists</p>
         <form (ngSubmit)="parkVehicle()" #parkForm="ngForm">
           <div class="form-group">
@@ -24,7 +24,7 @@
       </div>
 
       <div class="action-card">
-        <h3>Exit Vehicle</h3>
+        <h3>Check Out</h3>
         <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitVehicleForm="ngForm">
           <div class="form-group">
             <label>Vehicle Number</label>

@@ -1,77 +1,105 @@
 <div class="slots-page">
   <div class="container">
-    <h1>Parking Slot Management</h1>
+    <h1>Parking Slot Management</h1> 
+    <p></p>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <h3>All Slots</h3>
+      <select [(ngModel)]="filterType" class="type-select">
+        <option value="">All Types</option>
+        <option value="bike">Bike</option>
+        <option value="car">Car</option>
+        <option value="truck">Truck</option>
+      </select>
+
+      <button class="add-slot-dd" (click)="openAddModal()">Add Slot ▾</button>
+    </div>
+
+    <!-- All slots preview -->
+    <div class="all-slot-preview">
+      <div
+        class="preview-item"
+        *ngFor="let slot of getSortedFilteredSlots()"
+        [ngClass]="slot.status"
+        (click)="selectSlot(slot)"
+      >
+      {{ convertForDisplay(slot) }}
+
+      </div>
+    </div>
+
     
-    <div class="add-slot">
-      <div class="action-card">
-        <h3>Add New Parking Slot</h3>
-        <form (ngSubmit)="addSlot()" #slotForm="ngForm">
-          <div class="form-group">
-            <label>Slot Number</label>
-            <input type="text" [(ngModel)]="newSlot.slotNumber" name="slotNumber" required>
-          </div>
-          <div class="form-group">
-            <label>Vehicle Type</label>
-            <select [(ngModel)]="newSlot.vehicleType" name="vehicleType" required>
-              <option value="car">Car</option>
-              <option value="bike">Bike</option>
-              <option value="truck">Truck</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Hourly Rate (₹)</label>
-            <input type="number" [(ngModel)]="newSlot.hourlyRate" name="hourlyRate" required min="1">
-          </div>
-          <div class="form-group">
-            <label>Status</label>
-            <select [(ngModel)]="newSlot.status" name="status" required>
-              <option value="available">Available</option>
-              <option value="occupied">Occupied</option>
-              <option value="maintenance">Maintenance</option>
-            </select>
-          </div>
-          <button type="submit" class="btn-primary" [disabled]="!slotForm.valid">Add Slot</button>
-        </form>
-      </div>
-    </div>
 
-    <div class="slots-overview">
-      <h2>Slot Statistics</h2>
-      <div class="stats-grid">
-        <div class="stat-card available">
-          <h3>Available</h3>
-          <p class="stat-number">{{slotStats.available}}</p>
-        </div>
-        <div class="stat-card occupied">
-          <h3>Occupied</h3>
-          <p class="stat-number">{{slotStats.occupied}}</p>
-        </div>
-        <div class="stat-card maintenance">
-          <h3>Maintenance</h3>
-          <p class="stat-number">{{slotStats.maintenance}}</p>
-        </div>
-        <div class="stat-card total">
-          <h3>Total Slots</h3>
-          <p class="stat-number">{{slotStats.total}}</p>
+    <!-- Floor Layout -->
+    <h2>Slot Layout</h2>
+    <div class="floors-layout">
+      <div class="floor-column" *ngFor="let fl of floors">
+        <h3>{{ fl.label }}</h3>
+        <div class="slot-matrix">
+          <div class="slot-matrix">
+
+            <!-- Bikes (A..D) -->
+            <ng-container *ngIf="fl.type=='bike'">
+              <div *ngFor="let r of rows" class="slot-row">
+                <div *ngFor="let c of cols" class="slot-box"
+                     [ngClass]="getSlotClass(r+c, fl.type)"
+                     (click)="selectSlotFromMatrix(r+c, fl.type)">
+                  {{ r + c }}
+                </div>
+              </div>
+            </ng-container>
+          
+            <!-- Cars (E..H) -->
+            <ng-container *ngIf="fl.type=='car'">
+              <div *ngFor="let r of rows" class="slot-row">
+                <div *ngFor="let c of cols" class="slot-box"
+                     [ngClass]="getSlotClass(toChar(r,4)+c, fl.type)"
+                     (click)="selectSlotFromMatrix(toChar(r,4)+c, fl.type)">
+                  {{ toChar(r,4) + c }}
+                </div>
+              </div>
+            </ng-container>
+          
+            <!-- Trucks (L..O) -->
+            <ng-container *ngIf="fl.type=='truck'">
+              <div *ngFor="let r of rows" class="slot-row">
+                <div *ngFor="let c of cols" class="slot-box"
+                     [ngClass]="getSlotClass(toChar(r,10)+c, fl.type)"
+                     (click)="selectSlotFromMatrix(toChar(r,10)+c, fl.type)">
+                  {{ toChar(r,10) + c }}
+                </div>
+              </div>
+            </ng-container>
+          
+          </div>
+          
         </div>
       </div>
     </div>
-
-    <div class="slots-grid-view">
-      <h2>Slot Layout</h2>
-      <div class="slots-visual">
-        <div class="slot-item" 
-             *ngFor="let slot of slots" 
-             [class]="slot.status"
-             (click)="selectSlot(slot)">
-          <div class="slot-number">{{slot.slotNumber}}</div>
-          <div class="slot-type">{{slot.vehicleType}}</div>
-          <div class="slot-rate">${{slot.hourlyRate}}/hr</div>
-          <div class="slot-status">{{slot.status}}</div>
-        </div>
-      </div>
+<!-- Statistic -->
+<div class="slots-overview">
+  <h2>Slot Statistics</h2>
+  <div class="stats-grid">
+    <div class="stat-card available">
+      <h3>Available</h3>
+      <p class="stat-number">{{ slotStats.available }}</p>
     </div>
-
+    <div class="stat-card occupied">
+      <h3>Occupied</h3>
+      <p class="stat-number">{{ slotStats.occupied }}</p>
+    </div>
+    <div class="stat-card maintenance">
+      <h3>Maintenance</h3>
+      <p class="stat-number">{{ slotStats.maintenance }}</p>
+    </div>
+    <div class="stat-card total">
+      <h3>Total Slots</h3>
+      <p class="stat-number">{{ slotStats.total }}</p>
+    </div>
+  </div>
+</div>
+    <!-- Table -->
     <div class="slots-table">
       <h2>All Parking Slots</h2>
       <div class="table-container">
@@ -87,13 +115,12 @@
           </thead>
           <tbody>
             <tr *ngFor="let slot of slots">
-              <td>{{slot.slotNumber}}</td>
-              <td>{{slot.vehicleType}}</td>
-              <td>₹{{slot.hourlyRate}}</td>
+              <td>{{ convertForDisplay(slot) }}</td>
+
+              <td>{{ slot.vehicleType }}</td>
+              <td>₹{{ slot.hourlyRate }}</td>
               <td>
-                <span class="status-badge" [class]="slot.status">
-                  {{slot.status}}
-                </span>
+                <span class="status-badge" [ngClass]="slot.status">{{ slot.status }}</span>
               </td>
               <td>
                 <button class="btn-edit" (click)="editSlot(slot)">Edit</button>
@@ -105,41 +132,42 @@
       </div>
     </div>
 
-    <!-- Edit Modal -->
-    <div class="modal" *ngIf="editingSlot" (click)="closeModal()">
+    <!-- Add Slot Modal -->
+    <div class="modal" *ngIf="showAddModal" (click)="closeAddModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
-        <h3>Edit Parking Slot</h3>
-        <form (ngSubmit)="updateSlot()" #editForm="ngForm">
-          <div class="form-group">
-            <label>Slot Number</label>
-            <input type="text" [(ngModel)]="editingSlot.slotNumber" name="slotNumber" required>
-          </div>
+        <h3>Add New Parking Slot</h3>
+        <form (ngSubmit)="addSlot()" #slotForm="ngForm">
           <div class="form-group">
             <label>Vehicle Type</label>
-            <select [(ngModel)]="editingSlot.vehicleType" name="vehicleType" required>
-              <option value="car">Car</option>
+            <select [(ngModel)]="newSlot.vehicleType" name="vehicleType" required>
               <option value="bike">Bike</option>
+              <option value="car">Car</option>
               <option value="truck">Truck</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Hourly Rate (₹)</label>
-            <input type="number" [(ngModel)]="editingSlot.hourlyRate" name="hourlyRate" required min="1">
+            <label>Slot Number</label>
+            <input type="text" [(ngModel)]="newSlot.slotNumber" name="slotNumber" required />
+          </div>
+          <div class="form-group">
+            <label>Hourly Rate</label>
+            <input type="number" [(ngModel)]="newSlot.hourlyRate" name="hourlyRate" required />
           </div>
           <div class="form-group">
             <label>Status</label>
-            <select [(ngModel)]="editingSlot.status" name="status" required>
+            <select [(ngModel)]="newSlot.status" name="status" required>
               <option value="available">Available</option>
               <option value="occupied">Occupied</option>
               <option value="maintenance">Maintenance</option>
             </select>
           </div>
           <div class="modal-actions">
-            <button type="submit" class="btn-primary" [disabled]="!editForm.valid">Update</button>
-            <button type="button" class="btn-secondary" (click)="closeModal()">Cancel</button>
+            <button class="btn-primary" type="submit" [disabled]="!slotForm.valid">Add Slot</button>
+            <button class="btn-secondary" type="button" (click)="closeAddModal()">Cancel</button>
           </div>
         </form>
       </div>
     </div>
+
   </div>
 </div>

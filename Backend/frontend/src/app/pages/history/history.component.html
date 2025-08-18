@@ -2,31 +2,78 @@
   <div class="container">
     <!-- Header Section -->
     <div class="page-header">
-      <h1>📊 Parking History</h1>
-      <p>Track and export your parking records</p>
+      <h1> Parking History</h1><p></p>
+
     </div>
     
     <!-- Stats Cards -->
     <div class="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon">🚗</div>
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <defs>
+            <linearGradient id="sessionsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#3b82f6"/>
+              <stop offset="100%" style="stop-color:#1d4ed8"/>
+            </linearGradient>
+          </defs>
+          <circle cx="24" cy="24" r="24" fill="url(#sessionsGradient)"/>
+          <!-- Multiple Users Icon -->
+          <circle cx="20" cy="18" r="4" stroke="white" stroke-width="2" fill="none"/>
+          <circle cx="28" cy="18" r="4" stroke="white" stroke-width="2" fill="none"/>
+          <path d="M12 32c0-4 4-8 8-8s8 4 8 8M20 32c0-4 4-8 8-8s8 4 8 8" 
+                stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <!-- Activity Indicator -->
+          <circle cx="34" cy="14" r="3" fill="#22c55e"/>
+        </svg>
         <div class="stat-content">
-          <h3>{{historyStats.total}}</h3>
+          <h3>{{historyStats.total}} <b>♙</b></h3>
           <p>Daily Sessions</p>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">💰</div>
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <defs>
+            <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#10b981"/>
+              <stop offset="100%" style="stop-color:#059669"/>
+            </linearGradient>
+          </defs>
+          <circle cx="24" cy="24" r="24" fill="url(#revenueGradient)"/>
+          <!-- Rupee Symbol -->
+          <path d="M16 16h12M16 20h12M16 20h8c2.21 0 4 1.79 4 4s-1.79 4-4 4h-8l8 8" 
+                stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <!-- Growth Arrow -->
+          <path d="M32 14l4-4 4 4M36 10v8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
         <div class="stat-content">
-          <h3>₹{{historyStats.revenue}}</h3>
+          <h3>₹ {{historyStats.revenue}}</h3>
           <p>Daily Revenue</p>
         </div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">⏱️</div>
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+          <defs>
+            <linearGradient id="durationGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#f59e0b"/>
+              <stop offset="100%" style="stop-color:#d97706"/>
+            </linearGradient>
+          </defs>
+          <circle cx="24" cy="24" r="24" fill="url(#durationGradient)"/>
+          <!-- Clock Face -->
+          <circle cx="24" cy="24" r="12" stroke="white" stroke-width="2" fill="none"/>
+          <!-- Clock Hands -->
+          <path d="M24 16v8l6 4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- Hour Markers -->
+          <circle cx="24" cy="14" r="1" fill="white"/>
+          <circle cx="34" cy="24" r="1" fill="white"/>
+          <circle cx="24" cy="34" r="1" fill="white"/>
+          <circle cx="14" cy="24" r="1" fill="white"/>
+          <!-- Center Dot -->
+          <circle cx="24" cy="24" r="2" fill="white"/>
+        </svg>
         <div class="stat-content">
-          <h3>{{historyStats.avgHours}}h</h3>
-          <p>Avg Duration</p>
+          <h3>{{historyStats.avgHours}} hrs</h3>
+          <p>Avg. Duration</p>
         </div>
       </div>
     </div>
@@ -34,39 +81,57 @@
     <!-- Search & Filter Controls -->
     <div class="controls-card">
       <div class="controls-header">
-        <h3>🔍 Search & Filter</h3>
+        <h2>Find Records</h2>
       </div>
-      <div class="controls-grid">
-        <div class="search-section">
-          <label>Search by Vehicle Number</label>
-          <input type="text" [(ngModel)]="searchVehicle" placeholder="Enter vehicle number" class="search-input" (input)="searchByVehicle()">
-        </div>
-        <div class="date-filters">
-          <div class="date-group">
-            <label>Select Date</label>
-            <input type="date" [(ngModel)]="selectedDate" class="date-input" (change)="filterByDate()">
-          </div>
-          <button class="btn-today" (click)="showToday()">
+      
+      <div class="search-section">
+        <label>Vehicle No.</label>
+        <div class="search-input-group">
+          <input 
+            type="text" 
+            [(ngModel)]="searchVehicle" 
+            placeholder="Enter vehicle number" 
+            class="search-input"
+            (keydown.enter)="performSearch()">
+          <button class="btn-search" (click)="performSearch()">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
-            Today
+            Search
           </button>
         </div>
-        <div class="export-section">
-          <button class="btn-export" (click)="exportToExcel()">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            Export Excel
-          </button>
+      </div>
+      
+      <div class="date-filters">
+        <div class="date-group"><p></p>
+          <label>Select Date</label>
+          <input 
+            type="date" 
+            [(ngModel)]="selectedDate" 
+            class="date-input" 
+            (change)="filterByDate()">
         </div>
+        <button class="btn-today" (click)="showToday()">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          Today
+        </button>
+      </div>
+      
+      <div class="export-section">
+        <button class="btn-export" (click)="exportToExcel()">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          Export Excel
+        </button>
       </div>
     </div>
 
     <!-- Records Grid -->
     <div class="records-section">
-      <h3>🚙 Parking Records</h3>
+      <h3> Parking Records</h3>
       <div class="records-grid" *ngIf="filteredRecords.length > 0">
         <div class="record-card" *ngFor="let record of filteredRecords">
           <div class="record-header">
@@ -114,7 +179,7 @@
 
       <!-- Empty State -->
       <div class="empty-state" *ngIf="filteredRecords.length === 0">
-        <div class="empty-icon">📋</div>
+        <div class="empty-icon"></div>
         <h3>No Records Found</h3>
         <p>Try adjusting your date filter or check back later.</p>
       </div>

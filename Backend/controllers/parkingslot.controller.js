@@ -2,8 +2,30 @@ const ParkingSlot = require('../models/parkingslot.model');
 
 const createParkingSlot = async (req, res) => {
     try {
-        const { slotNumber, vehicleType, hourlyRate } = req.body;
-        const slotData = { slotNumber, vehicleType, hourlyRate };
+        let { slotNumber, vehicleType, hourlyRate, status } = req.body;
+        let letter = slotNumber[0];
+        const numPart = slotNumber.slice(1);
+
+        // Only shift if user is entering A–D manually
+        if (vehicleType === 'car') {
+            if (letter >= 'A' && letter <= 'D') {
+                letter = String.fromCharCode(letter.charCodeAt(0) + 4); // A→E, B→F, C→G, D→H
+            }
+        } else if (vehicleType === 'truck') {
+            if (letter >= 'A' && letter <= 'D') {
+                letter = String.fromCharCode(letter.charCodeAt(0) + 10); // A→K, B→L, C→M, D→N
+            }
+        }
+
+        const finalSlotNumber = letter + numPart;
+
+        const slotData = {
+            slotNumber: finalSlotNumber,
+            vehicleType,
+            hourlyRate,
+            status
+        };
+
         const slot = new ParkingSlot(slotData);
         await slot.save();
         res.status(201).json(slot);
@@ -11,6 +33,8 @@ const createParkingSlot = async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 };
+
+
 
 const getAllParkingSlots = async (req, res) => {
     try {
