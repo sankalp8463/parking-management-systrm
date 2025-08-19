@@ -3,7 +3,8 @@
 # ParkEase Deployment Script
 
 cd /home/ubuntu/parking-management-systrm/
-
+git add .
+git commit -m "no"
 # Pull latest changes
 git pull 
 cd Backend
