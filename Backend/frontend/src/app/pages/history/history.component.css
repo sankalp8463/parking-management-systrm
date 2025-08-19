@@ -99,7 +99,7 @@
   gap: 2rem;
 }
 
-/* Updated Search Section - Horizontal Layout */
+/* Updated Search Section - Compact Single Line Layout */
 .search-section {
   display: flex;
   flex-direction: column;
@@ -107,10 +107,11 @@
 }
 
 .search-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  display: flex;
+  gap: 1rem;
   align-items: end;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .search-group,
@@ -118,6 +119,14 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.search-group {
+  flex: 0 0 200px; /* Fixed width for search - suitable for 8 character license plates */
+}
+
+.date-group {
+  flex: 0 0 160px; /* Fixed width for date input */
 }
 
 .search-group label,
@@ -134,16 +143,25 @@
   align-items: center;
 }
 
-.search-input,
-.date-input {
-  flex: 1;
+.search-input {
+  width: 200px; /* Compact width for license plates (max 8 chars) */
   padding: 0.75rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #b6ceec;
   border-radius: 8px;
-  font-size: 0.875rem;
+  font-size: 0.879rem;
   background: white;
   transition: border-color 0.2s ease;
-  min-width: 0;
+  text-transform: uppercase; /* Auto-uppercase for license plates */
+}
+
+.date-input {
+  width: 160px; /* Compact width for date */
+  padding: 0.75rem;
+  border: 2px solid #b6ceec;
+  border-radius: 8px;
+  font-size: 0.879rem;
+  background: white;
+  transition: border-color 0.2s ease;
 }
 
 .search-input:focus,
@@ -157,7 +175,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.2rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -165,6 +183,7 @@
   font-weight: 500;
   white-space: nowrap;
   transition: all 0.2s ease;
+  height: fit-content;
 }
 
 .btn-search {
@@ -195,8 +214,7 @@
 }
 
 .export-section {
-  display: flex;
-  justify-content: flex-end;
+  margin-left: auto;
 }
 
 .date-filters {
@@ -415,23 +433,36 @@
     gap: 1rem;
   }
   
-  /* Mobile search layout */
+  /* Mobile search layout - Keep horizontal, make smaller */
   .search-row {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
   
-  .search-input-group,
-  .date-input-group {
-    flex-direction: column;
-    gap: 10px;
+  .search-group {
+    flex: 0 0 140px; /* Smaller on mobile but still horizontal */
   }
   
-  .search-input,
-  .date-input,
+  .date-group {
+    flex: 0 0 120px; /* Smaller on mobile but still horizontal */
+  }
+  
+  .search-input {
+    width: 140px;
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+  
+  .date-input {
+    width: 120px;
+    padding: 0.6rem;
+    font-size: 0.8rem;
+  }
+  
   .btn-search,
   .btn-today {
-    width: 100%;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
   }
   
   .export-section {

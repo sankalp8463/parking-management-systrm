@@ -16,7 +16,7 @@
       <button class="add-slot-dd" (click)="openAddModal()">Add Slot ▾</button>
     </div>
 
-    <!-- All slots preview -->
+    <!-- All slots preview - FIXED: Show actual slot numbers -->
     <div class="all-slot-preview">
       <div
         class="preview-item"
@@ -24,8 +24,7 @@
         [ngClass]="slot.status"
         (click)="selectSlot(slot)"
       >
-      {{ convertForDisplay(slot) }}
-
+      {{ slot.slotNumber }}
       </div>
     </div>
 
@@ -115,7 +114,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let slot of slots">
-              <td>{{ convertForDisplay(slot) }}</td>
+              <td>{{ slot.slotNumber }}</td>
 
               <td>{{ slot.vehicleType }}</td>
               <td>₹{{ slot.hourlyRate }}</td>

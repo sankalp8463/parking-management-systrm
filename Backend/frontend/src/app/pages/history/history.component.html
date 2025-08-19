@@ -3,7 +3,6 @@
     <!-- Header Section -->
     <div class="page-header">
       <h1> Parking History</h1><p></p>
-
     </div>
     
     <!-- Stats Cards -->
@@ -26,7 +25,7 @@
           <circle cx="34" cy="14" r="3" fill="#22c55e"/>
         </svg>
         <div class="stat-content">
-          <h3>{{historyStats.total}} <b>♙</b></h3>
+          <h3>{{historyStats.total}} <b></b></h3>
           <p>Daily Sessions</p>
         </div>
       </div>
@@ -78,54 +77,61 @@
       </div>
     </div>
 
-    <!-- Search & Filter Controls -->
+    <!-- Search & Filter Controls - FIXED: Single Line Layout -->
     <div class="controls-card">
       <div class="controls-header">
         <h2>Find Records</h2>
       </div>
       
       <div class="search-section">
-        <label>Vehicle No.</label>
-        <div class="search-input-group">
-          <input 
-            type="text" 
-            [(ngModel)]="searchVehicle" 
-            placeholder="Enter vehicle number" 
-            class="search-input"
-            (keydown.enter)="performSearch()">
-          <button class="btn-search" (click)="performSearch()">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-            Search
-          </button>
+        <div class="search-row">
+          <!-- Vehicle Search Group -->
+          <div class="search-group">
+            <label>Vehicle No.</label>
+            <div class="search-input-group">
+              <input 
+                type="text" 
+                [(ngModel)]="searchVehicle" 
+                placeholder="Enter vehicle number" 
+                class="search-input"
+                (keydown.enter)="performSearch()">
+              <button class="btn-search" (click)="performSearch()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                Search
+              </button>
+            </div>
+          </div>
+
+          <!-- Date Group -->
+          <div class="date-group">
+            <label>Select Date</label>
+            <div class="date-input-group">
+              <input 
+                type="date" 
+                [(ngModel)]="selectedDate" 
+                class="date-input" 
+                (change)="filterByDate()">
+              <button class="btn-today" (click)="showToday()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                Today
+              </button>
+            </div>
+          </div>
+
+          <!-- Export Button -->
+          <div class="export-section">
+            <button class="btn-export" (click)="exportToExcel()">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              Export Excel
+            </button>
+          </div>
         </div>
-      </div>
-      
-      <div class="date-filters">
-        <div class="date-group"><p></p>
-          <label>Select Date</label>
-          <input 
-            type="date" 
-            [(ngModel)]="selectedDate" 
-            class="date-input" 
-            (change)="filterByDate()">
-        </div>
-        <button class="btn-today" (click)="showToday()">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-          </svg>
-          Today
-        </button>
-      </div>
-      
-      <div class="export-section">
-        <button class="btn-export" (click)="exportToExcel()">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-          Export Excel
-        </button>
       </div>
     </div>
 
@@ -144,19 +150,19 @@
           
           <div class="record-details">
             <div class="detail-row">
-              <span class="label">🅿️ Slot:</span>
+              <span class="label">Slot:</span>
               <span class="value">{{record.entryInfo.slotNumber}}</span>
             </div>
             <div class="detail-row">
-              <span class="label">📅 Entry:</span>
+              <span class="label">Entry:</span>
               <span class="value">{{record.entryInfo.entryTime | date:'MMM d, y h:mm a'}}</span>
             </div>
             <div class="detail-row">
-              <span class="label">🚪 Exit:</span>
+              <span class="label">Exit:</span>
               <span class="value">{{record.entryInfo.exitTime | date:'MMM d, y h:mm a'}}</span>
             </div>
             <div class="detail-row">
-              <span class="label">⏰ Duration:</span>
+              <span class="label">Duration:</span>
               <span class="value">{{record.entryInfo.totalHours}}h</span>
             </div>
           </div>

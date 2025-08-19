@@ -97,13 +97,8 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getActivityIcon(type: string): string {
-    switch(type) {
-      case 'park': return '🅿️';
-      case 'payment': return '💳';
-      case 'exit': return '🚗';
-      default: return '📋';
-    }
+  getActivityIconType(type: string): string {
+    return type;
   }
 
   getTimeAgo(): string {
