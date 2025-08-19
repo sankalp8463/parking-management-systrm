@@ -26,6 +26,8 @@ jobs:
           echo "RAZORPAY_KEY_ID=${{ secrets.RAZORPAY_KEY_ID }}" >> .env
           echo "RAZORPAY_KEY_SECRET=${{ secrets.RAZORPAY_KEY_SECRET }}" >> .env
           echo "PORT=3000" >> .env
+          cd ..
+          cd ..
           
           # Run deployment script
           ./deploy.sh
