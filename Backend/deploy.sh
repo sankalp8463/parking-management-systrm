@@ -3,10 +3,10 @@
 # ParkEase Deployment Script
 
 cd /home/ubuntu/parking-management-systrm/
-git add .
-git commit -m "no"
-# Pull latest changes
-git pull 
+git add Backend/deploy.sh
+git commit -m "Save local changes before pull"
+git pull origin main
+
 cd Backend
 # Update backend
 npm install
