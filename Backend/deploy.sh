@@ -2,7 +2,7 @@
 
 # ParkEase Deployment Script
 
-cd /home/ubuntu/parking-management-systrm
+cd /home/ubuntu/parking-management-systrm/Backend
 
 # Pull latest changes
 git pull origin main
