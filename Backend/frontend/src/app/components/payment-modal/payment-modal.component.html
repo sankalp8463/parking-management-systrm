@@ -24,18 +24,15 @@
         </button>
         <button 
           class="method-btn" 
-          [class.active]="selectedMethod === 'online'"
-          (click)="selectMethod('online')">
-          Online
+          [class.active]="selectedMethod === 'razorpay'"
+          (click)="selectMethod('razorpay')">
+          Razorpay
         </button>
       </div>
     </div>
 
-    <div class="transaction-id" *ngIf="selectedMethod === 'online'">
-      <div class="form-group">
-        <label>Transaction ID</label>
-        <input type="text" [(ngModel)]="transactionId" placeholder="Enter transaction ID">
-      </div>
+    <div class="payment-info" *ngIf="selectedMethod === 'razorpay'">
+      <p class="info-text">Click 'Complete Payment' to proceed with Razorpay secure payment gateway</p>
     </div>
 
     <div class="modal-actions">
@@ -43,7 +40,7 @@
       <button 
         class="btn-pay" 
         (click)="processPayment()"
-        [disabled]="!selectedMethod || (selectedMethod === 'online' && !transactionId)">
+        [disabled]="!selectedMethod">
         Complete Payment
       </button>
     </div>

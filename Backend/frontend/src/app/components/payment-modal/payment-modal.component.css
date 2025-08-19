@@ -97,9 +97,19 @@
   color: #3498db;
 }
 
-.transaction-id {
+.transaction-id, .payment-info {
   padding: 0 1.5rem 1.5rem;
   border-bottom: 1px solid #eee;
+}
+
+.info-text {
+  margin: 0;
+  padding: 1rem;
+  background: #e8f5e8;
+  border-radius: 5px;
+  color: #2d5a2d;
+  text-align: center;
+  font-size: 0.9rem;
 }
 
 .form-group {

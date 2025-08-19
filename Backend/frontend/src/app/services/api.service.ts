@@ -92,6 +92,14 @@ export class ApiService {
     return this.http.get(`${this.baseUrl}/payments`, { headers: this.getAuthHeaders() });
   }
 
+  createRazorpayOrder(orderData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/payments/create-order`, orderData, { headers: this.getAuthHeaders() });
+  }
+
+  verifyRazorpayPayment(paymentData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/payments/verify`, paymentData, { headers: this.getAuthHeaders() });
+  }
+
   createPayment(paymentData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/payments`, paymentData, { headers: this.getAuthHeaders() });
   }
