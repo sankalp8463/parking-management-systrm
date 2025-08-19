@@ -3,8 +3,7 @@
 # ParkEase Deployment Script
 
 cd /home/ubuntu/parking-management-systrm/
-git add Backend/deploy.sh
-git commit -m "Save local changes before pull"
+git reset --hard HEAD
 git pull origin main
 
 cd Backend
