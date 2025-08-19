@@ -17,9 +17,13 @@
       </div>
     </div>
 
-    <div class="payments-list">
-      <h2>Payment History</h2>
-      <div class="payments-table">
+   <div class="payments-list">
+  <div class="payment-header">
+    <h2>Payment History</h2>
+    <button class="btn-create" (click)="openModal()">+ Create Payment</button>
+  </div> 
+    <div class="payments-table">
+ 
         <table>
           <thead>
             <tr>
@@ -48,33 +52,39 @@
         </table>
       </div>
     </div>
+  </div> <!-- end of .payments-list -->
 
-    <div class="create-payment">
-      <div class="action-card">
-        <h3>Create Payment</h3>
-        <form (ngSubmit)="createPayment()" #paymentForm="ngForm">
-          <div class="form-group">
-            <label>Vehicle Number</label>
-            <input type="text" [(ngModel)]="newPayment.vehicleNumber" name="vehicleNumber" required>
-          </div>
-          <div class="form-group">
-            <label>Amount</label>
-            <input type="number" [(ngModel)]="newPayment.amountPaid" name="amountPaid" required>
-          </div>
-          <div class="form-group">
-            <label>Payment Method</label>
-            <select [(ngModel)]="newPayment.paymentMethod" name="paymentMethod" required>
-              <option value="cash">Cash</option>
-              <option value="razorpay">Razorpay</option>
-            </select>
-          </div>
-          <div class="form-group" *ngIf="newPayment.paymentMethod === 'razorpay'">
-            <label>Transaction ID</label>
-            <input type="text" [(ngModel)]="newPayment.transactionId" name="transactionId">
-          </div>
-          <button type="submit" class="btn-primary" [disabled]="!paymentForm.valid">Create Payment</button>
-        </form>
-      </div>
+  <!-- Create Payment Modal -->
+  <div class="modal" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <h3 style="text-align: center;">Create Payment</h3>
+      <form (ngSubmit)="createPayment()" #paymentForm="ngForm">
+        <div class="form-group">
+          <label>Vehicle Number</label>
+          <input type="text" [(ngModel)]="newPayment.vehicleNumber" name="vehicleNumber" required>
+        </div>
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" [(ngModel)]="newPayment.amountPaid" name="amountPaid" required>
+        </div>
+        <div class="form-group">
+          <label>Payment Method</label>
+          <select [(ngModel)]="newPayment.paymentMethod" name="paymentMethod" required>
+            <option value="cash">Cash</option>
+            <option value="razorpay">Razorpay</option>
+          </select>
+        </div>
+        <div class="form-group" *ngIf="newPayment.paymentMethod === 'razorpay'">
+          <label>Transaction ID</label>
+          <input type="text" [(ngModel)]="newPayment.transactionId" name="transactionId">
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn-secondary" [disabled]="!paymentForm.valid">Create Payment</button>
+          <button type="button" class="btn-secondary" (click)="closeModal()">Cancel</button>
+        </div>
+      </form>
     </div>
   </div>
-</div>
+  
+
+   
