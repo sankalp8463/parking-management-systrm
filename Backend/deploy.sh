@@ -5,7 +5,7 @@
 cd /home/ubuntu/parking-management-systrm/
 
 # Pull latest changes
-git pull origin main
+git pull 
 cd Backend
 # Update backend
 npm install
