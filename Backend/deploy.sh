@@ -2,11 +2,11 @@
 
 # ParkEase Deployment Script
 
-cd /home/ubuntu/parking-management-systrm/Backend
+cd /home/ubuntu/parking-management-systrm/
 
 # Pull latest changes
 git pull origin main
-
+cd Backend
 # Update backend
 npm install
 pm2 restart parkease-backend
