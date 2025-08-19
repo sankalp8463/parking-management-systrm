@@ -3,8 +3,9 @@
 # ParkEase Deployment Script
 
 cd /home/ubuntu/parking-management-systrm/
-git reset --hard HEAD
-git pull origin main
+git stash --keep-index
+git pull
+git stash pop
 
 cd Backend
 # Update backend
