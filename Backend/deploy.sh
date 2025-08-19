@@ -2,7 +2,7 @@
 
 # ParkEase Deployment Script
 
-cd /home/ubuntu/parkease
+cd /home/ubuntu/parking-management-systrm
 
 # Pull latest changes
 git pull origin main
@@ -15,7 +15,7 @@ pm2 restart parkease-backend
 cd frontend
 npm install
 ng build --configuration=production
-sudo cp -r dist/frontend/* /var/www/html/
+sudo cp -r dist/frontend/browser* /var/www/html/
 
 # Reload nginx
 sudo systemctl reload nginx
