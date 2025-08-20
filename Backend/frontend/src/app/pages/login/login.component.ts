@@ -35,6 +35,14 @@ export class LoginComponent {
     }, 3000);
   }
 
+ ngOnInit() {
+           const token= localStorage.getItem('token');
+           if(token){
+            this.router.navigate(['/dashboard']);
+           }
+
+ }
+
   nextSlide() {
     this.currentSlide = (this.currentSlide + 1) % this.images.length;
   }
