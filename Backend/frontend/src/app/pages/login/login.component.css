@@ -138,3 +138,104 @@
 .nav-dot.active {
   background: #007bff;
 }
+
+/* Mobile Responsive Design */
+@media (max-width: 1024px) {
+  .login-card {
+    width: 90%;
+    max-width: 800px;
+    height: auto;
+    min-height: 450px;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 1rem;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .login-card {
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+  }
+  
+  .login-form {
+    padding: 2rem 1.5rem;
+  }
+  
+  .login-form h2 {
+    font-size: 1.75rem;
+    text-align: center;
+  }
+  
+  .login-form p {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .form-group input {
+    padding: 0.75rem;
+    font-size: 1rem;
+    min-height: 44px;
+  }
+  
+  .btn-login {
+    padding: 0.875rem;
+    font-size: 1rem;
+    min-height: 48px;
+    touch-action: manipulation;
+  }
+  
+  .login-slider {
+    height: 200px;
+    order: -1;
+  }
+  
+  .slide-nav {
+    bottom: 10px;
+  }
+  
+  .nav-dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 0.5rem;
+  }
+  
+  .login-card {
+    border-radius: 8px;
+  }
+  
+  .login-form {
+    padding: 1.5rem 1rem;
+  }
+  
+  .login-form h2 {
+    font-size: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group input {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .signup-text {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .login-slider {
+    height: 150px;
+  }
+}

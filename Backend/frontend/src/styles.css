@@ -1,8 +1,24 @@
-/* Global Styles */
+/* CSS Reset and Global Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+/* Override any conflicting styles */
+* {
+  max-width: 100% !important;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Ensure responsive images */
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 :root {
@@ -302,6 +318,21 @@ body {
   color: var(--primary-600);
 }
 
+/* Responsive Container */
+.responsive-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .responsive-container {
+    padding: 0 0.5rem !important;
+  }
+}
+
 /* Utility Classes */
 .text-center { text-align: center; }
 .text-right { text-align: right; }
@@ -333,3 +364,71 @@ body {
 .justify-between { justify-content: space-between; }
 .gap-4 { gap: 1rem; }
 .gap-6 { gap: 1.5rem; }
+
+/* Mobile-specific utility classes */
+@media (max-width: 768px) {
+  .mobile-hidden { display: none !important; }
+  .mobile-full-width { width: 100% !important; }
+  .mobile-text-center { text-align: center !important; }
+  .mobile-flex-col { flex-direction: column !important; }
+  .mobile-gap-2 { gap: 0.5rem !important; }
+  .mobile-p-2 { padding: 0.5rem !important; }
+  .mobile-p-4 { padding: 1rem !important; }
+  .mobile-mb-2 { margin-bottom: 0.5rem !important; }
+  .mobile-mb-4 { margin-bottom: 1rem !important; }
+}
+
+/* Touch-friendly interactive elements */
+@media (max-width: 768px) {
+  .btn, button, .form-input, .form-select, a[role="button"] {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+  
+  .btn {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  
+  .form-input, .form-select {
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+  
+  /* Larger tap targets for mobile */
+  .table td, .table th {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  /* Better spacing for mobile cards */
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .card-header {
+    padding: 1rem;
+  }
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+}
+
+/* Smooth scrolling for mobile */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Better focus states for mobile */
+@media (max-width: 768px) {
+  .btn:focus, .form-input:focus, .form-select:focus {
+    outline: 2px solid var(--primary-500);
+    outline-offset: 2px;
+  }
+}

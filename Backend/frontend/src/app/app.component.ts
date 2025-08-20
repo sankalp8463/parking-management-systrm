@@ -14,11 +14,20 @@ export class AppComponent implements OnInit {
   title = 'ParkEase';
   isLoggedIn = false;
   sidebarCollapsed = false;
+  showMobileSidebar = false;
 
   constructor(private router: Router) {}
 
   ngOnInit() {
     this.checkLoginStatus();
+    this.handleResize();
+    window.addEventListener('resize', () => this.handleResize());
+  }
+  
+  handleResize() {
+    if (window.innerWidth > 768 && this.showMobileSidebar) {
+      this.showMobileSidebar = false;
+    }
   }
 
   checkLoginStatus() {
@@ -26,13 +35,22 @@ export class AppComponent implements OnInit {
   }
 
   toggleSidebar() {
-    this.sidebarCollapsed = !this.sidebarCollapsed;
+    if (window.innerWidth <= 768) {
+      this.showMobileSidebar = !this.showMobileSidebar;
+    } else {
+      this.sidebarCollapsed = !this.sidebarCollapsed;
+    }
+  }
+
+  closeMobileSidebar() {
+    this.showMobileSidebar = false;
   }
 
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.isLoggedIn = false;
+    this.showMobileSidebar = false;
     this.router.navigate(['/']);
   }
 }

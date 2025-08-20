@@ -1,75 +1,142 @@
-<div class="dashboard-container">
-  <!-- Header Section -->
+<div class="dashboard-container responsive-container">
+  <!-- Enhanced Header Section -->
   <div class="dashboard-header">
     <div class="header-content">
-      <h1 class="dashboard-title">Dashboard</h1>
-      <p class="dashboard-subtitle">Welcome back! Here's what's happening with your parking system.</p>
+      <div class="title-section">
+        <h1 class="dashboard-title">
+          <i class="pi pi-chart-line title-icon"></i>
+          Dashboard Overview
+        </h1>
+        <p class="dashboard-subtitle">Real-time parking management insights</p>
+      </div>
+      <div class="status-indicator">
+        <div class="status-dot" [class.active]="!isLoading"></div>
+        <span class="status-text">{{isLoading ? 'Updating...' : 'Live'}}</span>
+      </div>
     </div>
     <div class="header-actions">
-      <p-button 
-        icon="pi pi-refresh" 
-        label="Refresh" 
-        [loading]="isLoading"
-        (click)="refreshStats()"
-        styleClass="p-button-outlined">
-      </p-button>
-      <span class="last-updated">Updated {{getTimeAgo()}}</span>
+      <div class="action-group">
+        <p-button 
+          icon="pi pi-refresh" 
+          [loading]="isLoading"
+          (click)="refreshStats()"
+          styleClass="p-button-outlined p-button-sm refresh-btn"
+          pTooltip="Refresh Data">
+        </p-button>
+        <span class="last-updated">
+          <i class="pi pi-clock"></i>
+          {{getTimeAgo()}}
+        </span>
+      </div>
     </div>
   </div>
 
-  <!-- Statistics Cards -->
+  <!-- Enhanced Statistics Cards -->
   <div class="stats-grid">
-    <p-card styleClass="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon stat-icon-primary">
-          <i class="pi pi-car"></i>
+    <div class="stat-card-wrapper" [class.loading]="isLoading">
+      <p-card styleClass="stat-card stat-card-primary">
+        <div class="stat-content">
+          <div class="stat-header">
+            <div class="stat-icon stat-icon-primary">
+              <i class="pi pi-car"></i>
+            </div>
+            <div class="stat-trend positive">
+              <i class="pi pi-arrow-up"></i>
+              <span>+5%</span>
+            </div>
+          </div>
+          <div class="stat-info">
+            <div class="stat-label">Total Vehicles</div>
+            <div class="stat-value" [class.animate]="animateStats">
+              {{isLoading ? '---' : stats.totalVehicles}}
+            </div>
+            <div class="stat-meta">
+              <p-tag value="Active" severity="info" styleClass="stat-tag"></p-tag>
+              <span class="stat-description">Registered vehicles</span>
+            </div>
+          </div>
         </div>
-        <div class="stat-info">
-          <div class="stat-label">Total Vehicles</div>
-          <div class="stat-value">{{isLoading ? '---' : stats.totalVehicles}}</div>
-          <p-tag value="Active" severity="info" styleClass="stat-tag"></p-tag>
-        </div>
-      </div>
-    </p-card>
+      </p-card>
+    </div>
 
-    <p-card styleClass="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon stat-icon-success">
-          <i class="pi pi-bolt"></i>
+    <div class="stat-card-wrapper" [class.loading]="isLoading">
+      <p-card styleClass="stat-card stat-card-success">
+        <div class="stat-content">
+          <div class="stat-header">
+            <div class="stat-icon stat-icon-success">
+              <i class="pi pi-bolt"></i>
+            </div>
+            <div class="stat-trend positive">
+              <i class="pi pi-arrow-up"></i>
+              <span>+2</span>
+            </div>
+          </div>
+          <div class="stat-info">
+            <div class="stat-label">Active Entries</div>
+            <div class="stat-value" [class.animate]="animateStats">
+              {{isLoading ? '---' : stats.activeEntries}}
+            </div>
+            <div class="stat-meta">
+              <p-tag value="Live" severity="success" styleClass="stat-tag"></p-tag>
+              <span class="stat-description">Currently parked</span>
+            </div>
+          </div>
         </div>
-        <div class="stat-info">
-          <div class="stat-label">Active Entries</div>
-          <div class="stat-value">{{isLoading ? '---' : stats.activeEntries}}</div>
-          <p-tag value="Live" severity="success" styleClass="stat-tag"></p-tag>
-        </div>
-      </div>
-    </p-card>
+      </p-card>
+    </div>
 
-    <p-card styleClass="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon stat-icon-warning">
-          <i class="pi pi-map-marker"></i>
+    <div class="stat-card-wrapper" [class.loading]="isLoading">
+      <p-card styleClass="stat-card stat-card-warning">
+        <div class="stat-content">
+          <div class="stat-header">
+            <div class="stat-icon stat-icon-warning">
+              <i class="pi pi-map-marker"></i>
+            </div>
+            <div class="stat-capacity">
+              <div class="capacity-bar">
+                <div class="capacity-fill" [style.width.%]="getOccupancyPercentage()"></div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-info">
+            <div class="stat-label">Available Slots</div>
+            <div class="stat-value" [class.animate]="animateStats">
+              {{isLoading ? '---' : stats.availableSlots}}
+            </div>
+            <div class="stat-meta">
+              <p-tag value="Ready" severity="warning" styleClass="stat-tag"></p-tag>
+              <span class="stat-description">{{getOccupancyPercentage()}}% occupied</span>
+            </div>
+          </div>
         </div>
-        <div class="stat-info">
-          <div class="stat-label">Available Slots</div>
-          <div class="stat-value">{{isLoading ? '---' : stats.availableSlots}}</div>
-          <p-tag value="Ready" severity="warning" styleClass="stat-tag"></p-tag>
-        </div>
-      </div>
-    </p-card>
+      </p-card>
+    </div>
 
-    <p-card styleClass="stat-card">
-      <div class="stat-content">
-        <div class="stat-icon stat-icon-secondary">
-          <i class="pi pi-dollar"></i>
+    <div class="stat-card-wrapper" [class.loading]="isLoading">
+      <p-card styleClass="stat-card stat-card-secondary">
+        <div class="stat-content">
+          <div class="stat-header">
+            <div class="stat-icon stat-icon-secondary">
+              <i class="pi pi-dollar"></i>
+            </div>
+            <div class="stat-trend positive">
+              <i class="pi pi-arrow-up"></i>
+              <span>+12%</span>
+            </div>
+          </div>
+          <div class="stat-info">
+            <div class="stat-label">Daily Revenue</div>
+            <div class="stat-value" [class.animate]="animateStats">
+              {{isLoading ? '---' : '₹' + stats.dailyRevenue}}
+            </div>
+            <div class="stat-meta">
+              <p-tag value="Today" severity="contrast" styleClass="stat-tag"></p-tag>
+              <span class="stat-description">vs yesterday</span>
+            </div>
+          </div>
         </div>
-        <div class="stat-info">
-          <div class="stat-label">Daily Revenue</div>
-          <div class="stat-value">{{isLoading ? '---' : '₹' + stats.dailyRevenue}}</div>
-          <p-tag value="Today" severity="contrast" styleClass="stat-tag"></p-tag>
-        </div>
-      </div>
-    </p-card>
+      </p-card>
+    </div>
   </div>
 
   <!-- Main Dashboard Grid -->

@@ -8,6 +8,7 @@ import { PaymentsComponent } from './pages/payments/payments.component';
 import { SlotsComponent } from './pages/slots/slots.component';
 import { HistoryComponent } from './pages/history/history.component';
 import { AuthGuard } from './guards/auth.guard';
+import { ActiveSessionComponent } from './pages/active-session/active-session.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,6 +17,8 @@ export const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'parking', component: ParkingComponent, canActivate: [AuthGuard] },
   { path: 'payments', component: PaymentsComponent, canActivate: [AuthGuard] },
+
+  { path: 'activesession', component:ActiveSessionComponent , canActivate: [AuthGuard] },
   { path: 'slots', component: SlotsComponent, canActivate: [AuthGuard] },
   { path: 'history', component: HistoryComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '' }
