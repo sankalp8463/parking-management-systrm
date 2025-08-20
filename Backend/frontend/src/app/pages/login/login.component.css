@@ -1,68 +1,140 @@
-.auth-container {
+.login-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
-  background: #f8f9fa;
+  height: 100vh;
+  background: #f4f6f9;
 }
 
-.auth-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 400px;
+.login-card {
+  display: flex;
+  width: 900px;
+  height: 500px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
-.auth-card h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #2c3e50;
+/* --- Left Form --- */
+.login-form {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form h2 {
+  margin-bottom: 10px;
+  font-size: 26px;
+  color: #333;
+}
+
+.login-form p {
+  margin-bottom: 30px;
+  color: #666;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 20px;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
-  color: #2c3e50;
-  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.8rem;
+  padding: 12px;
+  border-radius: 8px;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
+  font-size: 14px;
 }
 
-.btn-primary {
+.btn-login {
   width: 100%;
-  padding: 0.8rem;
-  background: #3498db;
-  color: white;
+  padding: 14px;
+  background: #007bff;
   border: none;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
   cursor: pointer;
-  margin-bottom: 1rem;
 }
 
-.btn-primary:disabled {
-  background: #bdc3c7;
-  cursor: not-allowed;
+.btn-login:hover {
+  background: #0056b3;
 }
 
-.auth-card p {
-  text-align: center;
-  color: #7f8c8d;
+.signup-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
 }
 
-.auth-card a {
-  color: #3498db;
+.signup-text a {
+  color: #007bff;
   text-decoration: none;
+}
+
+/* --- Right Image Slider --- */
+.login-slider {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Navigation Dots */
+.slide-nav {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+.nav-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.nav-dot.active {
+  background: #007bff;
 }

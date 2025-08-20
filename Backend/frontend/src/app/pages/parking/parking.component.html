@@ -2,41 +2,15 @@
   <div class="container">
     <h1>Vehicle Management</h1>
     
-    <div class="parking-actions">
-      <div class="action-card">
-        <h3>Park</h3>
-        <p class="info-text">Vehicle will be automatically registered if not exists</p>
-        <form (ngSubmit)="parkVehicle()" #parkForm="ngForm">
-          <div class="form-group">
-            <label>Vehicle Number</label>
-            <input type="text" [(ngModel)]="parkData.vehicleNumber" name="vehicleNumber" required placeholder="e.g. ABC123">
-          </div>
-          <div class="form-group">
-            <label>Vehicle Type</label>
-            <select [(ngModel)]="parkData.vehicleType" name="vehicleType" required>
-              <option value="car">Car</option>
-              <option value="bike">Bike</option>
-              <option value="truck">Truck</option>
-            </select>
-          </div>
-          <button type="submit" class="btn-primary" [disabled]="!parkForm.valid">Park Vehicle</button>
-        </form>
-      </div>
-
-      <div class="action-card">
-        <h3>Check Out</h3>
-        <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitVehicleForm="ngForm">
-          <div class="form-group">
-            <label>Vehicle Number</label>
-            <input type="text" [(ngModel)]="exitData.vehicleNumber" name="vehicleNumber" required placeholder="e.g. ABC123">
-          </div>
-          <button type="submit" class="btn-secondary" [disabled]="!exitVehicleForm.valid">Exit Vehicle</button>
-        </form>
-      </div>
-    </div>
-
     <div class="parking-slots">
-      <h2>Parking Slots Status</h2>
+      <div class="slots-header">
+        <h2>Slot Overview</h2>
+        <div class="slots-header-actions">
+          <button class="btn-action" (click)="openParkModal()">+ <b>Park Vehicle</b></button>
+          <button class="btn-action" (click)="openCheckoutModal()">+ <b>Check Out</b></button>
+        </div>
+      </div>
+      
       <div class="slots-grid">
         <div class="slot" 
              *ngFor="let slot of parkingSlots" 
@@ -49,8 +23,55 @@
       </div>
     </div>
 
+
+<!-- Park Vehicle Modal -->
+<div class="modal" *ngIf="showParkModal" (click)="closeParkModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3 style="text-align:center;">Park Vehicle</h3>
+    <form (ngSubmit)="parkVehicle()" #parkForm="ngForm">
+      <div class="form-group">
+        <label><b>Vehicle Number</b></label>
+        <input type="text" [(ngModel)]="parkData.vehicleNumber" name="vehicleNumber" required>
+      </div>
+      <div class="form-group">
+        <label><b>Vehicle Type</b></label>
+        <select [(ngModel)]="parkData.vehicleType" name="vehicleType" required>
+          <option value="car">Car</option>
+          <option value="bike">Bike</option>
+          <option value="truck">Truck</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" type="submit" [disabled]="!parkForm.valid">Park</button>
+        <button class="btn-secondary" type="button" (click)="closeParkModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal" *ngIf="showCheckoutModal" (click)="closeCheckoutModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3 style="text-align:center;">Check Out</h3>
+    <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitForm="ngForm">
+      <div class="form-group">
+        <label><b>Vehicle Number</b></label>
+        <input type="text" [(ngModel)]="exitData.vehicleNumber" name="vehicleNumber" required>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" type="submit" [disabled]="!exitForm.valid"><b>Check Out</b></button>
+        <button class="btn-secondary" type="button" (click)="closeCheckoutModal()"><b>Cancel</b></button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+   
+
     <div class="active-entries">
-      <h2>Active Parking Entries</h2>
+      <h2>Active Sessions</h2>
       <div class="entries-table">
         <table>
           <thead>

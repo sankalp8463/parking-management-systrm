@@ -1,6 +1,10 @@
 .payments-page h1 {
   text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
 }
+
 
 .payments-page {
   padding: 2rem;
@@ -34,15 +38,18 @@
 }
 
 .stat-card h3 {
-  color: #7f8c8d;
-  margin-bottom: 1rem;
-  font-size: 1rem;
+  color: #1f2a37; /* darker & clearer */
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;   /* bigger heading */
+  font-weight: 600;     /* semi-bold */
 }
+
 
 .stat-number {
   font-size: 2rem;
   font-weight: bold;
-  color: #3498db;
+  color: inherit;
+
   margin: 0;
 }
 
@@ -149,6 +156,7 @@ th {
 /* for button to create payment*/
 .payment-header {
   display: flex;
+  
   justify-content: space-between;
   align-items: center;
 }
@@ -156,7 +164,7 @@ th {
 .btn-create {
   background: #ffffff;
   color: #333;
-  border: 1px solid #ccc;
+  border: 2px solid #ccc;
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -224,3 +232,7 @@ th {
   align-items: center;
   margin-bottom: 1rem;
 }
+/* specific colours for payment stats cards */
+.stat-card.payments { color: #5a5a55; }       /* Daily Payments - green */
+.stat-card.revenue { color: #13991c; }        /* Daily Revenue - blue  */
+.stat-card.pending { color: #b53113; }        /* Pending - orange */

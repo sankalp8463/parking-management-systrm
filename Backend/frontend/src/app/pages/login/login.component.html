@@ -1,17 +1,67 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <h2>Login</h2>
-    <form (ngSubmit)="onLogin()" #loginForm="ngForm">
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input type="tel" [(ngModel)]="loginData.phoneNumber" name="phoneNumber" required>
+<div class="login-container">
+  <div class="login-card">
+    <!-- Left: Form -->
+    <div class="login-form">
+      <h2>Welcome Back!</h2>
+      <p>Please login to continue</p>
+
+      <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+        <!-- Mobile Number -->
+        <div class="form-group">
+          <label for="phoneNumber">Mobile Number</label>
+          <input
+            type="text"
+            id="phoneNumber"
+            name="phoneNumber"
+            [(ngModel)]="loginData.phoneNumber"
+            placeholder="Enter your mobile number"
+            required
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="loginData.password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+
+        <!-- Button -->
+        <button type="submit" class="btn-login">Login</button>
+      </form>
+
+      <p class="signup-text">
+        Don’t have an account? <a href="#">Sign Up</a>
+      </p>
+    </div>
+
+    <!-- Right: Image Slider -->
+    <div class="login-slider">
+      <div class="slides">
+        <div
+          class="slide"
+          *ngFor="let img of images; let i = index"
+          [class.active]="i === currentSlide"
+        >
+          <img [src]="img" alt="Slide {{ i + 1 }}" />
+        </div>
       </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" [(ngModel)]="loginData.password" name="password" required>
+
+      <!-- Navigation dots -->
+      <div class="slide-nav">
+        <span
+          *ngFor="let img of images; let i = index"
+          class="nav-dot"
+          [class.active]="i === currentSlide"
+          (click)="currentSlide = i"
+        ></span>
       </div>
-      <button type="submit" class="btn-primary" [disabled]="!loginForm.valid">Login</button>
-    </form>
-    <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+    </div>
   </div>
 </div>

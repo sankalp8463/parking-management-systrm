@@ -2,28 +2,31 @@
   <div class="container">
     <h1>Payment Management</h1>
     
+    <!-- Stats -->
     <div class="payment-stats">
-      <div class="stat-card">
-        <h3>Daily Payments</h3>
-        <p class="stat-number">{{paymentStats.total}}</p>
-      </div>
-      <div class="stat-card">
+      
+      <div class="stat-card revenue">
         <h3>Daily Revenue</h3>
         <p class="stat-number">₹{{paymentStats.revenue}}</p>
       </div>
-      <div class="stat-card">
+      <div class="stat-card payments">
+        <h3>Daily Payments</h3>
+        <p class="stat-number">{{paymentStats.total}}</p>
+      </div>
+      <div class="stat-card pending">
         <h3>Pending Payments</h3>
-        <p class="stat-number">{{paymentStats.pending}}</p>
+        <p class="stat-number">₹{{paymentStats.pending}}</p>
       </div>
     </div>
 
-   <div class="payments-list">
-  <div class="payment-header">
-    <h2>Payment History</h2>
-    <button class="btn-create" (click)="openModal()">+ Create Payment</button>
-  </div> 
-    <div class="payments-table">
- 
+    <!-- History -->
+    <div class="payments-list">
+      <div class="payment-header">
+        <h2>Payment History</h2>
+        <button class="btn-create" (click)="openModal()"><b>+ Create Payment</b></button>
+      </div>
+      
+      <div class="payments-table">
         <table>
           <thead>
             <tr>
@@ -52,7 +55,7 @@
         </table>
       </div>
     </div>
-  </div> <!-- end of .payments-list -->
+  </div> <!-- end .container -->
 
   <!-- Create Payment Modal -->
   <div class="modal" *ngIf="showModal" (click)="closeModal()">
@@ -79,12 +82,14 @@
           <input type="text" [(ngModel)]="newPayment.transactionId" name="transactionId">
         </div>
         <div class="modal-actions">
-          <button type="submit" class="btn-secondary" [disabled]="!paymentForm.valid">Create Payment</button>
-          <button type="button" class="btn-secondary" (click)="closeModal()">Cancel</button>
+          <button type="submit" class="btn-secondary" [disabled]="!paymentForm.valid">
+            Create Payment
+          </button>
+          <button type="button" class="btn-secondary" (click)="closeModal()">
+            Cancel
+          </button>
         </div>
       </form>
     </div>
   </div>
-  
-
-   
+</div>

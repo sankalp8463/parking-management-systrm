@@ -13,7 +13,7 @@
         <option value="truck">Truck</option>
       </select>
 
-      <button class="add-slot-dd" (click)="openAddModal()">Add Slot ▾</button>
+      <button class="add-slot-dd" (click)="openAddModal()"><b>Add Slot ▾</b></button>
     </div>
 
     <!-- All slots preview - FIXED: Show actual slot numbers -->
@@ -161,8 +161,8 @@
             </select>
           </div>
           <div class="modal-actions">
-            <button class="btn-primary" type="submit" [disabled]="!slotForm.valid">Add Slot</button>
-            <button class="btn-secondary" type="button" (click)="closeAddModal()">Cancel</button>
+            <button class="btn-primary" type="submit" [disabled]="!slotForm.valid"><b>Add Slot</b></button>
+            <button class="btn-secondary" type="button" (click)="closeAddModal()"><b>Cancel</b></button>
           </div>
         </form>
       </div>

@@ -1,5 +1,9 @@
 h1 {
   text-align: center;     /* <-- add this */
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+
 }
 
 .slots-page {
@@ -16,7 +20,14 @@ h1 {
   margin-bottom: 1.2rem;
 }
 .type-select{padding:0.5rem;border:1px solid #ccc;border-radius:5px;}
-.add-slot-dd{background:#3498db;color:white;padding:0.5rem 1rem;border:none;border-radius:5px;cursor:pointer;}
+.add-slot-dd{background: #ffffff;
+  color: #333;
+  border: 2px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;}
 .all-slot-preview{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:2rem;}
 .preview-item{padding:0.5rem 0.8rem;border-radius:5px;cursor:pointer;border:2px solid transparent;font-weight:bold;}
 .preview-item.available{background:#d5f4e6;border-color:#27ae60;color:#27ae60;}
@@ -57,5 +68,19 @@ th{background:#f8f9fa;color:#2c3e50;}
 .form-group{margin-bottom:1rem;}
 .form-group input,.form-group select{width:100%;padding:0.6rem;border:1px solid #ccc;border-radius:5px;}
 .modal-actions{display:flex;justify-content:flex-end;gap:1rem;margin-top:1rem;}
-.btn-primary{background:#3498db;color:white;padding:0.7rem 1.2rem;border:none;border-radius:5px;cursor:pointer;}
-.btn-secondary{background:#95a5a6;color:white;padding:0.7rem 1.2rem;border:none;border-radius:5px;cursor:pointer;}
+.btn-primary{background: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;}
+.btn-secondary{background: #ffffff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;}

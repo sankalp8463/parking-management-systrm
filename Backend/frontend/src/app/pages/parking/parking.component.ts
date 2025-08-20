@@ -26,6 +26,8 @@ export class ParkingComponent implements OnInit {
   activeEntries: any[] = [];
   showPaymentModal = false;
   paymentData: any = {};
+  showParkModal = false;
+  showCheckoutModal = false;
 
   constructor(private apiService: ApiService, private toast: ToastService) {}
 
@@ -128,4 +130,18 @@ export class ParkingComponent implements OnInit {
     const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
     return `${hours}h ${minutes}m`;
   }
+  
+  
+  openParkModal()  { 
+    console.log("Clicked Park Button");
+    this.showParkModal = true;
+  }
+  
+  closeParkModal() { this.showParkModal = false; }
+  
+  openCheckoutModal()  { this.showCheckoutModal = true; }
+  closeCheckoutModal() { this.showCheckoutModal = false; }
+  
+
+
 }

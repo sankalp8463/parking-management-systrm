@@ -1,145 +1,193 @@
 <div class="dashboard-container">
+  <!-- Header Section -->
   <div class="dashboard-header">
     <div class="header-content">
-      <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard</h1>
-      <p class="text-gray-600">Welcome back! Here's what's happening with your parking system.</p>
+      <h1 class="dashboard-title">Dashboard</h1>
+      <p class="dashboard-subtitle">Welcome back! Here's what's happening with your parking system.</p>
     </div>
     <div class="header-actions">
-      <button class="refresh-btn" (click)="refreshStats()" [disabled]="isLoading">
-        <svg class="w-4 h-4" [class.animate-spin]="isLoading" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-        </svg>
-        Refresh
-      </button>
+      <p-button 
+        icon="pi pi-refresh" 
+        label="Refresh" 
+        [loading]="isLoading"
+        (click)="refreshStats()"
+        styleClass="p-button-outlined">
+      </p-button>
       <span class="last-updated">Updated {{getTimeAgo()}}</span>
     </div>
   </div>
 
+  <!-- Statistics Cards -->
   <div class="stats-grid">
-    <div class="stat-card" [class.animate-pulse]="isLoading" [class.stat-updated]="animateStats">
-      <div class="stat-icon bg-blue-100 text-blue-600">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-        </svg>
-      </div>
+    <p-card styleClass="stat-card">
       <div class="stat-content">
-        <p class="stat-label">Total Vehicles</p>
-        <p class="stat-value" [class.loading-skeleton]="isLoading">{{isLoading ? '---' : stats.totalVehicles}}</p>
-      </div>
-    </div>
-
-    <div class="stat-card" [class.animate-pulse]="isLoading" [class.stat-updated]="animateStats">
-      <div class="stat-icon bg-green-100 text-green-600">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-        </svg>
-      </div>
-      <div class="stat-content">
-        <p class="stat-label">Active Entries</p>
-        <p class="stat-value" [class.loading-skeleton]="isLoading">{{isLoading ? '---' : stats.activeEntries}}</p>
-      </div>
-    </div>
-
-    <div class="stat-card" [class.animate-pulse]="isLoading" [class.stat-updated]="animateStats">
-      <div class="stat-icon bg-yellow-100 text-yellow-600">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        </svg>
-      </div>
-      <div class="stat-content">
-        <p class="stat-label">Available Slots</p>
-        <p class="stat-value" [class.loading-skeleton]="isLoading">{{isLoading ? '---' : stats.availableSlots}}</p>
-      </div>
-    </div>
-
-    <div class="stat-card" [class.animate-pulse]="isLoading" [class.stat-updated]="animateStats">
-      <div class="stat-icon bg-purple-100 text-purple-600">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-        </svg>
-      </div>
-      <div class="stat-content">
-        <p class="stat-label">Daily Revenue</p>
-        <p class="stat-value" [class.loading-skeleton]="isLoading">{{isLoading ? '---' : '₹' + stats.dailyRevenue}}</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="dashboard-grid">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Quick Actions</h3>
-      </div>
-      <div class="card-body">
-        <div class="actions-grid">
-          <button class="action-btn btn-primary" routerLink="/parking">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-            </svg>
-            Vehicle Management
-          </button>
-          <button class="action-btn btn-secondary" routerLink="/slots">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-            </svg>
-            Manage Slots
-          </button>
-          <button class="action-btn btn-success" routerLink="/payments">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-            </svg>
-            View Payments
-          </button>
-          <button class="action-btn btn-warning" routerLink="/history">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-            View History
-          </button>
+        <div class="stat-icon stat-icon-primary">
+          <i class="pi pi-car"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Total Vehicles</div>
+          <div class="stat-value">{{isLoading ? '---' : stats.totalVehicles}}</div>
+          <p-tag value="Active" severity="info" styleClass="stat-tag"></p-tag>
         </div>
       </div>
-    </div>
+    </p-card>
 
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Recent Activity</h3>
+    <p-card styleClass="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon stat-icon-success">
+          <i class="pi pi-bolt"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Active Entries</div>
+          <div class="stat-value">{{isLoading ? '---' : stats.activeEntries}}</div>
+          <p-tag value="Live" severity="success" styleClass="stat-tag"></p-tag>
+        </div>
       </div>
-      <div class="card-body">
-        <div class="activity-list">
-          <div class="activity-item" *ngFor="let activity of recentActivities; let i = index" 
-               [style.animation-delay]="i * 100 + 'ms'">
-            <div class="activity-icon">
-              <!-- Park icon -->
-              <svg *ngIf="activity.type === 'park'" class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <!-- Pin shape -->
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                <!-- P letter inside pin -->
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 7v8m0-4h3a2 2 0 100-4h-3"/>
-              </svg>
-              
-              <!-- Payment icon -->
-              <svg *ngIf="activity.type === 'payment'" class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
-              </svg>
-              
-              <!-- Exit icon -->
-              <svg *ngIf="activity.type === 'exit'" class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-              </svg>
-              
-              <!-- Default icon -->
-              <svg *ngIf="activity.type !== 'park' && activity.type !== 'payment' && activity.type !== 'exit'" class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-              </svg>
+    </p-card>
+
+    <p-card styleClass="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon stat-icon-warning">
+          <i class="pi pi-map-marker"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Available Slots</div>
+          <div class="stat-value">{{isLoading ? '---' : stats.availableSlots}}</div>
+          <p-tag value="Ready" severity="warning" styleClass="stat-tag"></p-tag>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card styleClass="stat-card">
+      <div class="stat-content">
+        <div class="stat-icon stat-icon-secondary">
+          <i class="pi pi-dollar"></i>
+        </div>
+        <div class="stat-info">
+          <div class="stat-label">Daily Revenue</div>
+          <div class="stat-value">{{isLoading ? '---' : '₹' + stats.dailyRevenue}}</div>
+          <p-tag value="Today" severity="contrast" styleClass="stat-tag"></p-tag>
+        </div>
+      </div>
+    </p-card>
+  </div>
+
+  <!-- Main Dashboard Grid -->
+  <div class="dashboard-grid">
+    
+    <!-- Charts Section -->
+    <div class="charts-section">
+      
+      <!-- Occupancy Chart -->
+      <p-card header="Parking Occupancy" styleClass="chart-card">
+        <div class="occupancy-display">
+          <div class="occupancy-circle">
+            <div class="circle-progress" [style.--percentage]="getOccupancyPercentage() + '%'">
+              <div class="circle-inner">
+                <div class="occupancy-percentage">{{getOccupancyPercentage()}}%</div>
+                <div class="occupancy-label">Occupied</div>
+              </div>
             </div>
-            <div class="activity-content">
-              <p class="activity-text">{{activity.text}}</p>
-              <p class="activity-time">{{activity.time}}</p>
+          </div>
+          <div class="occupancy-details">
+            <div class="occupancy-item">
+              <span class="occupancy-dot occupied"></span>
+              <span class="occupancy-name">Occupied: {{stats.activeEntries}}</span>
+            </div>
+            <div class="occupancy-item">
+              <span class="occupancy-dot available"></span>
+              <span class="occupancy-name">Available: {{stats.availableSlots}}</span>
             </div>
           </div>
         </div>
-      </div>
+      </p-card>
+
+      <!-- Revenue Chart -->
+      <p-card header="Weekly Revenue Trend" styleClass="chart-card">
+        <p-chart 
+          type="line" 
+          [data]="revenueChartData" 
+          [options]="chartOptions"
+          height="250px">
+        </p-chart>
+      </p-card>
+    </div>
+
+    <!-- Actions and Activity Section -->
+    <div class="actions-activity-section">
+      
+      <!-- Quick Actions -->
+      <p-card header="Quick Actions" styleClass="actions-card">
+        <div class="actions-grid">
+          <p-button 
+            label="Vehicle Management" 
+            icon="pi pi-plus" 
+            routerLink="/parking"
+            styleClass="p-button-primary action-btn">
+          </p-button>
+          <p-button 
+            label="Manage Slots" 
+            icon="pi pi-th-large" 
+            routerLink="/slots"
+            styleClass="p-button-secondary action-btn">
+          </p-button>
+          <p-button 
+            label="View Payments" 
+            icon="pi pi-credit-card" 
+            routerLink="/payments"
+            styleClass="p-button-success action-btn">
+          </p-button>
+          <p-button 
+            label="View History" 
+            icon="pi pi-history" 
+            routerLink="/history"
+            styleClass="p-button-warning action-btn">
+          </p-button>
+        </div>
+      </p-card>
+
+      <!-- Recent Activity Timeline -->
+      <p-card header="Recent Activity" styleClass="activity-card">
+        <p-timeline [value]="timelineEvents" align="left">
+          <ng-template pTemplate="marker" let-event>
+            <div class="custom-marker" [style.background-color]="event.color">
+              <i [class]="event.icon"></i>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="content" let-event>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <p-tag 
+                  [value]="event.status" 
+                  [severity]="getSeverityForActivity(event.status.toLowerCase())"
+                  styleClass="timeline-tag">
+                </p-tag>
+                <span class="timeline-time">{{event.date}}</span>
+              </div>
+              <p class="timeline-description">{{event.description}}</p>
+              <div class="timeline-details" *ngIf="event.vehicle">
+                <p-badge 
+                  *ngIf="event.vehicle" 
+                  [value]="event.vehicle" 
+                  styleClass="vehicle-badge">
+                </p-badge>
+                <p-badge 
+                  *ngIf="event.slot" 
+                  [value]="'Slot: ' + event.slot" 
+                  severity="info" 
+                  styleClass="slot-badge">
+                </p-badge>
+                <p-badge 
+                  *ngIf="event.amount" 
+                  [value]="'₹' + event.amount" 
+                  severity="success" 
+                  styleClass="amount-badge">
+                </p-badge>
+              </div>
+            </div>
+          </ng-template>
+        </p-timeline>
+      </p-card>
     </div>
   </div>
 </div>
