@@ -29,16 +29,16 @@ export class ApiService {
   }
 
   // Users
-  getUsers(): Promise<any> {
-    return firstValueFrom(this.http.get(`${this.baseUrl}/users`, { headers: this.getAuthHeaders() }));
+  getUsers(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/users`, { headers: this.getAuthHeaders() });
   }
 
-  createUser(userData: any): Promise<any> {
-    return firstValueFrom(this.http.post(`${this.baseUrl}/users`, userData, { headers: this.getAuthHeaders() }));
+  createUser(userData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/users`, userData, { headers: this.getAuthHeaders() });
   }
 
-  deleteUser(userId: string): Promise<any> {
-    return firstValueFrom(this.http.delete(`${this.baseUrl}/users/${userId}`, { headers: this.getAuthHeaders() }));
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/users/${userId}`, { headers: this.getAuthHeaders() });
   }
 
   // Vehicles

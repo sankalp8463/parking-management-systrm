@@ -404,6 +404,10 @@
 /* Chart Card Styles */
 ::ng-deep .chart-card {
   border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* width: 50%; */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.95);
@@ -510,6 +514,7 @@
 /* Actions Card */
 ::ng-deep .actions-card {
   border: none;
+
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.95);
@@ -526,16 +531,19 @@
 .actions-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: 0.5rem;
   max-width: 600px;
 }
 
 ::ng-deep .actions-grid .p-button {
-  width: 100%;
+  width: 90%;
   justify-content: center;
-  padding: 1.25rem;
+  padding: 1rem;
   font-size: 0.9rem;
-  min-height: 56px;
+  min-height: 50px;
+  margin-left: 15px;
+  margin-bottom: 10px;
+
   border-radius: 12px;
   font-weight: 500;
 }

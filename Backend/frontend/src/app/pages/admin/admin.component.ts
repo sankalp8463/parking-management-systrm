@@ -23,6 +23,21 @@ export class AdminComponent implements OnInit {
   staffList: any[] = [];
   isLoading = false;
   isSubmitting = false;
+  showCreateForm = false;
+  searchTerm = '';
+
+  get filteredStaff() {
+    if (!this.searchTerm) return this.staffList;
+    return this.staffList.filter(staff => 
+      staff.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      staff.phoneNumber.includes(this.searchTerm) ||
+      (staff.email && staff.email.toLowerCase().includes(this.searchTerm.toLowerCase()))
+    );
+  }
+
+  get activeStaffCount() {
+    return this.staffList.filter(s => s.role === 'staff').length;
+  }
 
   constructor(
     private apiService: ApiService,
@@ -33,47 +48,54 @@ export class AdminComponent implements OnInit {
     this.loadStaffList();
   }
 
-  async createStaff() {
+  createStaff() {
     if (!this.staffForm.name || !this.staffForm.phoneNumber || !this.staffForm.password) {
       this.toastService.showError('Please fill all required fields');
       return;
     }
 
     this.isSubmitting = true;
-    try {
-      await this.apiService.createUser(this.staffForm);
-      this.toastService.showSuccess('Staff member created successfully');
-      this.resetForm();
-      this.loadStaffList();
-    } catch (error: any) {
-      this.toastService.showError(error.error?.message || 'Failed to create staff member');
-    } finally {
-      this.isSubmitting = false;
-    }
+    this.apiService.createUser(this.staffForm).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Staff member created successfully');
+        this.resetForm();
+        this.showCreateForm = false;
+        this.loadStaffList();
+        this.isSubmitting = false;
+      },
+      error: (error: any) => {
+        this.toastService.showError(error.error?.message || 'Failed to create staff member');
+        this.isSubmitting = false;
+      }
+    });
   }
 
-  async loadStaffList() {
+  loadStaffList() {
     this.isLoading = true;
-    try {
-      const users = await this.apiService.getUsers();
-      this.staffList = users.filter((user: any) => user.role === 'staff');
-    } catch (error) {
-      this.toastService.showError('Failed to load staff list');
-    } finally {
-      this.isLoading = false;
-    }
+    this.apiService.getUsers().subscribe({
+      next: (users) => {
+        this.staffList = users.filter((user: any) => user.role === 'staff');
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.toastService.showError('Failed to load staff list');
+        this.isLoading = false;
+      }
+    });
   }
 
-  async deleteStaff(staffId: string) {
+  deleteStaff(staffId: string) {
     if (!confirm('Are you sure you want to delete this staff member?')) return;
     
-    try {
-      await this.apiService.deleteUser(staffId);
-      this.toastService.showSuccess('Staff member deleted successfully');
-      this.loadStaffList();
-    } catch (error) {
-      this.toastService.showError('Failed to delete staff member');
-    }
+    this.apiService.deleteUser(staffId).subscribe({
+      next: () => {
+        this.toastService.showSuccess('Staff member deleted successfully');
+        this.loadStaffList();
+      },
+      error: (error) => {
+        this.toastService.showError('Failed to delete staff member');
+      }
+    });
   }
 
   resetForm() {

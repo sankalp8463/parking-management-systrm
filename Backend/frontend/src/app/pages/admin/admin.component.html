@@ -1,102 +1,193 @@
-<div class="admin-container">
-  <div class="admin-header">
-    <h1>Admin Panel</h1>
-    <p>Manage staff members and system settings</p>
-  </div>
-
-  <div class="admin-content">
-    <!-- Create Staff Form -->
-    <div class="card">
-      <div class="card-header">
-        <h2>Create New Staff Member</h2>
+<div class="admin-dashboard">
+  <!-- Header Section -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1>Admin Dashboard</h1>
+        <p>Manage staff members and system operations</p>
       </div>
-      <div class="card-body">
-        <form (ngSubmit)="createStaff()" #staffFormRef="ngForm">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="name">Full Name *</label>
-              <input 
-                type="text" 
-                id="name" 
-                [(ngModel)]="staffForm.name" 
-                name="name" 
-                required
-                placeholder="Enter full name">
-            </div>
-            <div class="form-group">
-              <label for="phoneNumber">Phone Number *</label>
-              <input 
-                type="tel" 
-                id="phoneNumber" 
-                [(ngModel)]="staffForm.phoneNumber" 
-                name="phoneNumber" 
-                required
-                placeholder="Enter phone number">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input 
-                type="email" 
-                id="email" 
-                [(ngModel)]="staffForm.email" 
-                name="email"
-                placeholder="Enter email (optional)">
-            </div>
-            <div class="form-group">
-              <label for="password">Password *</label>
-              <input 
-                type="password" 
-                id="password" 
-                [(ngModel)]="staffForm.password" 
-                name="password" 
-                required
-                placeholder="Enter password">
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="button" class="btn-secondary" (click)="resetForm()">Reset</button>
-            <button type="submit" class="btn-primary" [disabled]="isSubmitting">
-              {{isSubmitting ? 'Creating...' : 'Create Staff'}}
-            </button>
-          </div>
-        </form>
+      <div class="header-actions">
+        <button class="btn-primary" (click)="showCreateForm = !showCreateForm">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          Add Staff
+        </button>
       </div>
     </div>
+  </div>
 
-    <!-- Staff List -->
-    <div class="card">
-      <div class="card-header">
-        <h2>Staff Members</h2>
-        <span class="staff-count">{{staffList.length}} members</span>
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon blue">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
       </div>
-      <div class="card-body">
-        <div *ngIf="isLoading" class="loading">Loading staff members...</div>
-        <div *ngIf="!isLoading && staffList.length === 0" class="empty-state">
-          No staff members found. Create your first staff member above.
+      <div class="stat-content">
+        <h3>{{staffList.length}}</h3>
+        <p>Total Staff</p>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <h3>{{activeStaffCount}}</h3>
+        <p>Active Staff</p>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon purple">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <h3>1</h3>
+        <p>Admin Users</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Staff Form -->
+  <div class="form-section" *ngIf="showCreateForm">
+    <div class="section-header">
+      <h2>Create New Staff Member</h2>
+      <button class="btn-close" (click)="showCreateForm = false">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <form (ngSubmit)="createStaff()" #staffFormRef="ngForm" class="staff-form">
+      <div class="form-grid">
+        <div class="input-group">
+          <label for="name">Full Name</label>
+          <input 
+            type="text" 
+            id="name" 
+            [(ngModel)]="staffForm.name" 
+            name="name" 
+            required
+            placeholder="Enter full name">
         </div>
-        <div *ngIf="!isLoading && staffList.length > 0" class="staff-grid">
-          <div *ngFor="let staff of staffList" class="staff-card">
-            <div class="staff-avatar">
-              <svg fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-              </svg>
-            </div>
-            <div class="staff-info">
-              <h3>{{staff.name}}</h3>
-              <p class="staff-phone">{{staff.phoneNumber}}</p>
-              <p class="staff-email" *ngIf="staff.email">{{staff.email}}</p>
-              <span class="staff-role">Staff</span>
-            </div>
-            <div class="staff-actions">
-              <button class="btn-danger" (click)="deleteStaff(staff._id)">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                </svg>
-              </button>
-            </div>
+        
+        <div class="input-group">
+          <label for="phoneNumber">Phone Number</label>
+          <input 
+            type="tel" 
+            id="phoneNumber" 
+            [(ngModel)]="staffForm.phoneNumber" 
+            name="phoneNumber" 
+            required
+            placeholder="Enter phone number">
+        </div>
+        
+        <div class="input-group">
+          <label for="email">Email (Optional)</label>
+          <input 
+            type="email" 
+            id="email" 
+            [(ngModel)]="staffForm.email" 
+            name="email"
+            placeholder="Enter email address">
+        </div>
+        
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            [(ngModel)]="staffForm.password" 
+            name="password" 
+            required
+            placeholder="Enter password">
+        </div>
+      </div>
+      
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="resetForm()">Reset Form</button>
+        <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+          <span *ngIf="!isSubmitting">Create Staff Member</span>
+          <span *ngIf="isSubmitting">
+            <svg class="spinner" fill="none" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" opacity="0.25"/>
+              <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" opacity="0.75"/>
+            </svg>
+            Creating...
+          </span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Staff List Section -->
+  <div class="staff-section">
+    <div class="section-header">
+      <h2>Staff Members</h2>
+      <div class="section-actions">
+        <div class="search-box">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+          <input type="text" placeholder="Search staff..." [(ngModel)]="searchTerm">
+        </div>
+      </div>
+    </div>
+    
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading staff members...</p>
+    </div>
+    
+    <div *ngIf="!isLoading && staffList.length === 0" class="empty-state">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+      </svg>
+      <h3>No Staff Members</h3>
+      <p>Get started by creating your first staff member</p>
+      <button class="btn-primary" (click)="showCreateForm = true">Add Staff Member</button>
+    </div>
+    
+    <div *ngIf="!isLoading && staffList.length > 0" class="staff-grid">
+      <div *ngFor="let staff of filteredStaff" class="staff-card">
+        <div class="card-header">
+          <div class="staff-avatar">
+            <span>{{staff.name.charAt(0).toUpperCase()}}</span>
           </div>
+          <div class="staff-status active"></div>
+        </div>
+        
+        <div class="card-body">
+          <h3>{{staff.name}}</h3>
+          <p class="staff-phone">{{staff.phoneNumber}}</p>
+          <p class="staff-email" *ngIf="staff.email">{{staff.email}}</p>
+          <div class="staff-meta">
+            <span class="role-badge">{{staff.role}}</span>
+            <span class="date-joined">{{staff.createdAt | date:'MMM yyyy'}}</span>
+          </div>
+        </div>
+        
+        <div class="card-actions">
+          <button class="btn-icon" title="Edit Staff">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </button>
+          <button class="btn-icon danger" (click)="deleteStaff(staff._id)" title="Delete Staff">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>

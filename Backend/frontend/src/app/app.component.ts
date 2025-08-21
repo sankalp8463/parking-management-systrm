@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
   navigateToAdmin() {
     this.closeProfileDropdown();
     this.router.navigate(['/admin']);
-    this.closeMobileMenu()
+    this.closeMobileMenu();
   }
 
   logout() {
