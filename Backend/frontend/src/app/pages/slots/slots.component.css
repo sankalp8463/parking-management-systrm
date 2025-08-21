@@ -427,13 +427,13 @@ select.form-control {
 }
 
 .btn-primary:disabled {
-  background: #6c757d;
+  background: #0197bd;
   cursor: not-allowed;
   opacity: 0.6;
 }
 
 .btn-secondary {
-  background: #6c757d;
+  background: #474f57;
   color: white;
 }
 

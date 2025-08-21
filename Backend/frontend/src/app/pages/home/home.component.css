@@ -91,15 +91,15 @@
   .hero {
     padding: 3rem 1.5rem;
   }
-  
+
   .hero-content h1 {
     font-size: 2.5rem;
   }
-  
+
   .features {
     padding: 3rem 1.5rem;
   }
-  
+
   .features h2 {
     font-size: 2rem;
   }
@@ -109,23 +109,23 @@
   .hero {
     padding: 2.5rem 1rem;
   }
-  
+
   .hero-content h1 {
     font-size: 2rem;
     line-height: 1.2;
   }
-  
+
   .hero-content p {
     font-size: 1rem;
     margin-bottom: 1.5rem;
   }
-  
+
   .hero-buttons {
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
   }
-  
+
   .btn-primary, .btn-secondary {
     width: 100%;
     max-width: 280px;
@@ -134,21 +134,21 @@
     min-height: 48px;
     touch-action: manipulation;
   }
-  
+
   .features {
     padding: 2.5rem 1rem;
   }
-  
+
   .features h2 {
     font-size: 1.75rem;
     margin-bottom: 2rem;
   }
-  
+
   .feature-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .feature-card {
     padding: 1.5rem;
   }
@@ -158,33 +158,123 @@
   .hero {
     padding: 2rem 0.75rem;
   }
-  
+
   .hero-content h1 {
     font-size: 1.75rem;
   }
-  
+
   .hero-content p {
     font-size: 0.9rem;
   }
-  
+
   .btn-primary, .btn-secondary {
     padding: 0.75rem 1.25rem;
     font-size: 0.9rem;
   }
-  
+
   .features {
     padding: 2rem 0.75rem;
   }
-  
+
   .features h2 {
     font-size: 1.5rem;
   }
-  
+
   .feature-card {
     padding: 1.25rem;
   }
-  
+
   .feature-card h3 {
     font-size: 1.1rem;
   }
+  .custom-svg {
+    width: 100px;   /* change size as you like */
+    height: 100px;
+    color: white;   /* makes the SVG white */
+  }
+  .footer {
+    background: #2c3e50;
+    color: #f1f1f1;
+    padding: 3rem 2rem 1rem;
+    margin-top: 3rem;
+  }
+
+  .footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-brand h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .footer-brand p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ccc;
+  }
+
+  .footer-links h4,
+  .footer-contact h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .footer-links ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-links ul li {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-links ul li a {
+    text-decoration: none;
+    color: #ccc;
+    transition: color 0.3s;
+  }
+
+  .footer-links ul li a:hover {
+    color: #3498db;
+  }
+
+  .footer-contact p {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+    color: #ccc;
+  }
+
+  .footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 2rem;
+  }
+
+  .footer-bottom p {
+    font-size: 0.85rem;
+    color: #aaa;
+  }
+  .footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .footer strong {
+    color: #007bff; /* highlight developer names */
+  }
+
+
 }
