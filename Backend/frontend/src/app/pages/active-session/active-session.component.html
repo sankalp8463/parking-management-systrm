@@ -1,1 +1,143 @@
-<p>active-session works!</p>
+<div class="page-title-section">
+  <p></p>
+  <h1>In-premise Vehicles</h1>
+</div>
+<div class="parking-page">
+  <div class="container">
+    <!-- In-premise Vehicles Section -->
+
+    <div class="active-entries">
+      <div class="slots-header">
+
+        <div class="slots-header-actions">
+          <button class="btn-action" (click)="openCheckoutModal()">
+            Check Out Vehicle
+          </button>
+        </div>
+      </div>
+
+      <div class="entries-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle Number</th>
+              <th>Slot</th>
+              <th>Entry Time</th>
+              <th>Duration</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of activeEntries" [attr.data-vehicle]="entry.vehicleNumber">
+              <td>
+                <strong>{{entry.vehicleNumber}}</strong>
+                <small class="vehicle-type">{{entry.vehicleType || 'N/A'}}</small>
+              </td>
+              <td>
+                <span class="slot-badge">{{entry.slotNumber}}</span>
+              </td>
+              <td>{{entry.entryTime | date:'MMM d, y, h:mm a'}}</td>
+              <td>
+                <span class="duration-badge">{{entry.duration}}</span>
+              </td>
+              <td>
+                <button class="btn-exit"
+                        (click)="exitVehicleByNumber(entry.vehicleNumber)"
+                        [attr.aria-label]="'Exit vehicle ' + entry.vehicleNumber">
+                  Exit
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!activeEntries || activeEntries.length === 0">
+              <td colspan="5" class="no-data">
+                <div class="empty-state">
+                  <p>No vehicles currently parked</p>
+                 
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Enhanced Checkout Modal -->
+    <div class="modal" *ngIf="showCheckoutModal" (click)="closeCheckoutModal()" role="dialog" aria-labelledby="checkout-modal-title">
+      <div class="modal-content" (click)="$event.stopPropagation()" role="document">
+        <h3 id="checkout-modal-title">Check Out Vehicle</h3>
+
+        <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitForm="ngForm" novalidate>
+          <div class="form-group">
+            <label for="vehicleNumber">
+              <strong>Vehicle Number</strong>
+            </label>
+            <input
+              type="text"
+              id="vehicleNumber"
+              [(ngModel)]="exitData.vehicleNumber"
+              name="vehicleNumber"
+              placeholder="Enter vehicle number (e.g., MH12AB1234)"
+              autocomplete="off"
+              required
+              #vehicleNumberInput="ngModel"
+              [class.error]="vehicleNumberInput.invalid && vehicleNumberInput.touched">
+
+            <div class="form-error" *ngIf="vehicleNumberInput.invalid && vehicleNumberInput.touched">
+              <small>Please enter a valid vehicle number</small>
+            </div>
+          </div>
+
+          <!-- Quick Select from Current Vehicles -->
+          <div class="form-group" *ngIf="activeEntries && activeEntries.length > 0">
+            <label for="quickSelect">
+              <strong>Quick Select</strong>
+            </label>
+            <select
+              id="quickSelect"
+              class="form-select"
+              (change)="onQuickSelectVehicle($event)"
+              aria-label="Select vehicle from current entries">
+              <option value="">Choose from parked vehicles...</option>
+              <option *ngFor="let entry of activeEntries"
+                      [value]="entry.vehicleNumber">
+                {{entry.vehicleNumber}} - Slot {{entry.slotNumber}} ({{entry.duration}})
+              </option>
+            </select>
+          </div>
+
+          <div class="modal-actions">
+            <button
+              class="btn-secondary"
+              type="button"
+              (click)="closeCheckoutModal()"
+              aria-label="Cancel checkout">
+              Cancel
+            </button>
+            <button
+              class="btn-primary"
+              type="submit"
+              [disabled]="!exitForm.valid || isProcessing"
+              [attr.aria-label]="isProcessing ? 'Processing checkout...' : 'Confirm checkout'">
+              <span *ngIf="!isProcessing">Check Out</span>
+              <span *ngIf="isProcessing">
+                <i class="spinner" aria-hidden="true"></i>
+                Processing...
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Payment Modal Integration -->
+    <app-payment-modal
+      *ngIf="showPaymentModal"
+      [paymentData]="paymentData"
+      (paymentComplete)="onPaymentComplete()"
+      (modalClose)="onModalClose()"
+      role="dialog"
+      aria-labelledby="payment-modal-title">
+    </app-payment-modal>
+  </div>
+</div>
+    

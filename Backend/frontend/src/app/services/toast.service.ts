@@ -43,6 +43,14 @@ export class ToastService {
     this.show(message, 'info', duration);
   }
 
+  showSuccess(message: string, duration?: number) {
+    this.success(message, duration);
+  }
+
+  showError(message: string, duration?: number) {
+    this.error(message, duration);
+  }
+
   remove(id: string) {
     const currentToasts = this.toastsSubject.value;
     this.toastsSubject.next(currentToasts.filter(toast => toast.id !== id));

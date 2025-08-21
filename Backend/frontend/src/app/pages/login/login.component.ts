@@ -21,9 +21,10 @@ export class LoginComponent {
 
   // Carousel images
   images: string[] = [
-    'assets/images/slide1.png',
-    'assets/images/slide2.png',
-    'assets/images/slide3.png'
+    '../../../assets/images/pexels-fotios-photos-29557509.jpg',
+    '../../../assets/images/pexels-proxyclick-2451622.jpg',
+    '../../../assets/images/pexels-keat007-31685643.jpg'
+
   ];
 
   currentSlide = 0;
@@ -35,17 +36,16 @@ export class LoginComponent {
     }, 3000);
   }
 
- ngOnInit() {
-           const token= localStorage.getItem('token');
-           if(token){
-            this.router.navigate(['/dashboard']);
-           }
-
- }
-
   nextSlide() {
     this.currentSlide = (this.currentSlide + 1) % this.images.length;
   }
+  ngOnInit() {
+    const token= localStorage.getItem('token');
+    if(token){
+     this.router.navigate(['/dashboard']);
+    }
+
+}
 
   onLogin() {
     if (this.loginData.phoneNumber && this.loginData.password) {

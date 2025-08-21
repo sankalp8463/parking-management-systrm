@@ -1,34 +1,56 @@
 <div class="slots-page">
   <div class="container">
-    <h1>Parking Slot Management</h1> 
-    <p></p>
+    <h1>Parking Slot Management</h1>
 
-    <!-- Top Bar -->
-    <div class="top-bar">
-      <h3>All Slots</h3>
-      <select [(ngModel)]="filterType" class="type-select">
-        <option value="">All Types</option>
-        <option value="bike">Bike</option>
-        <option value="car">Car</option>
-        <option value="truck">Truck</option>
-      </select>
+    <!-- Enhanced Stats Section with Add Button -->
+    <div class="slots-overview">
+      <div class="stats-header">
+        <h2>Slot Statistics</h2>
+        <button class="add-slot-btn" (click)="openAddModal()">
+          <span class="add-icon">+</span>
+          <span>Add Slot</span>
+        </button>
+      </div>
 
-      <button class="add-slot-dd" (click)="openAddModal()"><b>Add Slot ▾</b></button>
-    </div>
-
-    <!-- All slots preview - FIXED: Show actual slot numbers -->
-    <div class="all-slot-preview">
-      <div
-        class="preview-item"
-        *ngFor="let slot of getSortedFilteredSlots()"
-        [ngClass]="slot.status"
-        (click)="selectSlot(slot)"
-      >
-      {{ slot.slotNumber }}
+      <div class="stats-grid">
+        <div class="stat-card available">
+          <h3>Available</h3>
+          <p class="stat-number">{{ slotStats.available }}</p>
+        </div>
+        <div class="stat-card occupied">
+          <h3>Occupied</h3>
+          <p class="stat-number">{{ slotStats.occupied }}</p>
+        </div>
+        <div class="stat-card maintenance">
+          <h3>Maintenance</h3>
+          <p class="stat-number">{{ slotStats.maintenance }}</p>
+        </div>
+        <div class="stat-card total">
+          <h3>Total Slots</h3>
+          <p class="stat-number">{{ slotStats.total }}</p>
+        </div>
       </div>
     </div>
-
-    
+    <div class="available-slots-section" *ngIf="newSlot.vehicleType">
+      <label class="section-label">Available Slots for {{ newSlot.vehicleType | titlecase }}:</label>
+      <div class="slots-preview">
+        <div
+          *ngFor="let slot of getAvailableSlotsByType(newSlot.vehicleType)"
+          class="preview-slot available"
+          (click)="selectSlotForBooking(slot)">
+          {{ convertForDisplay(slot) }}
+        </div>
+        <div
+          *ngFor="let emptySlot of getEmptySlotsByType(newSlot.vehicleType)"
+          class="preview-slot empty"
+          (click)="selectEmptySlot(emptySlot)">
+          {{ emptySlot }}
+        </div>
+      </div>
+      <p class="slots-info" *ngIf="getAvailableSlotsByType(newSlot.vehicleType).length === 0 && getEmptySlotsByType(newSlot.vehicleType).length === 0">
+        No available slots for {{ newSlot.vehicleType }}
+      </p>
+    </div>
 
     <!-- Floor Layout -->
     <h2>Slot Layout</h2>
@@ -36,137 +58,110 @@
       <div class="floor-column" *ngFor="let fl of floors">
         <h3>{{ fl.label }}</h3>
         <div class="slot-matrix">
-          <div class="slot-matrix">
+          <!-- Bikes (A..D) -->
+          <ng-container *ngIf="fl.type=='bike'">
+            <div *ngFor="let r of rows" class="slot-row">
+              <div *ngFor="let c of cols" class="slot-box"
+                   [ngClass]="getSlotClass(r+c, fl.type)"
+                   (click)="selectSlotFromMatrix(r+c, fl.type)">
+                {{ r + c }}
+              </div>
+            </div>
+          </ng-container>
 
-            <!-- Bikes (A..D) -->
-            <ng-container *ngIf="fl.type=='bike'">
-              <div *ngFor="let r of rows" class="slot-row">
-                <div *ngFor="let c of cols" class="slot-box"
-                     [ngClass]="getSlotClass(r+c, fl.type)"
-                     (click)="selectSlotFromMatrix(r+c, fl.type)">
-                  {{ r + c }}
-                </div>
+          <!-- Cars (E..H) -->
+          <ng-container *ngIf="fl.type=='car'">
+            <div *ngFor="let r of rows" class="slot-row">
+              <div *ngFor="let c of cols" class="slot-box"
+                   [ngClass]="getSlotClass(toChar(r,4)+c, fl.type)"
+                   (click)="selectSlotFromMatrix(toChar(r,4)+c, fl.type)">
+                {{ toChar(r,4) + c }}
               </div>
-            </ng-container>
-          
-            <!-- Cars (E..H) -->
-            <ng-container *ngIf="fl.type=='car'">
-              <div *ngFor="let r of rows" class="slot-row">
-                <div *ngFor="let c of cols" class="slot-box"
-                     [ngClass]="getSlotClass(toChar(r,4)+c, fl.type)"
-                     (click)="selectSlotFromMatrix(toChar(r,4)+c, fl.type)">
-                  {{ toChar(r,4) + c }}
-                </div>
+            </div>
+          </ng-container>
+
+          <!-- Trucks (L..O) -->
+          <ng-container *ngIf="fl.type=='truck'">
+            <div *ngFor="let r of rows" class="slot-row">
+              <div *ngFor="let c of cols" class="slot-box"
+                   [ngClass]="getSlotClass(toChar(r,10)+c, fl.type)"
+                   (click)="selectSlotFromMatrix(toChar(r,10)+c, fl.type)">
+                {{ toChar(r,10) + c }}
               </div>
-            </ng-container>
-          
-            <!-- Trucks (L..O) -->
-            <ng-container *ngIf="fl.type=='truck'">
-              <div *ngFor="let r of rows" class="slot-row">
-                <div *ngFor="let c of cols" class="slot-box"
-                     [ngClass]="getSlotClass(toChar(r,10)+c, fl.type)"
-                     (click)="selectSlotFromMatrix(toChar(r,10)+c, fl.type)">
-                  {{ toChar(r,10) + c }}
-                </div>
-              </div>
-            </ng-container>
-          
-          </div>
-          
+            </div>
+          </ng-container>
         </div>
       </div>
     </div>
-<!-- Statistic -->
-<div class="slots-overview">
-  <h2>Slot Statistics</h2>
-  <div class="stats-grid">
-    <div class="stat-card available">
-      <h3>Available</h3>
-      <p class="stat-number">{{ slotStats.available }}</p>
-    </div>
-    <div class="stat-card occupied">
-      <h3>Occupied</h3>
-      <p class="stat-number">{{ slotStats.occupied }}</p>
-    </div>
-    <div class="stat-card maintenance">
-      <h3>Maintenance</h3>
-      <p class="stat-number">{{ slotStats.maintenance }}</p>
-    </div>
-    <div class="stat-card total">
-      <h3>Total Slots</h3>
-      <p class="stat-number">{{ slotStats.total }}</p>
-    </div>
-  </div>
-</div>
-    <!-- Table -->
-    <div class="slots-table">
-      <h2>All Parking Slots</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Slot Number</th>
-              <th>Vehicle Type</th>
-              <th>Hourly Rate</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let slot of slots">
-              <td>{{ slot.slotNumber }}</td>
 
-              <td>{{ slot.vehicleType }}</td>
-              <td>₹{{ slot.hourlyRate }}</td>
-              <td>
-                <span class="status-badge" [ngClass]="slot.status">{{ slot.status }}</span>
-              </td>
-              <td>
-                <button class="btn-edit" (click)="editSlot(slot)">Edit</button>
-                <button class="btn-delete" (click)="deleteSlot(slot._id)">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Add Slot Modal -->
+    <!-- Enhanced Add Modal -->
     <div class="modal" *ngIf="showAddModal" (click)="closeAddModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
-        <h3>Add New Parking Slot</h3>
-        <form (ngSubmit)="addSlot()" #slotForm="ngForm">
-          <div class="form-group">
-            <label>Vehicle Type</label>
-            <select [(ngModel)]="newSlot.vehicleType" name="vehicleType" required>
-              <option value="bike">Bike</option>
-              <option value="car">Car</option>
-              <option value="truck">Truck</option>
-            </select>
+        <div class="modal-header">
+          <h2>Add Slot</h2>
+          <button class="close-btn" (click)="closeAddModal()">&times;</button>
+        </div>
+
+
+
+        <div class="form-group">
+          <label for="vehicleType">Vehicle Type</label>
+          <select
+            id="vehicleType"
+            [(ngModel)]="newSlot.vehicleType"
+            (change)="onVehicleTypeChange()"
+            class="form-control">
+            <option value="">Select Vehicle Type</option>
+            <option value="bike">Bike</option>
+            <option value="car">Car</option>
+            <option value="truck">Truck</option>
+          </select>
+        </div>
+
+        <!-- Available Slots Preview -->
+        <div class="available-slots-section" *ngIf="newSlot.vehicleType">
+          <label class="section-label">Available Slots for {{ newSlot.vehicleType | titlecase }}:</label>
+          <div class="slots-preview">
+            <div
+              *ngFor="let slot of getAvailableSlotsByType(newSlot.vehicleType)"
+              class="preview-slot available"
+              (click)="selectSlotForBooking(slot)">
+              {{ convertForDisplay(slot) }}
+            </div>
+            <div
+              *ngFor="let emptySlot of getEmptySlotsByType(newSlot.vehicleType)"
+              class="preview-slot empty"
+              (click)="selectEmptySlot(emptySlot)">
+              {{ emptySlot }}
+            </div>
           </div>
-          <div class="form-group">
-            <label>Slot Number</label>
-            <input type="text" [(ngModel)]="newSlot.slotNumber" name="slotNumber" required />
-          </div>
-          <div class="form-group">
-            <label>Hourly Rate</label>
-            <input type="number" [(ngModel)]="newSlot.hourlyRate" name="hourlyRate" required />
-          </div>
-          <div class="form-group">
-            <label>Status</label>
-            <select [(ngModel)]="newSlot.status" name="status" required>
-              <option value="available">Available</option>
-              <option value="occupied">Occupied</option>
-              <option value="maintenance">Maintenance</option>
-            </select>
-          </div>
-          <div class="modal-actions">
-            <button class="btn-primary" type="submit" [disabled]="!slotForm.valid"><b>Add Slot</b></button>
-            <button class="btn-secondary" type="button" (click)="closeAddModal()"><b>Cancel</b></button>
-          </div>
-        </form>
+          <p class="slots-info" *ngIf="getAvailableSlotsByType(newSlot.vehicleType).length === 0 && getEmptySlotsByType(newSlot.vehicleType).length === 0">
+            No available slots for {{ newSlot.vehicleType }}
+          </p>
+        </div>
+
+        <div class="form-group" *ngIf="selectedSlotForBooking">
+          <label>Selected Slot: <span class="selected-slot-display">{{ selectedSlotForBooking }}</span></label>
+        </div>
+
+        <div class="form-group">
+          <label for="hourlyRate">Hourly Rate</label>
+          <input
+            id="hourlyRate"
+            type="number"
+            [(ngModel)]="newSlot.hourlyRate"
+            min="1"
+            class="form-control">
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn-secondary" (click)="closeAddModal()">Cancel</button>
+          <button class="btn-primary" (click)="addSlot()" [disabled]="!isFormValid()">Check Out</button>
+        </div>
       </div>
     </div>
 
+    <!-- Slots Table -->
+   
   </div>
 </div>

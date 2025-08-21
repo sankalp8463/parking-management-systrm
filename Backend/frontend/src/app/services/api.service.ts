@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -29,8 +29,16 @@ export class ApiService {
   }
 
   // Users
-  getUsers(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/users`, { headers: this.getAuthHeaders() });
+  getUsers(): Promise<any> {
+    return firstValueFrom(this.http.get(`${this.baseUrl}/users`, { headers: this.getAuthHeaders() }));
+  }
+
+  createUser(userData: any): Promise<any> {
+    return firstValueFrom(this.http.post(`${this.baseUrl}/users`, userData, { headers: this.getAuthHeaders() }));
+  }
+
+  deleteUser(userId: string): Promise<any> {
+    return firstValueFrom(this.http.delete(`${this.baseUrl}/users/${userId}`, { headers: this.getAuthHeaders() }));
   }
 
   // Vehicles

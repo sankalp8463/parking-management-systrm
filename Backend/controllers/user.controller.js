@@ -82,6 +82,20 @@ const updateUser = async (req, res) => {
     }
 };
 
+const createUser = async (req, res) => {
+    try {
+        const { name, phoneNumber, email, password, role } = req.body;
+        const userData = { name, phoneNumber, email, password, role };
+        const user = new User(userData);
+        await user.save();
+        
+        const { password: _, ...userWithoutPassword } = user.toObject();
+        res.status(201).json(userWithoutPassword);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
+
 const deleteUser = async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
@@ -98,5 +112,6 @@ module.exports = {
     getAllUsers,
     getUserById,
     updateUser,
+    createUser,
     deleteUser
 };

@@ -1,17 +1,14 @@
 <div class="payments-page">
   <div class="container">
     <h1>Payment Management</h1>
-    
+
     <!-- Stats -->
     <div class="payment-stats">
-      
-      <div class="stat-card revenue">
-        <h3>Daily Revenue</h3>
-        <p class="stat-number">₹{{paymentStats.revenue}}</p>
-      </div>
+
+     
       <div class="stat-card payments">
-        <h3>Daily Payments</h3>
-        <p class="stat-number">{{paymentStats.total}}</p>
+        <h3>Today's Revenue</h3>
+        <p class="stat-number">₹{{paymentStats.total}}</p>
       </div>
       <div class="stat-card pending">
         <h3>Pending Payments</h3>
@@ -25,7 +22,7 @@
         <h2>Payment History</h2>
         <button class="btn-create" (click)="openModal()"><b>+ Create Payment</b></button>
       </div>
-      
+
       <div class="payments-table">
         <table>
           <thead>

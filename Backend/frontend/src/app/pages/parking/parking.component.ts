@@ -8,14 +8,14 @@ import { ToastService } from '../../services/toast.service';
 @Component({
   selector: 'app-parking',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaymentModalComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './parking.component.html',
   styleUrl: './parking.component.css'
 })
 export class ParkingComponent implements OnInit {
   parkData = {
     vehicleNumber: '',
-    vehicleType: 'car'
+    vehicleType: ''
   };
 
   exitData = {
@@ -37,21 +37,21 @@ export class ParkingComponent implements OnInit {
 
   parkVehicle() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    
+
     if (!user._id) {
       this.toast.warning('Please login to park a vehicle');
       return;
     }
-    
+
     const parkingData = {
       ...this.parkData,
       userId: user._id
     };
-    
+
     this.apiService.parkVehicle(parkingData).subscribe({
       next: (data) => {
         this.toast.success('Vehicle parked successfully! Vehicle registered automatically.');
-        this.parkData = { vehicleNumber: '', vehicleType: 'car' };
+        this.parkData = { vehicleNumber: '', vehicleType: '' };
         this.loadParkingData();
       },
       error: (error) => {
@@ -59,6 +59,7 @@ export class ParkingComponent implements OnInit {
         this.toast.error('Error parking vehicle. Please check if slots are available.');
       }
     });
+    this.closeParkModal()
   }
 
   exitVehicleByVehicleNumber() {
@@ -130,18 +131,18 @@ export class ParkingComponent implements OnInit {
     const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
     return `${hours}h ${minutes}m`;
   }
-  
-  
-  openParkModal()  { 
+
+
+  openParkModal()  {
     console.log("Clicked Park Button");
     this.showParkModal = true;
   }
-  
+
   closeParkModal() { this.showParkModal = false; }
-  
+
   openCheckoutModal()  { this.showCheckoutModal = true; }
   closeCheckoutModal() { this.showCheckoutModal = false; }
-  
+
 
 
 }

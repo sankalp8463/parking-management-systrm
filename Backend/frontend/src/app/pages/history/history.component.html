@@ -4,7 +4,7 @@
     <div class="page-header">
       <h1> Parking History</h1><p></p>
     </div>
-    
+
     <!-- Stats Cards -->
     <div class="stats-grid">
       <div class="stat-card">
@@ -17,17 +17,17 @@
           </defs>
           <circle cx="24" cy="24" r="24" fill="url(#revenueGradient)"/>
           <!-- Rupee Symbol -->
-          <path d="M16 16h12M16 20h12M16 20h8c2.21 0 4 1.79 4 4s-1.79 4-4 4h-8l8 8" 
+          <path d="M16 16h12M16 20h12M16 20h8c2.21 0 4 1.79 4 4s-1.79 4-4 4h-8l8 8"
                 stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
           <!-- Growth Arrow -->
           <path d="M32 14l4-4 4 4M36 10v8" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         <div class="stat-content">
           <h3>₹ {{historyStats.revenue}}</h3>
-          <p>Daily Revenue</p>
+          <p>Today's Revenue</p>
         </div>
       </div>
-      
+
       <div class="stat-card">
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
           <defs>
@@ -40,17 +40,17 @@
           <!-- Multiple Users Icon -->
           <circle cx="20" cy="18" r="4" stroke="white" stroke-width="2" fill="none"/>
           <circle cx="28" cy="18" r="4" stroke="white" stroke-width="2" fill="none"/>
-          <path d="M12 32c0-4 4-8 8-8s8 4 8 8M20 32c0-4 4-8 8-8s8 4 8 8" 
+          <path d="M12 32c0-4 4-8 8-8s8 4 8 8M20 32c0-4 4-8 8-8s8 4 8 8"
                 stroke="white" stroke-width="2" stroke-linecap="round"/>
           <!-- Activity Indicator -->
           <circle cx="34" cy="14" r="3" fill="#22c55e"/>
         </svg>
         <div class="stat-content">
           <h3>{{historyStats.total}} <b></b></h3>
-          <p>Daily Sessions</p>
+          <p>Active Today</p>
         </div>
       </div>
-      
+
       <div class="stat-card">
         <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
           <defs>
@@ -84,25 +84,24 @@
       <div class="controls-header">
         <h2>Find Records</h2>
       </div>
-      
+
       <div class="search-section">
         <div class="search-row">
           <!-- Vehicle Search Group -->
           <div class="search-group">
             <label>Vehicle No.</label>
             <div class="search-input-group">
-              <input 
-                type="text" 
-                [(ngModel)]="searchVehicle" 
-                placeholder="Enter vehicle number" 
+              <input
+                type="text"
+                [(ngModel)]="searchVehicle"
+                placeholder="Search"
                 class="search-input"
                 (keydown.enter)="performSearch()">
               <button class="btn-search" (click)="performSearch()">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-                Search
-              </button>
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+  </svg>
+</button>
             </div>
           </div>
 
@@ -110,29 +109,31 @@
           <div class="date-group">
             <label>Select Date</label>
             <div class="date-input-group">
-              <input 
-                type="date" 
-                [(ngModel)]="selectedDate" 
-                class="date-input" 
+              <input
+                type="date"
+                [(ngModel)]="selectedDate"
+                class="date-input"
                 (change)="filterByDate()">
               <button class="btn-today" (click)="showToday()">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
-                Today
+
               </button>
             </div>
           </div>
 
           <!-- Export Button -->
           <div class="export-section">
-            <button class="btn-export" (click)="exportToExcel()">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-4-4m4 4l4-4m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              Export Excel
-            </button>
+              <button class="btn-export" (click)="exportToExcel()">
+                <svg class="svg1" viewBox="0 0 24 24">
+                  <path d="M8 12L12 16M12 16L16 12M12 16V8M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"></path>
+                </svg>
+                Export Excel
+              </button>
           </div>
+
+
         </div>
       </div>
     </div>
@@ -149,7 +150,7 @@
             </div>
             <div class="amount">₹{{record.entryInfo.totalAmount}}</div>
           </div>
-          
+
           <div class="record-details">
             <div class="detail-row">
               <span class="label">Slot:</span>

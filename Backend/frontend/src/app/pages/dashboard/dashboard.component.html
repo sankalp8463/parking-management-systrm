@@ -1,36 +1,6 @@
 <div class="dashboard-container responsive-container">
   <!-- Enhanced Header Section -->
-  <div class="dashboard-header">
-    <div class="header-content">
-      <div class="title-section">
-        <h1 class="dashboard-title">
-          <i class="pi pi-chart-line title-icon"></i>
-          Dashboard Overview
-        </h1>
-        <p class="dashboard-subtitle">Real-time parking management insights</p>
-      </div>
-      <div class="status-indicator">
-        <div class="status-dot" [class.active]="!isLoading"></div>
-        <span class="status-text">{{isLoading ? 'Updating...' : 'Live'}}</span>
-      </div>
-    </div>
-    <div class="header-actions">
-      <div class="action-group">
-        <p-button 
-          icon="pi pi-refresh" 
-          [loading]="isLoading"
-          (click)="refreshStats()"
-          styleClass="p-button-outlined p-button-sm refresh-btn"
-          pTooltip="Refresh Data">
-        </p-button>
-        <span class="last-updated">
-          <i class="pi pi-clock"></i>
-          {{getTimeAgo()}}
-        </span>
-      </div>
-    </div>
-  </div>
-
+  
   <!-- Enhanced Statistics Cards -->
   <div class="stats-grid">
     <div class="stat-card-wrapper" [class.loading]="isLoading">

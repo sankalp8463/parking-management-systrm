@@ -127,6 +127,7 @@
 
 .date-group {
   flex: 0 0 160px; /* Fixed width for date input */
+  margin-left: 160px;
 }
 
 .search-group label,
@@ -412,77 +413,116 @@
 }
 
 /* Utility Classes */
-.w-4 { width: 1rem; height: 1rem; }
+.w-4 {
+  width: 1rem;
+  height: 1rem;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* FIXED: SVG Styling for ALL screen sizes */
+.svg1 {
+  width: 30px;
+  height: 30px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .history-page {
     padding: 1rem;
   }
-  
+
   .page-header h1 {
     font-size: 2rem;
   }
-  
+
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .controls-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   /* Mobile search layout - Keep horizontal, make smaller */
   .search-row {
     gap: 0.5rem;
     flex-wrap: wrap;
   }
-  
+
   .search-group {
     flex: 0 0 140px; /* Smaller on mobile but still horizontal */
   }
-  
+
   .date-group {
     flex: 0 0 120px; /* Smaller on mobile but still horizontal */
+    margin-left: 0; /* Remove left margin on mobile */
   }
-  
+
   .search-input {
     width: 140px;
     padding: 0.6rem;
     font-size: 0.8rem;
   }
-  
+
   .date-input {
     width: 120px;
     padding: 0.6rem;
     font-size: 0.8rem;
   }
-  
+
   .btn-search,
   .btn-today {
     padding: 0.6rem 1rem;
     font-size: 0.8rem;
   }
-  
+
   .export-section {
+    display: flex;
     justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 0; /* Remove auto margin on mobile */
   }
-  
+
+  .btn-export {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn-export:hover {
+    background: linear-gradient(135deg, #38a169, #2f855a);
+  }
+
   .date-filters {
     justify-content: center;
   }
-  
+
   .records-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .record-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .record-footer {
     flex-direction: column;
     align-items: flex-start;

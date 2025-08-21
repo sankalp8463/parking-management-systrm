@@ -21,11 +21,16 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public",
-                "output": "/"
-              }
+  {
+    "glob": "**/*",
+    "input": "public",
+    "output": "/"
+  },
+  {
+    "glob": "**/*",
+    "input": "src/assets",
+    "output": "assets"
+  }
             ],
             "styles": [
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",

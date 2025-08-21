@@ -1,20 +1,21 @@
-<div class="parking-page responsive-container">
+<div class="parking-page">
   <div class="container">
     <h1>Vehicle Management</h1>
-    
+
     <div class="parking-slots">
       <div class="slots-header">
         <h2>Slot Overview</h2>
         <div class="slots-header-actions">
           <button class="btn-action" (click)="openParkModal()">+ <b>Park Vehicle</b></button>
-          <button class="btn-action" (click)="openCheckoutModal()">+ <b>Check Out</b></button>
+
         </div>
       </div>
-      
+
       <div class="slots-grid">
-        <div class="slot" 
-             *ngFor="let slot of parkingSlots" 
+        <div class="slot"
+             *ngFor="let slot of parkingSlots"
              [class.occupied]="slot.status === 'occupied'"
+             [class.maintenance]="slot.status === 'maintenance'"
              [class.available]="slot.status === 'available'">
           <span class="slot-number">{{slot.slotNumber}}</span>
           <span class="slot-type">{{slot.vehicleType}}</span>
@@ -27,7 +28,7 @@
 <!-- Park Vehicle Modal -->
 <div class="modal" *ngIf="showParkModal" (click)="closeParkModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <h3 style="text-align:center;">Park Vehicle</h3>
+    <h3 style="text-align:center;"><b>Park Vehicle</b></h3>
     <form (ngSubmit)="parkVehicle()" #parkForm="ngForm">
       <div class="form-group">
         <label><b>Vehicle Number</b></label>
@@ -35,74 +36,21 @@
       </div>
       <div class="form-group">
         <label><b>Vehicle Type</b></label>
-        <select [(ngModel)]="parkData.vehicleType" name="vehicleType" required>
-          <option value="car">Car</option>
-          <option value="bike">Bike</option>
-          <option value="truck">Truck</option>
+        <select class="form-select" [(ngModel)]="parkData.vehicleType" name="vehicleType" required>
+
+            <option value="car">Car</option>
+            <option value="bike">Bike</option>
+            <option value="truck">Truck</option>
         </select>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-secondary" type="submit" [disabled]="!parkForm.valid">Park</button>
-        <button class="btn-secondary" type="button" (click)="closeParkModal()">Cancel</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- Checkout Modal -->
-<div class="modal" *ngIf="showCheckoutModal" (click)="closeCheckoutModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <h3 style="text-align:center;">Check Out</h3>
-    <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitForm="ngForm">
-      <div class="form-group">
-        <label><b>Vehicle Number</b></label>
-        <input type="text" [(ngModel)]="exitData.vehicleNumber" name="vehicleNumber" required>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-secondary" type="submit" [disabled]="!exitForm.valid"><b>Check Out</b></button>
-        <button class="btn-secondary" type="button" (click)="closeCheckoutModal()"><b>Cancel</b></button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-
-   
-
-    <div class="active-entries">
-      <h2>Active Sessions</h2>
-      <div class="entries-table">
-        <table>
-          <thead>
-            <tr>
-              <th>Vehicle</th>
-              <th>Slot</th>
-              <th>Entry Time</th>
-              <th>Duration</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let entry of activeEntries">
-              <td>{{entry.vehicleNumber}}</td>
-              <td>{{entry.slotNumber}}</td>
-              <td>{{entry.entryTime | date:'short'}}</td>
-              <td>{{entry.duration}}</td>
-              <td>
-                <button class="btn-exit" (click)="exitVehicleByNumber(entry.vehicleNumber)">Exit</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </div>
+      <div class="modal-actions">
+
+        <button class="btn-secondary" type="button" (click)="closeParkModal()"><b>Cancel</b></button>
+        <button class="btn-secondary" type="submit" [disabled]="!parkForm.valid"><b>Park</b></button>
+      </div>
+    </form>
   </div>
 </div>
 
-<app-payment-modal 
-  *ngIf="showPaymentModal"
-  [paymentData]="paymentData"
-  (paymentComplete)="onPaymentComplete()"
-  (modalClose)="onModalClose()">
-</app-payment-modal>
+
+

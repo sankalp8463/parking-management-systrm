@@ -15,6 +15,7 @@ export class SlotsComponent implements OnInit {
   filterType = '';
   showAddModal = false;
   editingSlot: any = null;
+  selectedSlotForBooking = '';
 
   rows = ['A', 'B', 'C', 'D'];
   cols = [1, 2, 3, 4, 5, 6];
@@ -35,7 +36,7 @@ export class SlotsComponent implements OnInit {
 
   newSlot = {
     slotNumber: '',
-    vehicleType: 'car',
+    vehicleType: '',
     hourlyRate: 5,
     status: 'available'
   };
@@ -79,7 +80,7 @@ export class SlotsComponent implements OnInit {
     const s = this.slots.find(
       x => x.slotNumber.toUpperCase() === num.toUpperCase() && x.vehicleType === type
     );
-    return s ? s.status : 'available';
+    return s ? s.status : 'default';
   }
 
   selectSlot(slot: any) {
@@ -92,39 +93,164 @@ export class SlotsComponent implements OnInit {
     );
     if (s) {
       console.log('selected slot:', s);
+    } else {
+      // Create a new slot when clicking on an available (non-existent) slot
+      const newSlot = {
+        slotNumber: num,
+        vehicleType: type,
+        hourlyRate: type === 'bike' ? 5 : type === 'car' ? 10 : 15, // Default rates
+        status: 'available'
+      };
+
+      this.api.createParkingSlot(newSlot).subscribe({
+        next: (createdSlot) => {
+          this.slots.push(createdSlot);
+          this.calculateStats();
+          console.log('Created new slot:', createdSlot);
+        },
+        error: (e) => console.error('Error creating slot:', e)
+      });
     }
   }
 
   openAddModal() {
     this.showAddModal = true;
+    this.resetForm();
   }
 
-closeAddModal() {
-  this.showAddModal = false;
-  this.newSlot = {
-    slotNumber: '',
-    vehicleType: 'car',
-    hourlyRate: 5,
-    status: 'available'      // reset to available so form remains VALID
-  };
+  closeAddModal() {
+    this.showAddModal = false;
+    this.resetForm();
+  }
+
+  private resetForm() {
+    this.newSlot = {
+      slotNumber: '',
+      vehicleType: '',
+      hourlyRate: 5,
+      status: 'available'
+    };
+    this.selectedSlotForBooking = '';
+  }
+
+  onVehicleTypeChange() {
+    // Reset selected slot when vehicle type changes
+    this.selectedSlotForBooking = '';
+    this.newSlot.slotNumber = '';
+
+    // Set default hourly rate based on vehicle type
+    switch (this.newSlot.vehicleType) {
+      case 'bike':
+        this.newSlot.hourlyRate = 5;
+        break;
+      case 'car':
+        this.newSlot.hourlyRate = 10;
+        break;
+      case 'truck':
+        this.newSlot.hourlyRate = 15;
+        break;
+      default:
+        this.newSlot.hourlyRate = 5;
+    }
+  }
+
+  // Get available slots for the selected vehicle type
+getAvailableSlotsByType(vehicleType: string) {
+  if (!vehicleType) return [];
+  return this.slots
+    .filter(slot => slot.vehicleType === vehicleType && slot.status === 'available')
+    .sort((a, b) => a.slotNumber.localeCompare(b.slotNumber));
 }
 
+  // Get empty slots (not yet created) for the selected vehicle type
+getEmptySlotsByType(vehicleType: string): string[] {
+  if (!vehicleType) return [];
 
-addSlot() {
-  console.log('Sending:', this.newSlot);
-  this.api.createParkingSlot(this.newSlot).subscribe({
-    next: (d) => {
-      this.slots.push(d);
-      this.calculateStats();
-      alert('Slot added!');
-      // reset AFTER adding (so the selected status will be actually used first!)
-      this.newSlot = { slotNumber: '', vehicleType: 'car', hourlyRate: 5, status: 'available' };
-      this.showAddModal = false;
-    },
-    error: (e) => console.error(e)
+  const existingSlotsForType = this.slots
+    .filter(slot => slot.vehicleType === vehicleType)
+    .map(slot => slot.slotNumber.toUpperCase());
+
+  const allPossibleSlots: string[] = [];
+
+
+    // Generate all possible slot combinations based on vehicle type
+  this.rows.forEach(row => {
+    this.cols.forEach(col => {
+      let slotNumber = '';
+
+      if (vehicleType === 'bike') {
+        slotNumber = row + col;
+      } else if (vehicleType === 'car') {
+        slotNumber = this.toChar(row, 4) + col;
+      } else if (vehicleType === 'truck') {
+        slotNumber = this.toChar(row, 10) + col;
+      }
+
+      if (slotNumber && !existingSlotsForType.includes(slotNumber.toUpperCase())) {
+        allPossibleSlots.push(slotNumber);
+      }
+    });
   });
+
+  return allPossibleSlots.sort();
 }
 
+selectSlotForBooking(slot: any) {
+  this.newSlot.slotNumber = slot.slotNumber;
+
+  // Remove selection from all preview slots
+  const previewSlots = document.querySelectorAll('.preview-slot');
+  previewSlots.forEach(el => el.classList.remove('selected'));
+
+  // Add selection to clicked slot
+  if (event?.target) {
+    (event.target as HTMLElement).classList.add('selected');
+  }
+}
+
+selectEmptySlot(slotNumber: string) {
+  this.newSlot.slotNumber = slotNumber;
+
+  // Remove selection from all preview slots
+  const previewSlots = document.querySelectorAll('.preview-slot');
+  previewSlots.forEach(el => el.classList.remove('selected'));
+
+  // Add selection to clicked slot
+  if (event?.target) {
+    (event.target as HTMLElement).classList.add('selected');
+  }
+}
+
+  
+
+  isFormValid(): boolean {
+    return !!(
+      this.newSlot.slotNumber &&
+      this.newSlot.vehicleType &&
+      this.newSlot.hourlyRate > 0
+    );
+  }
+
+  addSlot() {
+    if (!this.isFormValid()) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    console.log('Sending:', this.newSlot);
+    this.api.createParkingSlot(this.newSlot).subscribe({
+      next: (d) => {
+        this.slots.push(d);
+        this.calculateStats();
+        alert('Slot added successfully!');
+        this.closeAddModal();
+      },
+      error: (e) => {
+        console.error(e);
+        alert('Error adding slot. Please try again.');
+      }
+    });
+  }
 
   editSlot(slot: any) {
     this.editingSlot = { ...slot };
@@ -143,20 +269,22 @@ addSlot() {
   }
 
   deleteSlot(id: string) {
-    if (confirm('Delete this slot?')) {
+    if (confirm('Are you sure you want to delete this slot?')) {
       this.api.deleteParkingSlot(id).subscribe({
         next: () => {
           this.slots = this.slots.filter(x => x._id !== id);
           this.calculateStats();
+          alert('Slot deleted successfully!');
         },
         error: (e) => console.error(e)
       });
     }
   }
+
   convertForDisplay(slot: any): string {
     const letter = slot.slotNumber[0];
     const num = slot.slotNumber.slice(1);
-  
+
     if (slot.vehicleType === 'car') {
       // reverse shift => E/F/G/H (backend) → A/B/C/D (display)
       return String.fromCharCode(letter.charCodeAt(0) - 4) + num;
@@ -167,9 +295,18 @@ addSlot() {
     }
     return slot.slotNumber; // bikes stay same
   }
-  
+
   toChar(base: string, offset: number) {
     return String.fromCharCode(base.charCodeAt(0) + offset);
   }
-  
+
+  getSlotsByType(vehicleType: string) {
+    return this.slots
+      .filter(slot => slot.vehicleType === vehicleType)
+      .sort((a, b) => {
+        const order = { available: 1, occupied: 2, maintenance: 3 } as any;
+        return order[a.status] - order[b.status];
+      });
+  }
+
 }
