@@ -222,7 +222,52 @@ th {
   font-size: 0.95rem;
   transition: background 0.2s;
 }
+.add-slot-btn {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
+  font-weight: 600;
+}
 
+.add-slot-btn:hover {
+  background: linear-gradient(135deg, #138496, #117a8b);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(23, 162, 184, 0.4);
+}
+
+.add-slot-btn:active {
+  transform: translateY(0);
+}
+
+.add-icon {
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #17a2b8;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
 .btn-secondary:hover {
   background: #f5f5f5;
 }
@@ -369,9 +414,207 @@ th {
   .modal-actions {
     flex-direction: column;
     gap: 0.5rem;
+    justify-content: flex-end;  }
+
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+/* Modal Actions - Right align buttons */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;  /* Changed from flex-start to flex-end */
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* Cancel Button - Grey */
+.btn-secondary {
+  width: auto;
+  padding: 0.75rem 1.5rem;
+  background: #0f78d3;  /* Grey background */
+  color: white;         /* White text */
+  border: 1px solid #206fb4;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.btn-secondary-cancel{
+  width: auto;
+  padding: 0.75rem 1.5rem;
+  background: #bac9d5;  /* Grey background */
+  color: white;         /* White text */
+  border: 1px solid #9dbedc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: #1b7dc8;  /* Darker grey on hover */
+  border-color: #1e7ac0;
+}
+
+.btn-secondary-cancel:hover {
+  background: #1b7dc8;  /* Darker grey on hover */
+  border-color: #1e7ac0;
+}
+
+/* Create Payment Button - Light Blue */
+.btn-primary {
+  width: auto;
+  padding: 0.75rem 1.5rem;
+  background: #17a2b8;  /* Light blue background */
+  color: white;         /* White text */
+  border: 1px solid #17a2b8;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #138496;  /* Darker blue on hover */
+  border-color: #138496;
+}
+
+.btn-primary:disabled {
+  background: #bdc3c7;
+  border-color: #bdc3c7;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* W3Schools Style Dropdown */
+.form-group select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  /* Custom dropdown arrow */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.form-group select:hover {
+  border-color: #999;
+  background-color: white;
+}
+
+/* Style the select options */
+.form-group select option {
+  padding: 12px;
+  background-color: white;
+  color: #333;
+}
+
+/* Improve other form inputs to match */
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  font-size: 16px;
+  color: #333;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.form-group input:hover {
+  border-color: #999;
+  background-color: white;
+}
+
+/* Form labels */
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Modal content improvements */
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 30%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h3 {
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #f8f9fa;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+  .modal-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: flex-end;
   }
 
   .btn-primary, .btn-secondary {
     width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 }
+
+/* Additional W3Schools inspired styling */
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+/* Add a subtle animation to form elements */
+.form-group input, .form-group select {
+  transform: translateZ(0);
+  will-change: border-color, background-color;
+}
+
+/* Success/validation styling (optional) */
+.form-group input:valid {
+  border-color: #28a745;
+}
+

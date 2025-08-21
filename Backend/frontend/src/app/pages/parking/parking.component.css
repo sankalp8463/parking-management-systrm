@@ -48,30 +48,26 @@
 }
 
 
-
-.form-group {
-  margin-bottom: 3rem;
-}
-
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   color: #2c3e50;
+  font-weight: 500;
 }
 
 .form-group input, .form-group select {
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem; /* Ensure consistent font size */
-  height: 48px; /* Fixed height for consistency */
+  border-radius: 8px;
+  font-size: 1rem;
+  height: 48px;
   box-sizing: border-box;
+  background-color: white;
 }
 
 /* Specific styling for select dropdown */
 .form-group select {
-  background-color: white;
   background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
   background-repeat: no-repeat;
   background-position: right 12px center;
@@ -94,7 +90,7 @@
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #ddd;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 1rem;
   height: 48px;
   background-color: #fff;
@@ -105,36 +101,6 @@
   appearance: none;
   cursor: pointer;
 }
-.btn-primary, .btn-secondary {
-  width: 100%;
-  padding: 0.8rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-/* Primary + Secondary buttons inside popup/modal */
-.btn-primary,
-.btn-secondary,
-.btn-exit {
-  background: #ffffff;
-  color: #333;
-  border: 1px solid #ccc;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background 0.2s;
-  width: 2 ;       /* remove full width */
-height: 3;}
-
-.btn-primary:hover,
-.btn-secondary:hover,
-.btn-exit:hover {
-  background: #f2f2f2;
-}
-
 
 .parking-slots, .active-entries {
   background: white;
@@ -212,11 +178,12 @@ th {
   border-radius: 4px;
   cursor: pointer;
 }
+
 .slots-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .slots-header-actions {
@@ -224,38 +191,105 @@ th {
   gap: 1rem;
 }
 
+/* Updated Park Vehicle Button Styling */
 .btn-action {
-  background: #ffffff;
-  color: #333;
-  border: 2px solid #ccc;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  background: #17a2b8;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .btn-action:hover {
-  background: #f2f2f2;
+  background: #138496;
 }
+
+/* Modal Styling */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.5);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 999;
 }
+
 .modal-content {
   background: white;
-  padding: 2rem;
-  border-radius: 10px;
+  padding: 1rem;
+  border-radius: 12px;
   width: 30%;
-  max-width: 500px;
+  max-width: 320px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
+
+.form-group {
+  margin-bottom: 0.8rem;
+}
+
+.modal-content h3 {
+  color: #2c3e50;
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
 .modal-actions {
   display: flex;
-  justify-content: flex-start;
-  gap: 3rem;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+.btn-primary, .btn-secondary {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+}
+
+.btn-secondary:disabled {
+  background: #c6c8ca;
+  cursor: not-allowed;
+}
+
+/* Close button for modal */
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover {
+  color: #495057;
 }

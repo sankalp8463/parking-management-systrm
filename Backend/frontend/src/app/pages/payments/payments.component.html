@@ -5,7 +5,7 @@
     <!-- Stats -->
     <div class="payment-stats">
 
-     
+
       <div class="stat-card payments">
         <h3>Today's Revenue</h3>
         <p class="stat-number">₹{{paymentStats.total}}</p>
@@ -20,7 +20,11 @@
     <div class="payments-list">
       <div class="payment-header">
         <h2>Payment History</h2>
-        <button class="btn-create" (click)="openModal()"><b>+ Create Payment</b></button>
+        <!-- <button class="btn-create" (click)="openModal()"><b>+ Create Payment</b></button> -->
+        <button class="add-slot-btn" (click)="openModal()">
+          <span class="add-icon">+</span>
+          <span>Create Payment</span>
+        </button>
       </div>
 
       <div class="payments-table">
@@ -79,12 +83,13 @@
           <input type="text" [(ngModel)]="newPayment.transactionId" name="transactionId">
         </div>
         <div class="modal-actions">
+          <button type="button" class="btn-secondary-cancel" (click)="closeModal()">
+            Cancel
+          </button>
           <button type="submit" class="btn-secondary" [disabled]="!paymentForm.valid">
             Create Payment
           </button>
-          <button type="button" class="btn-secondary" (click)="closeModal()">
-            Cancel
-          </button>
+
         </div>
       </form>
     </div>
