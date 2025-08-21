@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
       this.showProfileDropdown = false;
     }
   }
-  
+
   handleResize() {
     if (window.innerWidth > 768) {
       if (this.showMobileSidebar) {
@@ -87,6 +87,7 @@ export class AppComponent implements OnInit {
   navigateToAdmin() {
     this.closeProfileDropdown();
     this.router.navigate(['/admin']);
+    this.closeMobileMenu()
   }
 
   logout() {
