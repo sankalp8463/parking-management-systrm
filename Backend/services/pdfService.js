@@ -13,7 +13,7 @@ const generateReceiptPDF = (receiptData) => {
             });
 
             // Header
-            doc.fontSize(20).font('Helvetica-Bold').text('ParkEase - Parking Receipt', 50, 50);
+            doc.fontSize(20).font('Helvetica-Bold').text('Park Seva - Parking Receipt', 50, 50);
             doc.fontSize(12).font('Helvetica').text(`Receipt #: ${receiptData.receiptNumber}`, 50, 80);
             doc.text(`Date: ${new Date().toLocaleDateString()}`, 400, 80);
 
@@ -36,8 +36,8 @@ const generateReceiptPDF = (receiptData) => {
 
             // Footer
             doc.moveTo(50, 320).lineTo(550, 320).stroke();
-            doc.fontSize(10).text('Thank you for using ParkEase!', 50, 340);
-            doc.text('For support: support@parkease.com', 50, 355);
+            doc.fontSize(10).text('Thank you for using Park Seva!', 50, 340);
+            doc.text('For support: support@parkseva.com', 50, 355);
 
             doc.end();
         } catch (error) {
