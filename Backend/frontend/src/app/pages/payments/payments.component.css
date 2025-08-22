@@ -618,3 +618,65 @@ th {
   border-color: #28a745;
 }
 
+/* --- MOBILE-ONLY OVERRIDES (place at very end) --- */
+@media (max-width: 750px) {
+  .container { padding: 0 0.75rem; }
+
+  .payments-page { padding: 0.75rem; }
+  .payments-page h1 { font-size: 1.5rem; margin-bottom: 1rem; text-align: center; }
+
+  .payment-header, .top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .btn-create {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    min-height: 44px;
+  }
+
+  .payment-stats { grid-template-columns: 1fr; gap: 0.75rem; }
+  .stat-card { padding: 0.9rem; }
+  .stat-card h3 { font-size: 1rem; }
+  .stat-number { font-size: 1.4rem; }
+
+  .payments-list, .create-payment { padding: 1rem; }
+  .payments-list h2 { font-size: 1.125rem; }
+
+  .payments-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { min-width: 640px; } /* force horizontal scroll instead of squishing */
+  th, td { padding: 0.5rem; font-size: 0.85rem; }
+
+  .status { padding: 0.25rem 0.6rem; font-size: 0.7rem; }
+
+  /* Fix modal: override any 30% width rules defined later in the file */
+  .modal .modal-content {
+    width: 92vw;
+    max-width: none;
+    padding: 1rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    justify-content: flex-end;
+  }
+
+  .modal-actions .btn-primary,
+  .modal-actions .btn-secondary,
+  .modal-actions .btn-secondary-cancel {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Comfortable tap targets */
+  .btn-primary, .btn-secondary, .btn-secondary-cancel {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+}

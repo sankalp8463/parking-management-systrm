@@ -293,3 +293,90 @@ th {
 .modal-close:hover {
   color: #495057;
 }
+
+
+/* ----------- Responsive Styling ----------- */
+
+/* Large screens (desktops >1200px) */
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+/* Medium screens (tablets 768px–1199px) */
+@media (max-width: 1199px) and (min-width: 768px) {
+  .parking-page h1 {
+    font-size: 2rem;
+  }
+
+  .slots-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .modal-content {
+    width: 50%;
+    max-width: 400px;
+  }
+}
+
+/* Small screens (phones <768px) */
+@media (max-width: 767px) {
+  .parking-page {
+    padding: 1rem;
+  }
+
+  .parking-page h1 {
+    font-size: 1.6rem;
+  }
+
+  .parking-actions {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .slots-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .slots-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .modal-content {
+    width: 90%;
+    max-width: 100%;
+    padding: 1.5rem;
+  }
+
+  table, th, td {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+
+  .btn-action, .btn-primary, .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Very small screens (<480px) */
+@media (max-width: 480px) {
+  .parking-page h1 {
+    font-size: 1.4rem;
+  }
+
+  .slot {
+    padding: 0.6rem;
+  }
+
+  .slot-number {
+    font-size: 1rem;
+  }
+
+  .slot-type, .slot-status {
+    font-size: 0.7rem;
+  }
+}
