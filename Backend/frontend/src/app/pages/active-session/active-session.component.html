@@ -1,18 +1,15 @@
 <div class="page-title-section">
-  <p></p>
   <h1>In-premise Vehicles</h1>
 </div>
+
 <div class="parking-page">
   <div class="container">
-    <!-- In-premise Vehicles Section -->
 
+    <!-- Active Entries Table -->
     <div class="active-entries">
       <div class="slots-header">
-
         <div class="slots-header-actions">
-          <button class="btn-action" (click)="openCheckoutModal()">
-            Check Out Vehicle
-          </button>
+          <button class="btn-action" (click)="openCheckoutModal()">Check Out Vehicle</button>
         </div>
       </div>
 
@@ -33,27 +30,16 @@
                 <strong>{{entry.vehicleNumber}}</strong>
                 <small class="vehicle-type">{{entry.vehicleType || 'N/A'}}</small>
               </td>
-              <td>
-                <span class="slot-badge">{{entry.slotNumber}}</span>
-              </td>
+              <td><span class="slot-badge">{{entry.slotNumber}}</span></td>
               <td>{{entry.entryTime | date:'MMM d, y, h:mm a'}}</td>
+              <td><span class="duration-badge">{{entry.duration}}</span></td>
               <td>
-                <span class="duration-badge">{{entry.duration}}</span>
-              </td>
-              <td>
-                <button class="btn-exit"
-                        (click)="exitVehicleByNumber(entry.vehicleNumber)"
-                        [attr.aria-label]="'Exit vehicle ' + entry.vehicleNumber">
-                  Exit
-                </button>
+                <button class="btn-exit" (click)="exitVehicleByNumber(entry.vehicleNumber)">Exit</button>
               </td>
             </tr>
             <tr *ngIf="!activeEntries || activeEntries.length === 0">
               <td colspan="5" class="no-data">
-                <div class="empty-state">
-                  <p>No vehicles currently parked</p>
-                 
-                </div>
+                <div class="empty-state"><p>No vehicles currently parked</p></div>
               </td>
             </tr>
           </tbody>
@@ -61,83 +47,64 @@
       </div>
     </div>
 
-    <!-- Enhanced Checkout Modal -->
-    <div class="modal" *ngIf="showCheckoutModal" (click)="closeCheckoutModal()" role="dialog" aria-labelledby="checkout-modal-title">
-      <div class="modal-content" (click)="$event.stopPropagation()" role="document">
-        <h3 id="checkout-modal-title">Check Out Vehicle</h3>
+    <!-- Checkout Modal -->
+    <div class="modal" *ngIf="showCheckoutModal" (click)="closeCheckoutModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <h3>Check Out Vehicle</h3>
 
-        <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitForm="ngForm" novalidate>
+        <!-- Tabs -->
+        <div class="checkout-tabs">
+          <button type="button" [class.active]="!useScanner" (click)="useScanner=false">Manual Entry</button>
+          <button type="button" [class.active]="useScanner" (click)="useScanner=true">Scan QR</button>
+        </div>
+
+        <!-- Manual Entry -->
+        <form *ngIf="!useScanner" (ngSubmit)="exitVehicleByVehicleNumber()" #exitForm="ngForm">
           <div class="form-group">
-            <label for="vehicleNumber">
-              <strong>Vehicle Number</strong>
-            </label>
-            <input
-              type="text"
-              id="vehicleNumber"
-              [(ngModel)]="exitData.vehicleNumber"
-              name="vehicleNumber"
-              placeholder="Enter vehicle number (e.g., MH12AB1234)"
-              autocomplete="off"
-              required
-              #vehicleNumberInput="ngModel"
-              [class.error]="vehicleNumberInput.invalid && vehicleNumberInput.touched">
-
-            <div class="form-error" *ngIf="vehicleNumberInput.invalid && vehicleNumberInput.touched">
-              <small>Please enter a valid vehicle number</small>
-            </div>
+            <label for="vehicleNumber"><strong>Vehicle Number</strong></label>
+            <input type="text" id="vehicleNumber" [(ngModel)]="exitData.vehicleNumber" name="vehicleNumber" required placeholder="Enter vehicle number" />
           </div>
 
-          <!-- Quick Select from Current Vehicles -->
+          <!-- Quick Select -->
           <div class="form-group" *ngIf="activeEntries && activeEntries.length > 0">
-            <label for="quickSelect">
-              <strong>Quick Select</strong>
-            </label>
-            <select
-              id="quickSelect"
-              class="form-select"
-              (change)="onQuickSelectVehicle($event)"
-              aria-label="Select vehicle from current entries">
+            <label><strong>Quick Select</strong></label>
+            <select (change)="onQuickSelectVehicle($event)">
               <option value="">Choose from parked vehicles...</option>
-              <option *ngFor="let entry of activeEntries"
-                      [value]="entry.vehicleNumber">
+              <option *ngFor="let entry of activeEntries" [value]="entry.vehicleNumber">
                 {{entry.vehicleNumber}} - Slot {{entry.slotNumber}} ({{entry.duration}})
               </option>
             </select>
           </div>
 
           <div class="modal-actions">
-            <button
-              class="btn-secondary"
-              type="button"
-              (click)="closeCheckoutModal()"
-              aria-label="Cancel checkout">
-              Cancel
-            </button>
-            <button
-              class="btn-primary"
-              type="submit"
-              [disabled]="!exitForm.valid || isProcessing"
-              [attr.aria-label]="isProcessing ? 'Processing checkout...' : 'Confirm checkout'">
-              <span *ngIf="!isProcessing">Check Out</span>
-              <span *ngIf="isProcessing">
-                <i class="spinner" aria-hidden="true"></i>
-                Processing...
-              </span>
-            </button>
+            <button type="button" class="btn-secondary" (click)="closeCheckoutModal()">Cancel</button>
+            <button type="submit" class="btn-primary">Check Out</button>
           </div>
         </form>
+
+        <!-- QR Scanner -->
+        <div *ngIf="useScanner">
+          <app-qr-scanner (vehicleFound)="onVehicleScanned($event)"></app-qr-scanner>
+          
+          <p *ngIf="exitData.vehicleNumber" class="scanned-result">
+            Scanned Vehicle: <b>{{ exitData.vehicleNumber }}</b>
+          </p>
+
+          <div class="modal-actions">
+            <button class="btn-secondary" type="button" (click)="closeCheckoutModal()">Cancel</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- Payment Modal Integration -->
+    <!-- Payment Modal -->
     <app-payment-modal
       *ngIf="showPaymentModal"
       [paymentData]="paymentData"
       (paymentComplete)="onPaymentComplete()"
-      (modalClose)="onModalClose()"
-      role="dialog"
-      aria-labelledby="payment-modal-title">
+      (modalClose)="onModalClose()">
     </app-payment-modal>
+
   </div>
 </div>
-    

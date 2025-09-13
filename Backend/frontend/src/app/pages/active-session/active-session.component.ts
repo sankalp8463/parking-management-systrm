@@ -2,25 +2,21 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
-import { PaymentModalComponent } from '../../components/payment-modal/payment-modal.component';
 import { ToastService } from '../../services/toast.service';
+import { PaymentModalComponent } from '../../components/payment-modal/payment-modal.component';
+import { QrScannerComponent } from '../../components/qr-scanner/qr-scanner.component';
 
 @Component({
   selector: 'app-active-session',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaymentModalComponent],
+  imports: [CommonModule, FormsModule, PaymentModalComponent, QrScannerComponent],
   templateUrl: './active-session.component.html',
-  styleUrl: './active-session.component.css'
+  styleUrls: ['./active-session.component.css']
 })
 export class ActiveSessionComponent implements OnInit {
-  parkData = {
-    vehicleNumber: '',
-    vehicleType: 'car'
-  };
-
-  exitData = {
-    vehicleNumber: ''
-  };
+  parkData = { vehicleNumber: '', vehicleType: 'car' };
+  exitData = { vehicleNumber: '' };
+  useScanner = false; // default manual mode
 
   parkingSlots: any[] = [];
   activeEntries: any[] = [];
@@ -28,91 +24,83 @@ export class ActiveSessionComponent implements OnInit {
   paymentData: any = {};
   showParkModal = false;
   showCheckoutModal = false;
-
-  // Add missing property for processing state
   isProcessing = false;
+
+  // QR Scanner
+  scannerEnabled = false;
 
   constructor(private apiService: ApiService, private toast: ToastService) {}
 
   ngOnInit() {
     this.loadParkingData();
-    console.log('Component initialized');
   }
 
+  /** Quick select vehicle from dropdown */
+  onQuickSelectVehicle(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const selectedVehicleNumber = target.value;
+    if (selectedVehicleNumber) {
+      this.exitData.vehicleNumber = selectedVehicleNumber;
+    }
+  }
+
+  /** Triggered when QR scan is successful */
+  onVehicleScanned(vehicleNumber: string) {
+    console.log('Vehicle scanned:', vehicleNumber);
+    if (vehicleNumber) {
+      this.exitData.vehicleNumber = vehicleNumber.trim();
+      this.useScanner = false;
+      this.exitVehicleByVehicleNumber();
+    }
+  }
+
+  /** Park vehicle */
   parkVehicle() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-
     if (!user._id) {
       this.toast.warning('Please login to park a vehicle');
       return;
     }
 
-    const parkingData = {
-      ...this.parkData,
-      userId: user._id
-    };
-
+    const parkingData = { ...this.parkData, userId: user._id };
     this.apiService.parkVehicle(parkingData).subscribe({
-      next: (data) => {
-        this.toast.success('Vehicle parked successfully! Vehicle registered automatically.');
+      next: () => {
+        this.toast.success('Vehicle parked successfully!');
         this.parkData = { vehicleNumber: '', vehicleType: 'car' };
         this.loadParkingData();
       },
       error: (error) => {
         console.error('Error parking vehicle:', error);
-        this.toast.error('Error parking vehicle. Please check if slots are available.');
+        this.toast.error('Error parking vehicle. Please check slots.');
       }
     });
   }
 
-  // Fixed method - don't reload data until payment is complete
+  /** Exit vehicle using vehicle number */
   exitVehicleByVehicleNumber() {
-    if (!this.exitData.vehicleNumber || this.isProcessing) {
-      return;
-    }
-
+    if (!this.exitData.vehicleNumber || this.isProcessing) return;
     this.isProcessing = true;
 
     this.apiService.exitVehicleByNumber(this.exitData.vehicleNumber).subscribe({
       next: (data) => {
-        // Store payment data and show payment modal
-        this.paymentData = {
-          ...data,
-          vehicleNumber: this.exitData.vehicleNumber
-        };
-
+        this.paymentData = { ...data, vehicleNumber: this.exitData.vehicleNumber };
         this.showPaymentModal = true;
-        this.showCheckoutModal = false;
         this.exitData = { vehicleNumber: '' };
         this.isProcessing = false;
-
-        // DON'T reload data here - wait for payment completion
-        console.log('Exit initiated, showing payment modal');
       },
       error: (error) => {
         console.error('Error exiting vehicle:', error);
-        this.toast.error('Error exiting vehicle. Please check if vehicle is currently parked.');
+        this.toast.error('Error exiting vehicle. Please check if it’s parked.');
         this.isProcessing = false;
       }
     });
   }
 
-  // Fixed method - don't reload data until payment is complete
   exitVehicleByNumber(vehicleNumber: string) {
-    console.log('Exit button clicked for vehicle:', vehicleNumber);
-
     this.apiService.exitVehicleByNumber(vehicleNumber).subscribe({
       next: (data) => {
-        // Store payment data and show payment modal
-        this.paymentData = {
-          ...data,
-          vehicleNumber: vehicleNumber
-        };
-
+        this.paymentData = { ...data, vehicleNumber };
         this.showPaymentModal = true;
-
-        // DON'T reload data here - wait for payment completion
-        console.log('Payment modal should show now');
       },
       error: (error) => {
         console.error('Error exiting vehicle:', error);
@@ -121,47 +109,21 @@ export class ActiveSessionComponent implements OnInit {
     });
   }
 
-  /**
-   * Handle quick vehicle selection from dropdown
-   */
-  onQuickSelectVehicle(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    const selectedVehicleNumber = target.value;
-
-    if (selectedVehicleNumber) {
-      this.exitData.vehicleNumber = selectedVehicleNumber;
-    }
-  }
-
-  // Fixed method - only reload after payment is actually completed
   onPaymentComplete() {
-    console.log('Payment completed, reloading data');
-    this.loadParkingData(); // Now it's safe to reload
+    this.loadParkingData();
     this.showPaymentModal = false;
     this.toast.success('Vehicle checked out successfully!');
   }
 
-  // Fixed method - handle payment modal close
   onModalClose() {
-    console.log('Payment modal closed without completion');
     this.showPaymentModal = false;
-
-    // Since payment wasn't completed, the vehicle should still be in the system
-    // Reload data to ensure UI is in sync with backend
     this.loadParkingData();
   }
 
   loadParkingData() {
-    console.log('Loading parking data...');
-
     this.apiService.getParkingSlots().subscribe({
-      next: (data) => {
-        this.parkingSlots = data;
-        console.log('Parking slots loaded:', data.length);
-      },
-      error: (error) => {
-        console.error('Error loading parking slots:', error);
-      }
+      next: (data) => { this.parkingSlots = data; },
+      error: (error) => { console.error('Error loading parking slots:', error); }
     });
 
     this.apiService.getActiveEntries().subscribe({
@@ -174,11 +136,8 @@ export class ActiveSessionComponent implements OnInit {
           entryTime: new Date(entry.entryTime),
           duration: this.calculateDuration(entry.entryTime)
         }));
-        console.log('Active entries loaded:', this.activeEntries.length);
       },
-      error: (error) => {
-        console.error('Error loading active entries:', error);
-      }
+      error: (error) => { console.error('Error loading active entries:', error); }
     });
   }
 
@@ -192,40 +151,23 @@ export class ActiveSessionComponent implements OnInit {
   }
 
   openParkModal() {
-    console.log("Opening park modal");
     this.showParkModal = true;
   }
 
   closeParkModal() {
-    console.log("Closing park modal");
     this.showParkModal = false;
     this.parkData = { vehicleNumber: '', vehicleType: 'car' };
   }
 
-  // Fixed method with better logging
   openCheckoutModal() {
-    console.log("Opening checkout modal - button clicked");
     this.showCheckoutModal = true;
-
-    // Reset form when opening modal
     this.exitData = { vehicleNumber: '' };
     this.isProcessing = false;
-
-    console.log("Checkout modal state:", this.showCheckoutModal);
   }
 
   closeCheckoutModal() {
-    console.log("Closing checkout modal");
     this.showCheckoutModal = false;
-
-    // Reset form when closing modal
     this.exitData = { vehicleNumber: '' };
     this.isProcessing = false;
-  }
-
-  // Add this method to test modal functionality
-  testModal() {
-    console.log("Test modal method called");
-    alert("Button is working!");
   }
 }

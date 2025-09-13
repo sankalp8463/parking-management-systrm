@@ -4,30 +4,31 @@ import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { PaymentModalComponent } from '../../components/payment-modal/payment-modal.component';
 import { ToastService } from '../../services/toast.service';
+import { QrGeneratorComponent } from '../../components/qr-generator/qr-generator.component';
+import { QrScannerComponent } from '../../components/qr-scanner/qr-scanner.component';
+
 
 @Component({
   selector: 'app-parking',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, QrGeneratorComponent, QrScannerComponent],
   templateUrl: './parking.component.html',
   styleUrl: './parking.component.css'
 })
 export class ParkingComponent implements OnInit {
-  parkData = {
-    vehicleNumber: '',
-    vehicleType: ''
-  };
-
-  exitData = {
-    vehicleNumber: ''
-  };
-
+ parkData = { vehicleNumber: '', vehicleType: '' };
+  exitData = { vehicleNumber: '' };
   parkingSlots: any[] = [];
   activeEntries: any[] = [];
   showPaymentModal = false;
   paymentData: any = {};
   showParkModal = false;
   showCheckoutModal = false;
+
+  // For QR functionality
+  lastParkedVehicle: string = '';
+  showQrModal = false;
+  showScannerModal = false;
 
   constructor(private apiService: ApiService, private toast: ToastService) {}
 
@@ -43,24 +44,38 @@ export class ParkingComponent implements OnInit {
       return;
     }
 
-    const parkingData = {
-      ...this.parkData,
-      userId: user._id
-    };
+    const parkingData = { ...this.parkData, userId: user._id };
 
     this.apiService.parkVehicle(parkingData).subscribe({
-      next: (data) => {
+      next: () => {
         this.toast.success('Vehicle parked successfully! Vehicle registered automatically.');
+        this.lastParkedVehicle = parkingData.vehicleNumber;
         this.parkData = { vehicleNumber: '', vehicleType: '' };
         this.loadParkingData();
+        this.showQrModal = true;
       },
       error: (error) => {
         console.error('Error parking vehicle:', error);
         this.toast.error('Error parking vehicle. Please check if slots are available.');
       }
     });
-    this.closeParkModal()
+    this.closeParkModal();
   }
+  openQrModal() { this.showQrModal = true; }
+  closeQrModal() { this.showQrModal = false; }
+
+  openScannerModal() { this.showScannerModal = true; }
+  closeScannerModal() { this.showScannerModal = false; }
+
+  onVehicleScanned(vehicleNumber: string) {
+    if (vehicleNumber && vehicleNumber.trim()) {
+      this.exitData.vehicleNumber = vehicleNumber.trim();
+      this.closeScannerModal();
+      this.exitVehicleByVehicleNumber();
+    }
+  }
+
+
 
   exitVehicleByVehicleNumber() {
     this.apiService.exitVehicleByNumber(this.exitData.vehicleNumber).subscribe({

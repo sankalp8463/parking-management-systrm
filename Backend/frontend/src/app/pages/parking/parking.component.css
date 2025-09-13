@@ -380,3 +380,125 @@ th {
     font-size: 0.7rem;
   }
 }
+
+/* QR Styles */
+.qr-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.qr-code img {
+  max-width: 200px;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.vehicle-info {
+  margin: 10px 0;
+  font-weight: bold;
+  color: #333;
+}
+
+.scanner-container {
+  padding: 20px;
+}
+
+.search-option {
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.search-option h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.search-option p {
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.search-option input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.btn-search {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.qr-scanner-placeholder {
+  text-align: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.qr-scanner-placeholder h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.qr-scanner-placeholder input {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.qr-info {
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  margin-top: 1rem;
+}
+
+.no-entries {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.scanner-modal {
+  max-width: 600px;
+  width: 90%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #6c757d;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.close-btn:hover {
+  color: #495057;
+}

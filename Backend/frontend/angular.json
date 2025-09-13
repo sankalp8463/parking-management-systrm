@@ -38,7 +38,11 @@
               "node_modules/primeicons/primeicons.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "qrcode",
+              "jsqr"
+            ]
           },
           "configurations": {
             "production": {

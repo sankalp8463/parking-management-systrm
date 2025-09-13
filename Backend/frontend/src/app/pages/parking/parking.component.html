@@ -7,7 +7,7 @@
         <h2>Slot Overview</h2>
         <div class="slots-header-actions">
           <button class="btn-action" (click)="openParkModal()">+ <b>Park Vehicle</b></button>
-
+          <button class="btn-action" (click)="openScannerModal()">📱 <b>Scan QR Exit</b></button>
         </div>
       </div>
 
@@ -52,5 +52,83 @@
   </div>
 </div>
 
+    <div class="active-entries">
+      <div class="slots-header">
+        <h2>Active Parking Sessions</h2>
+        <button class="btn-action" (click)="openCheckoutModal()">🚗 Exit Vehicle</button>
+      </div>
+      
+      <div class="entries-table" *ngIf="activeEntries.length > 0">
+        <table>
+          <thead>
+            <tr>
+              <th>Vehicle Number</th>
+              <th>Slot</th>
+              <th>Entry Time</th>
+              <th>Duration</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let entry of activeEntries">
+              <td><strong>{{entry.vehicleNumber}}</strong></td>
+              <td>{{entry.slotNumber}}</td>
+              <td>{{entry.entryTime | date:'short'}}</td>
+              <td>{{entry.duration}}</td>
+              <td>
+                <button class="btn-exit" (click)="exitVehicleByNumber(entry.vehicleNumber)">
+                  Exit
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div *ngIf="activeEntries.length === 0" class="no-entries">
+        <p>No active parking sessions</p>
+      </div>
+    </div>
 
+<!-- Exit Vehicle Modal -->
+<div class="modal" *ngIf="showCheckoutModal" (click)="closeCheckoutModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h3 style="text-align:center;"><b>Exit Vehicle</b></h3>
+    <form (ngSubmit)="exitVehicleByVehicleNumber()" #exitForm="ngForm">
+      <div class="form-group">
+        <label><b>Vehicle Number</b></label>
+        <input type="text" [(ngModel)]="exitData.vehicleNumber" name="vehicleNumber" required>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" type="button" (click)="closeCheckoutModal()"><b>Cancel</b></button>
+        <button class="btn-secondary" type="submit" [disabled]="!exitForm.valid"><b>Exit</b></button>
+      </div>
+    </form>
+  </div>
+</div>
 
+<!-- QR Code Modal -->
+<div class="modal" *ngIf="showQrModal" (click)="closeQrModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Vehicle Parked Successfully!</h3>
+      <button class="close-btn" (click)="closeQrModal()">&times;</button>
+    </div>
+    <app-qr-generator [vehicleNumber]="lastParkedVehicle"></app-qr-generator>
+    <p class="qr-info">Save this QR code for quick vehicle exit</p>
+  </div>
+</div>
+
+<!-- QR Scanner Modal -->
+<div class="modal" *ngIf="showScannerModal" (click)="closeScannerModal()">
+  <div class="modal-content scanner-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Vehicle Search & QR Scanner</h3>
+      <button class="close-btn" (click)="closeScannerModal()">&times;</button>
+    </div>
+    <app-qr-scanner (vehicleFound)="onVehicleScanned($event)"></app-qr-scanner>
+  </div>
+</div>
+
+  </div>
+</div>
