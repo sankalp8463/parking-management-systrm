@@ -12,7 +12,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { ActiveSessionComponent } from './pages/active-session/active-session.component';
 import { SlotOverviewComponent } from './pages/slot-overview/slot-overview.component';
 import { ChatComponent } from './pages/chat/chat.component';
-import { SimpleChatComponent } from './pages/chat/simple-chat.component';
+// import { SimpleChatComponent } from './pages/chat/simple-chat.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
