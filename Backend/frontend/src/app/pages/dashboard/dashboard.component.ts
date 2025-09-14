@@ -37,7 +37,7 @@ interface ChartData {
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     RouterModule,
     // PrimeNG Modules
     CardModule,
@@ -64,19 +64,19 @@ export class DashboardComponent implements OnInit {
     availableSlots: 11,
     dailyRevenue: 60
   };
-  
+
   isLoading = false;
   lastUpdated = new Date();
   animateStats = false;
-  
+
   // Chart Data
   occupancyChartData: ChartData = { labels: [], datasets: [] };
   revenueChartData: ChartData = { labels: [], datasets: [] };
   chartOptions: any = {};
-  
+
   // Timeline Events for Recent Activity
   timelineEvents: any[] = [];
-  
+
   recentActivities: RecentActivity[] = [
     { time: '10:30 AM', text: 'Vehicle ABC123 parked in slot A1', type: 'park', vehicle: 'ABC123', slot: 'A1' },
     { time: '10:15 AM', text: 'Payment received for vehicle XYZ789', type: 'payment', vehicle: 'XYZ789', amount: 25 },
@@ -232,7 +232,7 @@ export class DashboardComponent implements OnInit {
 
   loadStats(showLoading = true) {
     if (showLoading) this.isLoading = true;
-    
+
     // Check if ApiService exists and has required methods
     if (!this.apiService || typeof this.apiService.getVehicles !== 'function') {
       console.warn('ApiService not available or methods missing, using mock data');
@@ -240,7 +240,7 @@ export class DashboardComponent implements OnInit {
       this.lastUpdated = new Date();
       return;
     }
-    
+
     forkJoin({
       vehicles: this.apiService.getVehicles(),
       activeEntries: this.apiService.getActiveEntries(),
@@ -252,7 +252,7 @@ export class DashboardComponent implements OnInit {
         const today = new Date();
         const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
         const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 23, 59, 59, 999);
-        
+
         const newStats = {
           totalVehicles: data.vehicles.length,
           activeEntries: data.activeEntries.length,
@@ -292,5 +292,15 @@ export class DashboardComponent implements OnInit {
     if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
     return `${Math.floor(diff / 3600)}h ago`;
   }
-  
+  getArrowClass(): string {
+    const percent = this.getOccupancyPercentage();
+
+    if (percent > 70) {
+      return 'pi-arrow-up';   // High occupancy
+    } else if (percent > 30) {
+      return 'pi-arrow-right'; // Medium occupancy
+    } else {
+      return 'pi-arrow-down';  // Low occupancy
+    }
+  }
 }

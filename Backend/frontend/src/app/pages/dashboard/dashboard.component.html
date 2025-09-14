@@ -1,6 +1,28 @@
 <div class="dashboard-container responsive-container">
   <!-- Enhanced Header Section -->
-  
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="dashboard-title">
+
+          Welcome Back,
+        </h1>
+
+        <p class="dashboard-subtitle">Your centralized hub for parking insights and control</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="action-group">
+        <div class="last-updated">
+          <i class="pi pi-clock"></i>
+          Last updated: Just now
+        </div>
+      </div>
+    </div>
+
+
+  </header>
+
   <!-- Enhanced Statistics Cards -->
   <div class="stats-grid">
     <div class="stat-card-wrapper" [class.loading]="isLoading">
@@ -21,8 +43,8 @@
               {{isLoading ? '---' : stats.totalVehicles}}
             </div>
             <div class="stat-meta">
-              <p-tag value="Active" severity="info" styleClass="stat-tag"></p-tag>
-              <span class="stat-description">Registered vehicles</span>
+              <p-tag value="" severity="info" styleClass="stat-tag"></p-tag>
+              <span class="stat-description"></span>
             </div>
           </div>
         </div>
@@ -47,8 +69,8 @@
               {{isLoading ? '---' : stats.activeEntries}}
             </div>
             <div class="stat-meta">
-              <p-tag value="Live" severity="success" styleClass="stat-tag"></p-tag>
-              <span class="stat-description">Currently parked</span>
+              <p-tag value="" severity="success" styleClass="stat-tag"></p-tag>
+              <span class="stat-description"></span>
             </div>
           </div>
         </div>
@@ -59,23 +81,29 @@
       <p-card styleClass="stat-card stat-card-warning">
         <div class="stat-content">
           <div class="stat-header">
+
+            <!-- Icon -->
             <div class="stat-icon stat-icon-warning">
               <i class="pi pi-map-marker"></i>
             </div>
+
+            <!-- Progress bar BELOW the icon -->
             <div class="stat-capacity">
               <div class="capacity-bar">
                 <div class="capacity-fill" [style.width.%]="getOccupancyPercentage()"></div>
               </div>
             </div>
+
           </div>
+
           <div class="stat-info">
             <div class="stat-label">Available Slots</div>
             <div class="stat-value" [class.animate]="animateStats">
               {{isLoading ? '---' : stats.availableSlots}}
             </div>
             <div class="stat-meta">
-              <p-tag value="Ready" severity="warning" styleClass="stat-tag"></p-tag>
-              <span class="stat-description">{{getOccupancyPercentage()}}% occupied</span>
+              <p-tag value="" severity="warning" styleClass="stat-tag"></p-tag>
+              <span></span>
             </div>
           </div>
         </div>
@@ -87,7 +115,7 @@
         <div class="stat-content">
           <div class="stat-header">
             <div class="stat-icon stat-icon-secondary">
-              <i class="pi pi-dollar"></i>
+              ₹
             </div>
             <div class="stat-trend positive">
               <i class="pi pi-arrow-up"></i>
@@ -100,8 +128,8 @@
               {{isLoading ? '---' : '₹' + stats.dailyRevenue}}
             </div>
             <div class="stat-meta">
-              <p-tag value="Today" severity="contrast" styleClass="stat-tag"></p-tag>
-              <span class="stat-description">vs yesterday</span>
+              <p-tag value="" severity="contrast" styleClass="stat-tag"></p-tag>
+
             </div>
           </div>
         </div>
@@ -111,39 +139,43 @@
 
   <!-- Main Dashboard Grid -->
   <div class="dashboard-grid">
-    
+
     <!-- Charts Section -->
     <div class="charts-section">
-      
-      <!-- Occupancy Chart -->
+
       <p-card header="Parking Occupancy" styleClass="chart-card">
         <div class="occupancy-display">
           <div class="occupancy-circle">
-            <div class="circle-progress" [style.--percentage]="getOccupancyPercentage() + '%'">
-              <div class="circle-inner">
-                <div class="occupancy-percentage">{{getOccupancyPercentage()}}%</div>
-                <div class="occupancy-label">Occupied</div>
-              </div>
+            <!-- Circular progress -->
+            <div class="circle-progress" [style.--percentage]="getOccupancyPercentage()"></div>
+
+            <!-- Inner circle showing the percentage dynamically -->
+            <div class="circle-inner">
+              <div class="occupancy-percentage">{{ getOccupancyPercentage() }}%</div>
+              <div class="occupancy-label">Occupied</div>
             </div>
           </div>
+
+          <!-- Additional details -->
           <div class="occupancy-details">
             <div class="occupancy-item">
               <span class="occupancy-dot occupied"></span>
-              <span class="occupancy-name">Occupied: {{stats.activeEntries}}</span>
+              <span class="occupancy-name">Occupied: {{ stats.activeEntries }}</span>
             </div>
             <div class="occupancy-item">
               <span class="occupancy-dot available"></span>
-              <span class="occupancy-name">Available: {{stats.availableSlots}}</span>
+              <span class="occupancy-name">Available: {{ stats.availableSlots }}</span>
             </div>
           </div>
         </div>
       </p-card>
 
+
       <!-- Revenue Chart -->
       <p-card header="Weekly Revenue Trend" styleClass="chart-card">
-        <p-chart 
-          type="line" 
-          [data]="revenueChartData" 
+        <p-chart
+          type="line"
+          [data]="revenueChartData"
           [options]="chartOptions"
           height="250px">
         </p-chart>
@@ -152,31 +184,31 @@
 
     <!-- Actions and Activity Section -->
     <div class="actions-activity-section">
-      
+
       <!-- Quick Actions -->
       <p-card header="Quick Actions" styleClass="actions-card">
         <div class="actions-grid">
-          <p-button 
-            label="Vehicle Management" 
-            icon="pi pi-plus" 
+          <p-button
+            label="Vehicle Management"
+            icon="pi pi-plus"
             routerLink="/parking"
             styleClass="p-button-primary action-btn">
           </p-button>
-          <p-button 
-            label="Manage Slots" 
-            icon="pi pi-th-large" 
+          <p-button
+            label="Manage Slots"
+            icon="pi pi-th-large"
             routerLink="/slots"
             styleClass="p-button-secondary action-btn">
           </p-button>
-          <p-button 
-            label="View Payments" 
-            icon="pi pi-credit-card" 
+          <p-button
+            label="View Payments"
+            icon="pi pi-credit-card"
             routerLink="/payments"
             styleClass="p-button-success action-btn">
           </p-button>
-          <p-button 
-            label="View History" 
-            icon="pi pi-history" 
+          <p-button
+            label="View History"
+            icon="pi pi-history"
             routerLink="/history"
             styleClass="p-button-warning action-btn">
           </p-button>
@@ -194,8 +226,8 @@
           <ng-template pTemplate="content" let-event>
             <div class="timeline-content">
               <div class="timeline-header">
-                <p-tag 
-                  [value]="event.status" 
+                <p-tag
+                  [value]="event.status"
                   [severity]="getSeverityForActivity(event.status.toLowerCase())"
                   styleClass="timeline-tag">
                 </p-tag>
@@ -203,21 +235,21 @@
               </div>
               <p class="timeline-description">{{event.description}}</p>
               <div class="timeline-details" *ngIf="event.vehicle">
-                <p-badge 
-                  *ngIf="event.vehicle" 
-                  [value]="event.vehicle" 
+                <p-badge
+                  *ngIf="event.vehicle"
+                  [value]="event.vehicle"
                   styleClass="vehicle-badge">
                 </p-badge>
-                <p-badge 
-                  *ngIf="event.slot" 
-                  [value]="'Slot: ' + event.slot" 
-                  severity="info" 
+                <p-badge
+                  *ngIf="event.slot"
+                  [value]="'Slot: ' + event.slot"
+                  severity="info"
                   styleClass="slot-badge">
                 </p-badge>
-                <p-badge 
-                  *ngIf="event.amount" 
-                  [value]="'₹' + event.amount" 
-                  severity="success" 
+                <p-badge
+                  *ngIf="event.amount"
+                  [value]="'₹' + event.amount"
+                  severity="success"
                   styleClass="amount-badge">
                 </p-badge>
               </div>
