@@ -126,4 +126,21 @@ export class ApiService {
   getUserHistory(userId: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/parking-history/user/${userId}`, { headers: this.getAuthHeaders() });
   }
+
+  // Generic HTTP methods
+  get(endpoint: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}${endpoint}`, { headers: this.getAuthHeaders() });
+  }
+
+  post(endpoint: string, data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}${endpoint}`, data, { headers: this.getAuthHeaders() });
+  }
+
+  put(endpoint: string, data: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}${endpoint}`, data, { headers: this.getAuthHeaders() });
+  }
+
+  delete(endpoint: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}${endpoint}`, { headers: this.getAuthHeaders() });
+  }
 }

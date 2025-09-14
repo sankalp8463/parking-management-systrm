@@ -1,0 +1,58 @@
+<div class="chat-container">
+  <div class="chat-header">
+    <h2>💬 Group Chat</h2>
+    <div class="room-info">
+      <span class="room-name">Room: {{currentRoom}}</span>
+      <span class="user-name">{{currentUser.name}}</span>
+    </div>
+  </div>
+
+  <div class="messages-container" #messagesContainer>
+    <div *ngFor="let message of messages" 
+         class="message" 
+         [class.my-message]="isMyMessage(message)"
+         [class.other-message]="!isMyMessage(message)">
+      
+      <div class="message-header" *ngIf="!isMyMessage(message)">
+        <span class="username">{{message.username}}</span>
+        <span class="timestamp">{{formatTime(message.timestamp)}}</span>
+      </div>
+      
+      <div class="message-content">
+        {{message.message}}
+      </div>
+      
+      <div class="message-time" *ngIf="isMyMessage(message)">
+        {{formatTime(message.timestamp)}}
+      </div>
+    </div>
+
+    <div *ngIf="typingText" class="typing-indicator">
+      {{typingText}}
+    </div>
+  </div>
+
+  <div class="message-input-container">
+    <div class="input-wrapper">
+      <input 
+        type="text" 
+        [(ngModel)]="newMessage"
+        (keyup.enter)="sendMessage()"
+        (input)="onTyping()"
+        placeholder="Type your message..."
+        class="message-input"
+        [disabled]="!currentUser._id">
+      
+      <button 
+        (click)="sendMessage()" 
+        [disabled]="!newMessage.trim() || !currentUser._id"
+        class="send-button">
+        📤
+      </button>
+    </div>
+    
+    <div *ngIf="!currentUser._id" class="login-warning">
+      Please login to participate in chat
+    </div>
+  </div>
+</div>

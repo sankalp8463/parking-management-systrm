@@ -2,7 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const http = require('http');
+const { Server } = require('socket.io');
 const connectDB = require('./config/db');
+const chatSocket = require('./socket/chatSocket');
 
 // Import routes
 const userRoutes = require('./router/entry-routes/user.routes');
@@ -13,8 +16,17 @@ const paymentRoutes = require('./router/entry-routes/payment.routes');
 const billRoutes = require('./router/entry-routes/bill.routes');
 const parkingHistoryRoutes = require('./router/entry-routes/parkinghistory.routes');
 const receiptRoutes = require('./router/entry-routes/receipt.routes');
+const chatRoutes = require('./router/entry-routes/chat.routes');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: ["http://localhost:4200", "http://127.0.0.1:4200"],
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
 // Configuration
 const PORT = process.env.PORT || 3000;
@@ -35,13 +47,18 @@ app.use('/api/payments', paymentRoutes);
 app.use('/api/bills', billRoutes);
 app.use('/api/parking-history', parkingHistoryRoutes);
 app.use('/api/receipts', receiptRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Database connection
 
+// Initialize Socket.IO
+chatSocket(io);
+
 // Start server
 const startServer = () => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log(`Socket.IO server initialized`);
   });
 };
 

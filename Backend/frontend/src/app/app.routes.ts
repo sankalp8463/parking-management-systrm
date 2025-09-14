@@ -11,7 +11,8 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ActiveSessionComponent } from './pages/active-session/active-session.component';
 import { SlotOverviewComponent } from './pages/slot-overview/slot-overview.component';
-import { ChatsComponent } from './pages/chats/chats.component';
+import { ChatComponent } from './pages/chat/chat.component';
+import { SimpleChatComponent } from './pages/chat/simple-chat.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,7 +24,8 @@ export const routes: Routes = [
   { path: 'slotoverview', component: SlotOverviewComponent, canActivate: [AuthGuard] },
   { path: 'activesession', component: ActiveSessionComponent, canActivate: [AuthGuard] },
   { path: 'slots', component: SlotsComponent, canActivate: [AuthGuard] },
-  { path: 'chat', component: ChatsComponent, canActivate: [AuthGuard] },
+  { path: 'chat', component: ChatComponent },
+  { path: 'chat-full', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '' }
 ];
