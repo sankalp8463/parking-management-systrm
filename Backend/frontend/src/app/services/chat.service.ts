@@ -23,8 +23,8 @@ export class ChatService {
   public typing$ = this.typingSubject.asObservable();
 
   constructor() {
-    this.socket = io('http://51.20.84.36/api/api', {
-      transports: ['websocket', 'polling'],
+    this.socket = io('http://51.20.84.36/api', {
+      transports: ['polling'],
       timeout: 20000
     });
     this.setupSocketListeners();
