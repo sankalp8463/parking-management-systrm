@@ -358,6 +358,14 @@
           </svg>
           <span>History</span>
         </a>
+ <a routerLink="/chat" routerLinkActive="active" class="sidebar-item" (click)="closeMobileSidebar()">
+  <svg class="sidebar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+      d="M8 10h.01M12 10h.01M16 10h.01M21 12a9 9 0 11-18 0 
+         9 9 0 0118 0zm-3 4H6l-2 2v-6a9 9 0 0118 0v4z"/>
+  </svg>
+  <span>Chats</span>
+</a>
 
 
         <a (click)="logout()" class="sidebar-item">

@@ -33,7 +33,9 @@
 }
 
 .toast-success {
-  background: rgba(34, 197, 94, 0.95);
+  background: rgba(89, 209, 133, 0.95);
+    border: rgb(2, 148, 28) 2px solid;
+ 
   color: white;
 }
 
@@ -52,6 +54,8 @@
 
 .toast-warning {
   background: rgba(245, 158, 11, 0.95);
+      border: rgb(253, 192, 8) 2px solid;
+
   color: white;
 }
 
