@@ -16,7 +16,7 @@ import { QrScannerComponent } from '../../components/qr-scanner/qr-scanner.compo
 export class ActiveSessionComponent implements OnInit {
   parkData = { vehicleNumber: '', vehicleType: 'car' };
   exitData = { vehicleNumber: '' };
-  useScanner = false; // default manual mode
+  useScanner = false;
 
   parkingSlots: any[] = [];
   activeEntries: any[] = [];
@@ -26,7 +26,6 @@ export class ActiveSessionComponent implements OnInit {
   showCheckoutModal = false;
   isProcessing = false;
 
-  // QR Scanner
   scannerEnabled = false;
 
   constructor(private apiService: ApiService, private toast: ToastService) {}
@@ -35,7 +34,6 @@ export class ActiveSessionComponent implements OnInit {
     this.loadParkingData();
   }
 
-  /** Quick select vehicle from dropdown */
   onQuickSelectVehicle(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const selectedVehicleNumber = target.value;
@@ -44,7 +42,6 @@ export class ActiveSessionComponent implements OnInit {
     }
   }
 
-  /** Triggered when QR scan is successful */
   onVehicleScanned(vehicleNumber: string) {
     console.log('Vehicle scanned:', vehicleNumber);
     if (vehicleNumber) {
@@ -54,7 +51,6 @@ export class ActiveSessionComponent implements OnInit {
     }
   }
 
-  /** Park vehicle */
   parkVehicle() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     if (!user._id) {
@@ -69,28 +65,27 @@ export class ActiveSessionComponent implements OnInit {
         this.parkData = { vehicleNumber: '', vehicleType: 'car' };
         this.loadParkingData();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error parking vehicle:', error);
         this.toast.error('Error parking vehicle. Please check slots.');
       }
     });
   }
 
-  /** Exit vehicle using vehicle number */
   exitVehicleByVehicleNumber() {
     if (!this.exitData.vehicleNumber || this.isProcessing) return;
     this.isProcessing = true;
 
     this.apiService.exitVehicleByNumber(this.exitData.vehicleNumber).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.paymentData = { ...data, vehicleNumber: this.exitData.vehicleNumber };
         this.showPaymentModal = true;
         this.exitData = { vehicleNumber: '' };
         this.isProcessing = false;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error exiting vehicle:', error);
-        this.toast.error('Error exiting vehicle. Please check if it’s parked.');
+        this.toast.error('Error exiting vehicle. Please check if it\'s parked.');
         this.isProcessing = false;
       }
     });
@@ -98,11 +93,11 @@ export class ActiveSessionComponent implements OnInit {
 
   exitVehicleByNumber(vehicleNumber: string) {
     this.apiService.exitVehicleByNumber(vehicleNumber).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.paymentData = { ...data, vehicleNumber };
         this.showPaymentModal = true;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error exiting vehicle:', error);
         this.toast.error('Error exiting vehicle');
       }
@@ -122,12 +117,12 @@ export class ActiveSessionComponent implements OnInit {
 
   loadParkingData() {
     this.apiService.getParkingSlots().subscribe({
-      next: (data) => { this.parkingSlots = data; },
-      error: (error) => { console.error('Error loading parking slots:', error); }
+      next: (data: any) => { this.parkingSlots = data; },
+      error: (error: any) => { console.error('Error loading parking slots:', error); }
     });
 
     this.apiService.getActiveEntries().subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.activeEntries = data.map((entry: any) => ({
           id: entry._id,
           vehicleNumber: entry.vehicleId?.vehicleNumber || 'N/A',
@@ -137,7 +132,7 @@ export class ActiveSessionComponent implements OnInit {
           duration: this.calculateDuration(entry.entryTime)
         }));
       },
-      error: (error) => { console.error('Error loading active entries:', error); }
+      error: (error: any) => { console.error('Error loading active entries:', error); }
     });
   }
 

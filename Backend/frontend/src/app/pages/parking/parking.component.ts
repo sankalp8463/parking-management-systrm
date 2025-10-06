@@ -79,12 +79,12 @@ export class ParkingComponent implements OnInit {
 
   exitVehicleByVehicleNumber() {
     this.apiService.exitVehicleByNumber(this.exitData.vehicleNumber).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.paymentData = data;
         this.showPaymentModal = true;
         this.exitData = { vehicleNumber: '' };
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error exiting vehicle:', error);
         this.toast.error('Error exiting vehicle. Please check if vehicle is currently parked.');
       }
@@ -93,11 +93,11 @@ export class ParkingComponent implements OnInit {
 
   exitVehicleByNumber(vehicleNumber: string) {
     this.apiService.exitVehicleByNumber(vehicleNumber).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.paymentData = data;
         this.showPaymentModal = true;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error exiting vehicle:', error);
         this.toast.error('Error exiting vehicle');
       }

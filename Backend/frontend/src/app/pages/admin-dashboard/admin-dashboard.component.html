@@ -1,0 +1,102 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <h1>Admin Dashboard</h1>
+    <p>Manage your parking space</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Total Slots</h3>
+      <div class="stat-number">{{ stats.totalSlots }}</div>
+    </div>
+    <div class="stat-card">
+      <h3>Available</h3>
+      <div class="stat-number available">{{ stats.availableSlots }}</div>
+    </div>
+    <div class="stat-card">
+      <h3>Occupied</h3>
+      <div class="stat-number occupied">{{ stats.occupiedSlots }}</div>
+    </div>
+    <div class="stat-card">
+      <h3>Revenue</h3>
+      <div class="stat-number">₹{{ stats.totalRevenue }}</div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="actions-section">
+    <div class="action-card">
+      <h3>Create New Slot</h3>
+      <form (ngSubmit)="createSlot()" class="action-form">
+        <input [(ngModel)]="newSlot.slotNumber" name="slotNumber" placeholder="Slot Number" required>
+        <select [(ngModel)]="newSlot.vehicleType" name="vehicleType">
+          <option value="car">Car</option>
+          <option value="bike">Bike</option>
+          <option value="truck">Truck</option>
+        </select>
+        <input [(ngModel)]="newSlot.hourlyRate" name="hourlyRate" type="number" placeholder="Hourly Rate">
+        <button type="submit" class="btn-primary">Create Slot</button>
+      </form>
+    </div>
+
+    <div class="action-card">
+      <h3>Park Vehicle</h3>
+      <form (ngSubmit)="parkVehicle()" class="action-form">
+        <input [(ngModel)]="parkingData.vehicleNumber" name="vehicleNumber" placeholder="Vehicle Number" required>
+        <select [(ngModel)]="parkingData.slotId" name="slotId" required>
+          <option value="">Select Slot</option>
+          <option *ngFor="let slot of slots" [value]="slot._id" [disabled]="slot.status !== 'available'">
+            {{ slot.slotNumber }} - {{ slot.vehicleType }} (₹{{ slot.hourlyRate }}/hr)
+          </option>
+        </select>
+        <button type="submit" class="btn-primary">Park Vehicle</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Parking Slots -->
+  <div class="section">
+    <h2>Parking Slots</h2>
+    <div class="slots-grid">
+      <div *ngFor="let slot of slots" class="slot-card" [class]="slot.status">
+        <div class="slot-header">
+          <h4>{{ slot.slotNumber }}</h4>
+          <span class="status-badge" [class]="slot.status">{{ slot.status }}</span>
+        </div>
+        <p>{{ slot.vehicleType | titlecase }} - ₹{{ slot.hourlyRate }}/hr</p>
+        <button (click)="deleteSlot(slot._id)" class="btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Entries -->
+  <div class="section">
+    <h2>Active Parking</h2>
+    <div class="entries-list">
+      <div *ngFor="let entry of activeEntries" class="entry-card">
+        <div class="entry-info">
+          <h4>{{ entry.vehicleNumber }}</h4>
+          <p>Slot: {{ entry.slotId?.slotNumber }}</p>
+          <p>Entry: {{ entry.entryTime | date:'short' }}</p>
+        </div>
+        <button (click)="exitVehicle(entry._id)" class="btn-warning">Exit Vehicle</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Payments -->
+  <div class="section">
+    <h2>Recent Payments</h2>
+    <div class="payments-list">
+      <div *ngFor="let payment of payments.slice(0, 5)" class="payment-card">
+        <div class="payment-info">
+          <h4>₹{{ payment.amount }}</h4>
+          <p>{{ payment.paymentMethod | titlecase }}</p>
+          <p>{{ payment.createdAt | date:'short' }}</p>
+        </div>
+        <span class="status-badge completed">{{ payment.status }}</span>
+      </div>
+    </div>
+  </div>
+</div>

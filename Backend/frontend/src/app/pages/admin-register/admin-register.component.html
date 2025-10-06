@@ -1,0 +1,86 @@
+<div class="auth-container">
+  <div class="auth-card admin-register-card">
+    <h2>Admin Registration</h2>
+    <p class="subtitle">Create your parking space management account</p>
+    
+    <form (ngSubmit)="onRegister()" #adminForm="ngForm">
+      <!-- Admin Details Section -->
+      <div class="section">
+        <h3>Admin Details</h3>
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" [(ngModel)]="adminData.name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" [(ngModel)]="adminData.phoneNumber" name="phoneNumber" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="adminData.email" name="email">
+        </div>
+        <div class="form-group">
+          <label>Password *</label>
+          <input type="password" [(ngModel)]="adminData.password" name="password" required>
+        </div>
+      </div>
+
+      <!-- Location Details Section -->
+      <div class="section">
+        <h3>Parking Location Details</h3>
+        <div class="form-group">
+          <label>Location Name *</label>
+          <input type="text" [(ngModel)]="locationData.locationName" name="locationName" 
+                 placeholder="e.g., Downtown Parking Plaza" required>
+        </div>
+        <div class="form-group">
+          <label>Address *</label>
+          <textarea [(ngModel)]="locationData.address" name="address" 
+                    placeholder="Full address of your parking facility" required></textarea>
+        </div>
+        
+        <!-- Coordinates -->
+        <div class="coordinates-section">
+          <h4>Location Coordinates</h4>
+          <button type="button" class="btn-secondary" (click)="getCurrentLocation()">
+            Get Current Location
+          </button>
+          <div class="coordinate-inputs">
+            <div class="form-group">
+              <label>Latitude *</label>
+              <input type="number" [(ngModel)]="locationData.coordinates.latitude" 
+                     name="latitude" step="any" required>
+            </div>
+            <div class="form-group">
+              <label>Longitude *</label>
+              <input type="number" [(ngModel)]="locationData.coordinates.longitude" 
+                     name="longitude" step="any" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- Operating Hours -->
+        <div class="operating-hours">
+          <h4>Operating Hours</h4>
+          <div class="time-inputs">
+            <div class="form-group">
+              <label>Opening Time</label>
+              <input type="time" [(ngModel)]="locationData.operatingHours.open" name="openTime">
+            </div>
+            <div class="form-group">
+              <label>Closing Time</label>
+              <input type="time" [(ngModel)]="locationData.operatingHours.close" name="closeTime">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="!adminForm.valid || isLoading">
+        <span *ngIf="isLoading">Creating Account...</span>
+        <span *ngIf="!isLoading">Create Admin Account</span>
+      </button>
+    </form>
+    
+    <p class="login-link">Already have an account? <a routerLink="/login">Login here</a></p>
+  </div>
+</div>

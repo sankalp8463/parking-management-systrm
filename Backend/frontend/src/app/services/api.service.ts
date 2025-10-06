@@ -7,7 +7,8 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = environment.production ? environment.apiUrl : 'http://localhost:3000/api';
+  private baseUrl = environment.production ? environment.apiUrl : ' http://localhost:3000/api';
+  // private baseUrl = environment.production ? environment.apiUrl : ' https://16.171.133.32/api/api';
 
   constructor(private http: HttpClient) {}
 
@@ -54,51 +55,55 @@ export class ApiService {
     return this.http.delete(`${this.baseUrl}/vehicles/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  // Parking Slots
+  // Parking Slots (Admin-specific)
   getParkingSlots(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/parking-slots`, { headers: this.getAuthHeaders() });
+    return this.http.get(`${this.baseUrl}/admin-parking-slots`, { headers: this.getAuthHeaders() });
   }
 
   getAvailableSlots(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/parking-slots/status/available`, { headers: this.getAuthHeaders() });
+    return this.http.get(`${this.baseUrl}/admin-parking-slots/available`, { headers: this.getAuthHeaders() });
   }
 
   createParkingSlot(slotData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/parking-slots`, slotData, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.baseUrl}/admin-parking-slots`, slotData, { headers: this.getAuthHeaders() });
   }
 
   updateParkingSlot(id: string, slotData: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/parking-slots/${id}`, slotData, { headers: this.getAuthHeaders() });
+    return this.http.put(`${this.baseUrl}/admin-parking-slots/${id}`, slotData, { headers: this.getAuthHeaders() });
   }
 
   deleteParkingSlot(id: string): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/parking-slots/${id}`, { headers: this.getAuthHeaders() });
+    return this.http.delete(`${this.baseUrl}/admin-parking-slots/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  // Parking Entries
+  // Parking Entries (Admin-specific)
   parkVehicle(parkData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/parking-entries/park`, parkData, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.baseUrl}/admin-parking-entries/park`, parkData, { headers: this.getAuthHeaders() });
   }
 
   exitVehicle(entryId: string): Observable<any> {
-    return this.http.put(`${this.baseUrl}/parking-entries/exit/${entryId}`, {}, { headers: this.getAuthHeaders() });
+    return this.http.put(`${this.baseUrl}/admin-parking-entries/exit/${entryId}`, {}, { headers: this.getAuthHeaders() });
   }
 
   exitVehicleByNumber(vehicleNumber: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/parking-entries/exit-by-vehicle`, { vehicleNumber }, { headers: this.getAuthHeaders() });
+    return this.http.post(`${this.baseUrl}/admin-parking-entries/exit-by-vehicle`, { vehicleNumber }, { headers: this.getAuthHeaders() });
   }
 
   getActiveEntries(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/parking-entries/status/active`, { headers: this.getAuthHeaders() });
+    return this.http.get(`${this.baseUrl}/admin-parking-entries/active`, { headers: this.getAuthHeaders() });
   }
 
   getAllEntries(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/parking-entries`, { headers: this.getAuthHeaders() });
+    return this.http.get(`${this.baseUrl}/admin-parking-entries`, { headers: this.getAuthHeaders() });
   }
 
-  // Payments
+  // Payments (Admin-specific)
   getPayments(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/payments`, { headers: this.getAuthHeaders() });
+    return this.http.get(`${this.baseUrl}/admin-payments`, { headers: this.getAuthHeaders() });
+  }
+
+  createPayment(paymentData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/admin-payments`, paymentData, { headers: this.getAuthHeaders() });
   }
 
   createRazorpayOrder(orderData: any): Observable<any> {
@@ -107,10 +112,6 @@ export class ApiService {
 
   verifyRazorpayPayment(paymentData: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/payments/verify`, paymentData, { headers: this.getAuthHeaders() });
-  }
-
-  createPayment(paymentData: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}/payments`, paymentData, { headers: this.getAuthHeaders() });
   }
 
   // Receipts
@@ -126,6 +127,25 @@ export class ApiService {
   getUserHistory(userId: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/parking-history/user/${userId}`, { headers: this.getAuthHeaders() });
   }
+
+  // Admin Locations
+  getAllLocations(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/admin-locations/all`);
+  }
+
+  getAdminLocation(adminId: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/admin-locations/${adminId}`, { headers: this.getAuthHeaders() });
+  }
+
+  createAdminLocation(locationData: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/admin-locations`, locationData, { headers: this.getAuthHeaders() });
+  }
+
+  updateAdminLocation(adminId: string, locationData: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/admin-locations/${adminId}`, locationData, { headers: this.getAuthHeaders() });
+  }
+
+
 
   // Generic HTTP methods
   get(endpoint: string): Observable<any> {

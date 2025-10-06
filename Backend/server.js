@@ -5,6 +5,7 @@ const cors = require('cors');
 const http = require('http');
 const { Server } = require('socket.io');
 const connectDB = require('./config/db');
+const multiDB = require('./config/multidb');
 const chatSocket = require('./socket/chatSocket');
 
 // Import routes
@@ -17,6 +18,10 @@ const billRoutes = require('./router/entry-routes/bill.routes');
 const parkingHistoryRoutes = require('./router/entry-routes/parkinghistory.routes');
 const receiptRoutes = require('./router/entry-routes/receipt.routes');
 const chatRoutes = require('./router/entry-routes/chat.routes');
+const adminLocationRoutes = require('./router/entry-routes/adminlocation.routes');
+const adminParkingSlotRoutes = require('./router/entry-routes/admin.parkingslot.routes');
+const adminParkingEntryRoutes = require('./router/entry-routes/admin.parkingentry.routes');
+const adminPaymentRoutes = require('./router/entry-routes/admin.payment.routes');
 
 const app = express();
 const server = http.createServer(app);
@@ -42,6 +47,10 @@ app.get('/api', (req, res) => {
   res.send('Hello World!');
 });
 
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Server is working', routes: 'admin-parking-slots available' });
+});
+
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/vehicles', vehicleRoutes);
@@ -52,6 +61,12 @@ app.use('/api/bills', billRoutes);
 app.use('/api/parking-history', parkingHistoryRoutes);
 app.use('/api/receipts', receiptRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/admin-locations', adminLocationRoutes);
+console.log('Loading admin parking slot routes...');
+app.use('/api/admin-parking-slots', adminParkingSlotRoutes);
+console.log('Admin parking slot routes loaded');
+app.use('/api/admin-parking-entries', adminParkingEntryRoutes);
+app.use('/api/admin-payments', adminPaymentRoutes);
 
 // Database connection
 
@@ -67,4 +82,7 @@ const startServer = () => {
 };
 
 // Initialize application
-connectDB().then(startServer);
+connectDB().then(async () => {
+  await multiDB.initMainConnection();
+  startServer();
+});

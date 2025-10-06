@@ -1,0 +1,78 @@
+<div class="location-finder-container">
+  <div class="header">
+    <h1>Find Parking Locations</h1>
+    <p>Discover nearby parking spaces and get directions</p>
+  </div>
+
+  <div class="search-section">
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearch()"
+        placeholder="Search by location name or address..."
+        class="search-input">
+    </div>
+  </div>
+
+  <!-- Map Section -->
+  <div class="map-section">
+    <div id="map" class="map-container"></div>
+  </div>
+
+  <div class="locations-grid" *ngIf="!isLoading">
+    <div class="location-card" *ngFor="let location of filteredLocations">
+      <div class="location-header">
+        <h3>{{ location.locationName }}</h3>
+        <div class="distance" *ngIf="location.distance">
+          {{ location.distance | number:'1.1-1' }} km away
+        </div>
+      </div>
+      
+      <div class="location-details">
+        <div class="detail-item">
+          <strong>Address:</strong>
+          <p>{{ location.address }}</p>
+        </div>
+        
+        <div class="detail-item">
+          <strong>Contact:</strong>
+          <p>{{ location.contactInfo.phone }}</p>
+          <p *ngIf="location.contactInfo.email">{{ location.contactInfo.email }}</p>
+        </div>
+        
+        <div class="detail-item">
+          <strong>Operating Hours:</strong>
+          <p>{{ location.operatingHours.open }} - {{ location.operatingHours.close }}</p>
+        </div>
+        
+        <div class="detail-item">
+          <strong>Available Slots:</strong>
+          <p>{{ location.totalSlots }} total slots</p>
+        </div>
+        
+        <div class="detail-item">
+          <strong>Admin:</strong>
+          <p>{{ location.adminId.name }}</p>
+        </div>
+      </div>
+      
+      <div class="location-actions">
+        <button class="btn-primary" (click)="getDirections(location)">
+          Get Directions
+        </button>
+        <button class="btn-secondary" (click)="openInMaps(location)">
+          View on Map
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading" *ngIf="isLoading">
+    <p>Loading parking locations...</p>
+  </div>
+
+  <div class="no-results" *ngIf="!isLoading && filteredLocations.length === 0">
+    <p>No parking locations found.</p>
+  </div>
+</div>

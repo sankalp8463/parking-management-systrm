@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
     phoneNumber: { type: String, required: true, unique: true },
     email: { type: String, unique: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ['customer', 'staff', 'admin'], default: 'admin' },
+    role: { type: String, enum: ['customer', 'staff', 'admin'], default: 'customer' },
+    adminId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // For staff/customer association
     createdAt: { type: Date, default: Date.now }
 });
 

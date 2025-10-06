@@ -2,6 +2,7 @@
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
+
   font-weight: 700;
 }
 
@@ -19,6 +20,7 @@
 .parking-page h1 {
   color: #2c3e50;
   margin-bottom: 2rem;
+  
 }
 
 .parking-actions {

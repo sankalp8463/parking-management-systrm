@@ -2,6 +2,9 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
+import { AdminRegisterComponent } from './pages/admin-register/admin-register.component';
+import { LocationFinderComponent } from './pages/location-finder/location-finder.component';
+import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ParkingComponent } from './pages/parking/parking.component';
 import { PaymentsComponent } from './pages/payments/payments.component';
@@ -12,12 +15,14 @@ import { AuthGuard } from './guards/auth.guard';
 import { ActiveSessionComponent } from './pages/active-session/active-session.component';
 import { SlotOverviewComponent } from './pages/slot-overview/slot-overview.component';
 import { ChatComponent } from './pages/chat/chat.component';
-// import { SimpleChatComponent } from './pages/chat/simple-chat.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'admin-register', component: AdminRegisterComponent },
+  { path: 'locations', component: LocationFinderComponent },
+  { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [AuthGuard] },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'parking', component: ParkingComponent, canActivate: [AuthGuard] },
   { path: 'payments', component: PaymentsComponent, canActivate: [AuthGuard] },
@@ -25,6 +30,8 @@ export const routes: Routes = [
   { path: 'activesession', component: ActiveSessionComponent, canActivate: [AuthGuard] },
   { path: 'slots', component: SlotsComponent, canActivate: [AuthGuard] },
   { path: 'chat', component: ChatComponent },
+  { path: 'history', component: HistoryComponent,canActivate: [AuthGuard]  },
+
   { path: 'chat-full', component: ChatComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '' }

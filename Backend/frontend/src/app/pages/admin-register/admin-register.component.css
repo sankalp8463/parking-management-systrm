@@ -6,7 +6,7 @@
   padding: 2rem 1rem;
 }
 
-.auth-card {
+.admin-register-card {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   border-radius: var(--radius-xl);
@@ -14,12 +14,12 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 2rem;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
 }
 
-.auth-card h2 {
+.admin-register-card h2 {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
   background: linear-gradient(135deg, var(--primary-600), var(--accent-600));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -28,8 +28,37 @@
   font-size: 1.875rem;
 }
 
-.form-group {
+.subtitle {
+  color: var(--gray-600);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.section {
   margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, var(--primary-50), var(--accent-50));
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--primary-200);
+}
+
+.section h3 {
+  margin: 0 0 1rem 0;
+  color: var(--primary-700);
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.section h4 {
+  margin: 1rem 0 0.5rem 0;
+  color: var(--gray-700);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.form-group {
+  margin-bottom: 1rem;
 }
 
 .form-group label {
@@ -40,7 +69,9 @@
   font-size: 0.875rem;
 }
 
-.form-group input, .form-group select {
+.form-group input,
+.form-group textarea,
+.form-group select {
   width: 100%;
   padding: 0.75rem;
   border: 1px solid var(--gray-300);
@@ -50,10 +81,39 @@
   background: white;
 }
 
-.form-group input:focus, .form-group select:focus {
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
   outline: none;
   border-color: var(--primary-500);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.coordinate-inputs,
+.time-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+  color: var(--gray-700);
+  border: 1px solid var(--gray-300);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
@@ -66,7 +126,6 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  margin-bottom: 1rem;
   transition: all 0.2s ease;
   box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
@@ -84,19 +143,37 @@
   box-shadow: none;
 }
 
-.auth-card p {
+.login-link {
   text-align: center;
+  margin-top: 1.5rem;
   color: var(--gray-600);
   font-size: 0.875rem;
 }
 
-.auth-card a {
+.login-link a {
   color: var(--primary-600);
   text-decoration: none;
   font-weight: 500;
 }
 
-.auth-card a:hover {
+.login-link a:hover {
   color: var(--primary-700);
   text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .coordinate-inputs,
+  .time-inputs {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-register-card {
+    margin: 1rem;
+    max-width: none;
+    padding: 1.5rem;
+  }
+  
+  .section {
+    padding: 1rem;
+  }
 }

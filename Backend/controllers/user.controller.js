@@ -1,5 +1,7 @@
 const User = require('../models/user.model');
-
+const AdminLocation = require('../models/adminlocation.model');
+const ParkingSlot = require('../models/parkingslot.model');
+const multiDB = require('../config/multidb');
 const jwt = require('jsonwebtoken');
 
 const generateToken = (userId) => {
@@ -8,10 +10,39 @@ const generateToken = (userId) => {
 
 const register = async (req, res) => {
     try {
-        const { name, phoneNumber, email, password, role } = req.body;
+        const { name, phoneNumber, email, password, role, locationData } = req.body;
         const userData = { name, phoneNumber, email, password, role };
         const user = new User(userData);
         await user.save();
+        
+        // If admin registration, create location data and separate database
+        if (role === 'admin' && locationData) {
+            const adminLocation = new AdminLocation({
+                adminId: user._id,
+                ...locationData
+            });
+            await adminLocation.save();
+            
+            // Create admin-specific database and default slots
+            const adminConnection = await multiDB.getAdminConnection(user._id);
+            const AdminParkingSlot = require('../models/admin/parkingslot.admin.model')(adminConnection);
+            
+            const defaultSlots = [];
+            for (let i = 1; i <= 10; i++) {
+                defaultSlots.push({
+                    slotNumber: `A${i.toString().padStart(2, '0')}`,
+                    vehicleType: 'car',
+                    hourlyRate: 50
+                });
+            }
+            await AdminParkingSlot.insertMany(defaultSlots);
+            
+            // Update total slots count
+            await AdminLocation.findOneAndUpdate(
+                { adminId: user._id },
+                { totalSlots: defaultSlots.length }
+            );
+        }
         
         const token = generateToken(user._id);
         const { password: _, ...userWithoutPassword } = user.toObject();

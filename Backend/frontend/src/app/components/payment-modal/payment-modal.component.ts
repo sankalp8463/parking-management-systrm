@@ -43,10 +43,10 @@ export class PaymentModalComponent {
     };
 
     this.apiService.createRazorpayOrder(orderData).subscribe({
-      next: (order) => {
+      next: (order: any) => {
         this.openRazorpayCheckout(order);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Order creation error:', error);
         this.toast.error('Failed to create payment order');
       }
@@ -118,7 +118,7 @@ export class PaymentModalComponent {
     };
 
     this.apiService.verifyRazorpayPayment(verificationData).subscribe({
-      next: (result) => {
+      next: (result: any) => {
         if (result.success) {
           this.toast.success(`Payment of ₹${this.paymentData.totalAmount} completed successfully!`);
           this.generateReceiptAfterPayment();
@@ -126,7 +126,7 @@ export class PaymentModalComponent {
           this.toast.error('Payment verification failed');
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Payment verification error:', error);
         this.toast.error('Payment verification failed');
       }

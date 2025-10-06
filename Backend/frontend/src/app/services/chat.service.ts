@@ -23,7 +23,7 @@ export class ChatService {
   public typing$ = this.typingSubject.asObservable();
 
   constructor() {
-    this.socket = io('http://localhost:3000', {
+    this.socket = io(' https://parking-management-systrm.onrender.com', {
       transports: ['polling'],
       timeout: 20000
     });

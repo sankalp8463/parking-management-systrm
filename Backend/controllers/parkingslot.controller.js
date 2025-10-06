@@ -2,7 +2,13 @@ const ParkingSlot = require('../models/parkingslot.model');
 
 const createParkingSlot = async (req, res) => {
     try {
-        let { slotNumber, vehicleType, hourlyRate, status } = req.body;
+        let { slotNumber, vehicleType, hourlyRate, status, adminId } = req.body;
+        
+        // Get adminId from authenticated user if not provided
+        if (!adminId && req.user) {
+            adminId = req.user.id;
+        }
+        
         let letter = slotNumber[0];
         const numPart = slotNumber.slice(1);
 
@@ -21,6 +27,7 @@ const createParkingSlot = async (req, res) => {
 
         const slotData = {
             slotNumber: finalSlotNumber,
+            adminId,
             vehicleType,
             hourlyRate,
             status
@@ -38,7 +45,18 @@ const createParkingSlot = async (req, res) => {
 
 const getAllParkingSlots = async (req, res) => {
     try {
-        const slots = await ParkingSlot.find();
+        const { adminId } = req.query;
+        let query = {};
+        
+        // Filter by adminId if provided, otherwise show all (for super admin)
+        if (adminId) {
+            query.adminId = adminId;
+        } else if (req.user && req.user.role === 'admin') {
+            // If admin is logged in, show only their slots
+            query.adminId = req.user.id;
+        }
+        
+        const slots = await ParkingSlot.find(query);
         res.json(slots);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -79,7 +97,18 @@ const deleteParkingSlot = async (req, res) => {
 
 const getAvailableSlots = async (req, res) => {
     try {
-        const slots = await ParkingSlot.find({ status: 'available' });
+        const { adminId } = req.query;
+        let query = { status: 'available' };
+        
+        // Filter by adminId if provided
+        if (adminId) {
+            query.adminId = adminId;
+        } else if (req.user && req.user.role === 'admin') {
+            // If admin is logged in, show only their available slots
+            query.adminId = req.user.id;
+        }
+        
+        const slots = await ParkingSlot.find(query);
         res.json(slots);
     } catch (error) {
         res.status(500).json({ error: error.message });
