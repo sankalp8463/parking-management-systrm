@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 
-declare var L: any;
+declare var ol: any;
 
 @Component({
   selector: 'app-location-finder',
@@ -19,6 +19,7 @@ export class LocationFinderComponent implements OnInit, AfterViewInit {
   userLocation: { latitude: number; longitude: number } | null = null;
   isLoading = true;
   map: any;
+  vectorSource: any;
   markers: any[] = [];
 
   constructor(private apiService: ApiService) {}
@@ -33,15 +34,35 @@ export class LocationFinderComponent implements OnInit, AfterViewInit {
   }
 
   initializeMap() {
-    // Default center (you can change this to your preferred location)
+    // Default center (Mumbai coordinates)
     const defaultLat = 19.0760;
-    const defaultLng = 72.8777; // Mumbai coordinates
+    const defaultLng = 72.8777;
     
-    this.map = L.map('map').setView([defaultLat, defaultLng], 10);
+    // Create vector source for markers
+    const vectorSource = new ol.source.Vector();
     
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(this.map);
+    // Create vector layer for markers
+    const vectorLayer = new ol.layer.Vector({
+      source: vectorSource
+    });
+    
+    // Initialize map
+    this.map = new ol.Map({
+      target: 'map',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        }),
+        vectorLayer
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([defaultLng, defaultLat]),
+        zoom: 10
+      })
+    });
+    
+    // Store vector source for adding markers
+    this.vectorSource = vectorSource;
     
     // Add markers once locations are loaded
     if (this.locations.length > 0) {
@@ -50,62 +71,114 @@ export class LocationFinderComponent implements OnInit, AfterViewInit {
   }
 
   addMarkersToMap() {
+    if (!this.vectorSource) return;
+    
     // Clear existing markers
-    this.markers.forEach(marker => this.map.removeLayer(marker));
+    this.vectorSource.clear();
     this.markers = [];
+    
+    const features = [];
     
     // Add user location marker if available
     if (this.userLocation) {
-      const userMarker = L.marker([this.userLocation.latitude, this.userLocation.longitude])
-        .addTo(this.map)
-        .bindPopup('Your Location')
-        .openPopup();
-      
-      const userIcon = L.divIcon({
-        html: '<div style="background: #ef4444; width: 20px; height: 20px; border-radius: 50%; border: 2px solid white;"></div>',
-        iconSize: [20, 20],
-        className: 'user-location-marker'
+      const userFeature = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([this.userLocation.longitude, this.userLocation.latitude])),
+        type: 'user',
+        name: 'Your Location'
       });
-      userMarker.setIcon(userIcon);
-      this.markers.push(userMarker);
+      
+      userFeature.setStyle(new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 8,
+          fill: new ol.style.Fill({ color: '#ef4444' }),
+          stroke: new ol.style.Stroke({ color: 'white', width: 2 })
+        })
+      }));
+      
+      features.push(userFeature);
     }
     
     // Add parking location markers
     this.filteredLocations.forEach(location => {
-      const marker = L.marker([location.coordinates.latitude, location.coordinates.longitude])
-        .addTo(this.map)
-        .bindPopup(`
-          <div class="map-popup">
-            <h4>${location.locationName}</h4>
-            <p><strong>Address:</strong> ${location.address}</p>
-            <p><strong>Contact:</strong> ${location.contactInfo.phone}</p>
-            <p><strong>Hours:</strong> ${location.operatingHours.open} - ${location.operatingHours.close}</p>
-            <p><strong>Total Slots:</strong> ${location.totalSlots}</p>
-            <p><strong>Admin:</strong> ${location.adminId.name}</p>
-            ${location.distance ? `<p><strong>Distance:</strong> ${location.distance.toFixed(1)} km</p>` : ''}
-            <div class="popup-actions">
-              <button onclick="window.open('https://www.google.com/maps?q=${location.coordinates.latitude},${location.coordinates.longitude}', '_blank')" class="btn-sm btn-primary">View on Maps</button>
-              ${this.userLocation ? `<button onclick="window.open('https://www.google.com/maps/dir/${this.userLocation!.latitude},${this.userLocation!.longitude}/${location.coordinates.latitude},${location.coordinates.longitude}', '_blank')" class="btn-sm btn-secondary">Get Directions</button>` : ''}
-            </div>
-          </div>
-        `);
-      
-      // Custom parking icon
-      const parkingIcon = L.divIcon({
-        html: '<div style="background: #3b82f6; width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">P</div>',
-        iconSize: [30, 30],
-        className: 'parking-marker'
+      const feature = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([location.coordinates.longitude, location.coordinates.latitude])),
+        type: 'parking',
+        location: location
       });
-      marker.setIcon(parkingIcon);
       
-      this.markers.push(marker);
+      feature.setStyle(new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 12,
+          fill: new ol.style.Fill({ color: '#3b82f6' }),
+          stroke: new ol.style.Stroke({ color: 'white', width: 3 })
+        }),
+        text: new ol.style.Text({
+          text: 'P',
+          fill: new ol.style.Fill({ color: 'white' }),
+          font: 'bold 12px Arial'
+        })
+      }));
+      
+      features.push(feature);
+    });
+    
+    // Add all features to the vector source
+    this.vectorSource.addFeatures(features);
+    
+    // Add click handler for popups
+    this.map.on('click', (event: any) => {
+      const feature = this.map.forEachFeatureAtPixel(event.pixel, (feature: any) => feature);
+      if (feature && feature.get('type') === 'parking') {
+        const location = feature.get('location');
+        this.showPopup(event.coordinate, location);
+      }
     });
     
     // Fit map to show all markers
-    if (this.markers.length > 0) {
-      const group = new L.featureGroup(this.markers);
-      this.map.fitBounds(group.getBounds().pad(0.1));
+    if (features.length > 0) {
+      const extent = this.vectorSource.getExtent();
+      this.map.getView().fit(extent, { padding: [50, 50, 50, 50] });
     }
+  }
+  
+  showPopup(coordinate: any, location: any) {
+    // Remove existing popup
+    const existingPopup = document.getElementById('map-popup');
+    if (existingPopup) {
+      existingPopup.remove();
+    }
+    
+    // Create popup element
+    const popup = document.createElement('div');
+    popup.id = 'map-popup';
+    popup.className = 'ol-popup';
+    popup.innerHTML = `
+      <div class="popup-content">
+        <button class="popup-closer" onclick="document.getElementById('map-popup').remove()">&times;</button>
+        <h4>${location.locationName}</h4>
+        <p><strong>Address:</strong> ${location.address}</p>
+        <p><strong>Contact:</strong> ${location.contactInfo.phone}</p>
+        <p><strong>Hours:</strong> ${location.operatingHours.open} - ${location.operatingHours.close}</p>
+        <p><strong>Total Slots:</strong> ${location.totalSlots}</p>
+        <p><strong>Admin:</strong> ${location.adminId.name}</p>
+        ${location.distance ? `<p><strong>Distance:</strong> ${location.distance.toFixed(1)} km</p>` : ''}
+        <div class="popup-actions">
+          <button onclick="window.open('https://www.google.com/maps?q=${location.coordinates.latitude},${location.coordinates.longitude}', '_blank')" class="btn-sm btn-primary">View on Maps</button>
+          ${this.userLocation ? `<button onclick="window.open('https://www.google.com/maps/dir/${this.userLocation!.latitude},${this.userLocation!.longitude}/${location.coordinates.latitude},${location.coordinates.longitude}', '_blank')" class="btn-sm btn-secondary">Get Directions</button>` : ''}
+        </div>
+      </div>
+    `;
+    
+    // Create overlay
+    const overlay = new ol.Overlay({
+      element: popup,
+      positioning: 'bottom-center',
+      stopEvent: false,
+      offset: [0, -10]
+    });
+    
+    this.map.addOverlay(overlay);
+    overlay.setPosition(coordinate);
   }
 
   loadLocations() {
