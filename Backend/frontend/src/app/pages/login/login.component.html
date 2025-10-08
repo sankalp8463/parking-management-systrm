@@ -3,9 +3,11 @@
     <!-- Left: Form -->
     <div class="login-form">
       <h2>Welcome Back!</h2>
-      <p>Please login to continue</p>
+      <p *ngIf="loginStep === 'credentials'">Please enter your credentials</p>
+      <p *ngIf="loginStep === 'otp'">Enter the OTP sent to your phone</p>
 
-      <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+      <!-- Credentials Step -->
+      <form *ngIf="loginStep === 'credentials'" (ngSubmit)="onLogin()" #loginForm="ngForm">
         <!-- Mobile Number -->
         <div class="form-group">
           <label for="phoneNumber">Mobile Number</label>
@@ -16,6 +18,7 @@
             [(ngModel)]="loginData.phoneNumber"
             placeholder="Enter your mobile number"
             required
+            maxlength="10"
           />
         </div>
 
@@ -33,11 +36,56 @@
         </div>
 
         <!-- Button -->
-        <button type="submit" class="btn-login">Login</button>
+        <button type="submit" class="btn-login" [disabled]="isLoading">
+          {{ isLoading ? 'Verifying...' : 'Continue' }}
+        </button>
       </form>
 
-      <p class="signup-text">
-        Don’t have an account? <a href="#">Sign Up</a>
+      <!-- OTP Verification Step -->
+      <div *ngIf="loginStep === 'otp'" class="otp-section">
+        <div class="otp-info">
+          <p>We've sent a 6-digit code to</p>
+          <p class="phone-display">+91 {{ loginData.phoneNumber }}</p>
+        </div>
+
+        <div class="form-group">
+          <label for="otp">Enter Verification Code</label>
+          <input
+            type="text"
+            id="otp"
+            name="otp"
+            [(ngModel)]="otp"
+            placeholder="000000"
+            maxlength="6"
+            class="otp-input"
+            (input)="onOtpInput($event)"
+          />
+        </div>
+
+        <button class="btn-login" (click)="verifyOTP()" [disabled]="isLoading || otp.length !== 6">
+          <span *ngIf="isLoading">🔄 Verifying...</span>
+          <span *ngIf="!isLoading">🔐 Verify & Login</span>
+        </button>
+
+        <div class="otp-actions">
+          <button type="button" class="btn-link" (click)="backToCredentials()">
+            ← Back to credentials
+          </button>
+          
+          <button 
+            type="button" 
+            class="btn-link" 
+            (click)="resendOTP()" 
+            [disabled]="!canResend || isLoading"
+          >
+            <span *ngIf="canResend">🔄 Resend OTP</span>
+            <span *ngIf="!canResend">⏱️ Resend in {{ resendTimer }}s</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="signup-text" *ngIf="loginStep === 'credentials'">
+        Don't have an account? <a routerLink="/register">Sign Up</a>
       </p>
     </div>
 

@@ -3,14 +3,14 @@
 # ParkEase Deployment Script
 
 cd /home/ubuntu/parking-management-systrm/
-git reset --hard HEAD
-git pull origin main
+#git reset --hard HEAD
+#git pull origin main
 
 
 cd Backend
 # Update backend
 npm install
-pm2 restart parkease-backend
+pm2 restart server.js
 
 # Update frontend
 cd frontend

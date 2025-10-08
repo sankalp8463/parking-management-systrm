@@ -7,8 +7,8 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class ApiService {
-  // private baseUrl = environment.production ? environment.apiUrl : ' http://localhost:3000/api';
-  private baseUrl = environment.production ? environment.apiUrl : ' https://16.171.133.32/api/api';
+
+  private baseUrl = environment.production ? environment.apiUrl : ' http://localhost:3000/api';
 
   constructor(private http: HttpClient) {}
 
@@ -27,6 +27,15 @@ export class ApiService {
 
   login(credentials: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/users/login`, credentials);
+  }
+
+  // Password + OTP Authentication
+  verifyPasswordAndSendOTP(credentials: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/verify-password-send-otp`, credentials);
+  }
+
+  completeLogin(phoneNumber: string, otp: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/complete-login`, { phoneNumber, otp });
   }
 
   // Users

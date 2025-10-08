@@ -16,9 +16,11 @@ import { ActiveSessionComponent } from './pages/active-session/active-session.co
 import { SlotOverviewComponent } from './pages/slot-overview/slot-overview.component';
 import { ChatComponent } from './pages/chat/chat.component';
 
+
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
+
   { path: 'register', component: RegisterComponent },
   { path: 'admin-register', component: AdminRegisterComponent },
   { path: 'locations', component: LocationFinderComponent },

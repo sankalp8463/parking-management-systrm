@@ -138,12 +138,103 @@
 .nav-dot.active {
   background: #007bff;
 }
+
+/* OTP Section Styles */
+.otp-section {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.otp-input {
+  text-align: center;
+  letter-spacing: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  padding: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.otp-input:focus {
+  border-color: #007bff;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  outline: none;
+}
+
+.otp-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e9ecef;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.btn-link:hover:not(:disabled) {
+  background: #f8f9fa;
+  color: #0056b3;
+}
+
+.btn-link:disabled {
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.btn-login:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.otp-info {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+  border-radius: 10px;
+  border: 1px solid #bbdefb;
+}
+
+.otp-info p {
+  margin: 0;
+  color: #1976d2;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.phone-display {
+  font-weight: 600;
+  color: #333;
+}
+
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-
-  /* Background image from assets */
   background: url('../../../assets/images/pms1.jpg') no-repeat center center/cover;
 }
